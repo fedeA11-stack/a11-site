@@ -9,6 +9,7 @@ const projects = [
     subtitle: "9 People. One of the largest mobile wallets in the World.",
     aspectW: 760,
     aspectH: 423,
+    href: "/world",
   },
   {
     image: "/assets/Freehold.png",
@@ -82,6 +83,7 @@ export default function WorkPage() {
               title={p.title}
               aspectW={p.aspectW}
               aspectH={p.aspectH}
+              href={"href" in p ? p.href : undefined}
             />
 
             {/* Title + subtitle */}

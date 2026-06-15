@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const imgLogoMark = "/assets/logo.svg";
 const imgLogoText = "/assets/A11 Product Studio of the Ambitious.svg";
@@ -43,7 +44,7 @@ function MenuIcon({ state }: { state: "default" | "hover" | "open" }) {
           cx={d.cx}
           cy={d.cy}
           r={2}
-          fill="#181818"
+          fill="white"
           animate={{ opacity: dotOpacity(state, i) }}
           transition={{ duration: 0.18, ease: "easeInOut" }}
         />
@@ -63,20 +64,34 @@ export default function NavMenu() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const onScroll = () => setOpen(false);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
+
   const iconState = open ? "open" : hovered ? "hover" : "default";
 
   return (
     <>
-      {/* ── Navbar ──────────────────────────────────────────────────────────── */}
-      <header style={{ position: "relative", width: "100%", height: 90 }}>
+      {/* ── Navbar — fixed, no background, blend mode over content ── */}
+      <header style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: 90,
+        zIndex: 100,
+        mixBlendMode: "difference",
+        pointerEvents: "none",
+      }}>
 
         {/* Logo mark — 48×53, left:32, top:32 */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imgLogoMark}
-          alt="A11"
-          style={{ position: "absolute", left: 32, top: 32, width: 48, height: 53 }}
-        />
+        <Link href="/" style={{ position: "absolute", left: 32, top: 32, display: "block", width: 48, height: 53, pointerEvents: "auto" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={imgLogoMark} alt="A11" style={{ width: 48, height: 53, filter: "brightness(0) invert(1)" }} />
+        </Link>
 
         {/* Wordmark — centered, 97×40, top:38.5 */}
         <div
@@ -93,7 +108,7 @@ export default function NavMenu() {
           <img
             src={imgLogoText}
             alt="A11 Product Studio of the Ambitious"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", filter: "brightness(0) invert(1)" }}
           />
         </div>
 
@@ -108,44 +123,7 @@ export default function NavMenu() {
             gap: 20,
           }}
         >
-          {/* CTA button — hides on open, slides in from right on close */}
-          <AnimatePresence>
-            {!open && (
-              <motion.button
-                key="cta"
-                initial={{ opacity: 0, x: 16 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 16 }}
-                transition={{ type: "tween", duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
-                style={{
-                  background: "#282328",
-                  border: "none",
-                  borderRadius: 100,
-                  height: 32,
-                  padding: "0 16px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "'TWK Continental', serif",
-                    fontWeight: 400,
-                    fontSize: 14,
-                    lineHeight: 1,
-                    color: "#ffffff",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Let&apos;s craft together
-                </span>
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Menu trigger — 44×44 hit area, always above panel (z:51) */}
+          {/* Menu trigger — 44×44 hit area */}
           <button
             onClick={() => setOpen((v) => !v)}
             onMouseEnter={() => setHovered(true)}
@@ -162,7 +140,7 @@ export default function NavMenu() {
               height: 44,
               flexShrink: 0,
               position: "relative",
-              zIndex: 51,
+              pointerEvents: "auto",
             }}
             aria-label={open ? "Close menu" : "Open menu"}
           >
@@ -170,6 +148,9 @@ export default function NavMenu() {
           </button>
         </div>
       </header>
+
+      {/* Spacer — reserves 90px so page content starts below the fixed header */}
+      <div style={{ height: 90, flexShrink: 0 }} aria-hidden />
 
       {/* ── Backdrop ────────────────────────────────────────────────────────── */}
       <AnimatePresence>
@@ -228,7 +209,7 @@ export default function NavMenu() {
                 flexDirection: "column",
                 gap: 4,
                 fontFamily: "'TWK Continental', serif",
-                fontWeight: 500,
+                fontWeight: 400,
                 fontSize: 24,
                 lineHeight: 1.1,
                 letterSpacing: "-0.48px",
@@ -297,7 +278,7 @@ export default function NavMenu() {
                   flexDirection: "column",
                   gap: 4,
                   fontFamily: "'TWK Continental', serif",
-                  fontWeight: 500,
+                  fontWeight: 400,
                   fontSize: 15,
                   lineHeight: 1.1,
                   letterSpacing: "-0.15px",

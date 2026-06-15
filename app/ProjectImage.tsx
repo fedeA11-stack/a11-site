@@ -1,12 +1,15 @@
+import Link from "next/link";
+
 interface Props {
   image: string;
   title: string;
   aspectW: number;
   aspectH: number;
+  href?: string;
 }
 
-export default function ProjectImage({ image, title, aspectW, aspectH }: Props) {
-  return (
+export default function ProjectImage({ image, title, aspectW, aspectH, href }: Props) {
+  const inner = (
     <div
       data-cursor="View project"
       style={{
@@ -14,7 +17,8 @@ export default function ProjectImage({ image, title, aspectW, aspectH }: Props) 
         aspectRatio: `${aspectW} / ${aspectH}`,
         position: "relative",
         overflow: "hidden",
-        cursor: "none",
+        cursor: href ? "none" : "default",
+        display: "block",
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -32,4 +36,14 @@ export default function ProjectImage({ image, title, aspectW, aspectH }: Props) 
       />
     </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} style={{ display: "block" }}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return inner;
 }
