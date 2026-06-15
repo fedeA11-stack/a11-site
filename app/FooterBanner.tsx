@@ -1,79 +1,152 @@
 "use client";
 
+// ── Design tokens ─────────────────────────────────────────────────────────────
+const FONT = "'TWK Continental', serif";
+
+// ── Component ─────────────────────────────────────────────────────────────────
+// Renders the footer banner + bottom bar.
+// Parent is responsible for horizontal container (max-w-[1240px] mx-auto).
 export default function FooterBanner() {
   return (
-    <section
-      data-footer=""
-      style={{
-        margin:             "0 32px 32px",
-        position:           "relative",
-        display:            "flex",
-        alignItems:         "center",
-        justifyContent:     "center",
-        minHeight:          "clamp(240px, 27.78vw, 400px)",
-        backgroundImage:    "url('/assets/Footer.svg')",
-        backgroundSize:     "100% 100%",
-        backgroundRepeat:   "no-repeat",
-        backgroundPosition: "center",
-      }}
-    >
-
-      {/* Content */}
-      <div
+    <div>
+      {/*
+       * Dark banner — 422.146px tall, bg #282328, rounded 8.887px.
+       * Text positions are absolute within this container, exact from Figma:
+       *   body copy  → top: 77.76px,  left: 6.45%
+       *   CTA link   → top: 297.72px, left: 6.45%, underlined
+       */}
+      <section
+        data-footer=""
         style={{
-          position:       "relative",
-          zIndex:         1,
-          display:        "flex",
-          flexDirection:  "column",
-          alignItems:     "center",
-          gap:            32,
-          padding:        "clamp(48px, 6.67vw, 96px) 32px",
-          textAlign:      "center",
+          position:           "relative",
+          width:              "100%",
+          height:             "422.146px",
+          borderRadius:       "8.887px",
+          overflow:           "hidden",
+          backgroundImage:    "url('/assets/footer.png')",
+          backgroundSize:     "cover",
+          backgroundPosition: "center",
+          backgroundRepeat:   "no-repeat",
         }}
       >
+        {/* "If you're ambitious enough to work with us." */}
         <p
           style={{
+            position:      "absolute",
+            top:           "77.76px",
+            left:          "6.45%",
+            right:         "27.15%",
             margin:        0,
-            fontFamily:    "'TWK Continental', serif",
-            fontWeight:    450,
-            fontSize:      "clamp(28px, 2.78vw, 40px)",
+            fontFamily:    FONT,
+            fontWeight:    400,
+            fontSize:      "42px",
             lineHeight:    0.95,
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.84px",
             color:         "#ffffff",
-            maxWidth:      "min(741px, 100%)",
+            whiteSpace:    "pre-wrap",
           }}
         >
-          If you&apos;re ambitious <br />
-          enough to work with us. <br />
-          We should talk!
+          {`If you're ambitious\nenough to work with us.`}
         </p>
 
+        {/* "We should talk." — underlined CTA */}
         <a
           href="mailto:hello@a11studio.com"
           style={{
-            display:        "inline-flex",
-            alignItems:     "center",
-            justifyContent: "center",
-            height:         40,
-            padding:        "6px 14px",
-            borderRadius:   100,
-            background:     "#ffffff",
-            textDecoration: "none",
-            fontFamily:     "'TWK Continental', serif",
-            fontWeight:     400,
-            fontSize:       14,
-            lineHeight:     1.09,
-            color:          "#282328",
-            whiteSpace:     "nowrap",
-            textTransform:  "capitalize",
-            transition:     "opacity 0.18s ease",
+            position:      "absolute",
+            top:           "297.72px",
+            left:          "6.45%",
+            right:         "27.15%",
+            fontFamily:    FONT,
+            fontWeight:    400,
+            fontSize:      "42px",
+            lineHeight:    0.95,
+            letterSpacing: "-0.84px",
+            color:         "#ffffff",
+            textDecoration: "underline",
+            textUnderlineOffset: "4px",
+            display:       "block",
           }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = "0.8")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
         >
-          Let&apos;s Talk
+          We should talk.
         </a>
+      </section>
+
+      {/*
+       * Bottom bar — gap 81px below banner (from Figma: gap-[81px] in parent flex).
+       * Layout: justify-between
+       *   Left group (w-459px, justify-between): A11 © 2026 | Social links
+       *   Right: Privacy Policy
+       * Font: 16px, leading 1.4, tracking -0.32px
+       */}
+      <div
+        style={{
+          marginTop:     "81px",
+          display:       "flex",
+          alignItems:    "center",
+          justifyContent: "space-between",
+          whiteSpace:    "nowrap",
+        }}
+      >
+        {/* Left group — fixed 459px, space-between A11 © 2026 and Social links */}
+        <div
+          style={{
+            display:        "flex",
+            alignItems:     "center",
+            justifyContent: "space-between",
+            width:          "459px",
+          }}
+        >
+          <p
+            style={{
+              margin:        0,
+              fontFamily:    FONT,
+              fontWeight:    400,
+              fontSize:      "16px",
+              lineHeight:    1.4,
+              letterSpacing: "-0.32px",
+              color:         "#282328",
+            }}
+          >
+            A11 © 2026
+          </p>
+
+          <div
+            style={{
+              display:    "flex",
+              alignItems: "center",
+              gap:        "4px",
+              fontFamily: FONT,
+              fontSize:   "16px",
+              lineHeight: 1.4,
+              letterSpacing: "-0.32px",
+              color:      "#282328",
+            }}
+          >
+            {/* "Social" label — Medium weight */}
+            <span style={{ fontWeight: 400 }}>Social</span>
+            {/* Individual links — Regular weight */}
+            <span style={{ fontWeight: 450 }}>Twitter,</span>
+            <span style={{ fontWeight: 450 }}>Cosmos,</span>
+            <span style={{ fontWeight: 450 }}>Linkedin</span>
+          </div>
+        </div>
+
+        {/* Right: Privacy Policy */}
+        <p
+          style={{
+            margin:        0,
+            fontFamily:    FONT,
+            fontWeight:    400,
+            fontSize:      "16px",
+            lineHeight:    1.4,
+            letterSpacing: "-0.32px",
+            color:         "#282328",
+          }}
+        >
+          Privacy Policy
+        </p>
       </div>
-    </section>
+    </div>
   );
 }

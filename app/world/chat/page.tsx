@@ -265,7 +265,9 @@ export default function WorldChatPage() {
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────────────────── */}
-        <FooterBanner />
+        <div style={{ padding: PAD, paddingBottom: "32px" }}>
+          <FooterBanner />
+        </div>
 
       </main>
     </div>
