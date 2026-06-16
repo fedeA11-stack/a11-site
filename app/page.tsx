@@ -49,7 +49,7 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 62,
     descTop: 124,
-    logo: "/assets/freehold logo.png",
+    logo: "/assets/freehold logo grey.png",
     logoHeight: 31,
     logoLeft: 174,
   },
@@ -110,18 +110,12 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// ─── Chevron ──────────────────────────────────────────────────────────────────
+// ─── Slash ────────────────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Chevron({ color }: { color: string }) {
   return (
-    <svg width="10" height="18" viewBox="0 0 10 18" fill="none" aria-hidden style={{ flexShrink: 0 }}>
-      <path
-        d="M1.5 1.5l7 7.5-7 7.5"
-        stroke={color}
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src="/assets/slash.svg" alt="" aria-hidden style={{ height: 18, width: "auto", flexShrink: 0 }} />
   );
 }
 
