@@ -1,7 +1,10 @@
 "use client";
 
+import CoverImage from "./CoverImage";
+import footerBg from "../public/assets/footer.png";
+
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const FONT = "'System Unlicensed Trial', sans-serif";
+const FONT = "var(--font-system), sans-serif";
 
 // ── Component ─────────────────────────────────────────────────────────────────
 // Renders the footer banner + bottom bar.
@@ -23,12 +26,15 @@ export default function FooterBanner() {
           height:             "422.146px",
           borderRadius:       "8.887px",
           overflow:           "hidden",
-          backgroundImage:    "url('/assets/footer.png')",
-          backgroundSize:     "cover",
-          backgroundPosition: "center",
-          backgroundRepeat:   "no-repeat",
         }}
       >
+        {/* Banner background — was a CSS background-image, now optimized via next/image */}
+        <CoverImage
+          src={footerBg}
+          alt=""
+          sizes="(max-width: 1280px) 100vw, 1240px"
+        />
+
         {/* "If you're ambitious enough to work with us." */}
         <p
           style={{

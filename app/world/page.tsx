@@ -3,17 +3,34 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import { type StaticImageData } from "next/image";
 import NavMenu from "../NavMenu";
+import CoverImage from "../CoverImage";
+
+import worldMoneyCase from "../../public/assets/world/case/world-money.jpg";
+import worldIdCase from "../../public/assets/world/case/world-id.jpg";
+import worldChatCase from "../../public/assets/world/case/world-chat.jpg";
+import worldOrbCase from "../../public/assets/world/case/world-orb.jpg";
 
 // ── Cards — Figma World_CaseStudy (1725:10129 / hover 1725:10175) ──────────
 // Photos are badge-free; the icon badge is a floating element so the card can
 // scoop a cove around it on hover. iconScale = icon px ÷ 48px badge.
-const CARDS = [
-  { img: "/assets/world/case/world-money.jpg", icon: "/assets/world/case/world-money-icon.svg", iconScale: 0.5625, solid: true,  title: "World Money", sub: "Manage your investments",   href: "/world/money" },
-  { img: "/assets/world/case/world-id.jpg",    icon: "/assets/world/case/world-id-icon.svg",    iconScale: 0.5625, solid: false, title: "World ID",    sub: "Prove you’re a real human", href: undefined      },
-  { img: "/assets/world/case/world-chat.jpg",  icon: "/assets/world/case/world-chat-icon.svg",  iconScale: 0.5625, solid: false, title: "World Chat",  sub: "Chat with real humans",      href: "/world/chat"  },
-  { img: "/assets/world/case/world-orb.jpg",   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, solid: false, title: "Orb App",     sub: "Manage your Orb operations", href: undefined      },
-] as const;
+type CaseCard = {
+  img: StaticImageData;
+  icon: string;
+  iconScale: number;
+  solid: boolean;
+  title: string;
+  sub: string;
+  href?: string;
+};
+
+const CARDS: CaseCard[] = [
+  { img: worldMoneyCase, icon: "/assets/world/case/world-money-icon.svg", iconScale: 0.5625, solid: true,  title: "World Money", sub: "Manage your investments",   href: "/world/money" },
+  { img: worldIdCase,    icon: "/assets/world/case/world-id-icon.svg",    iconScale: 0.5625, solid: false, title: "World ID",    sub: "Prove you’re a real human", href: undefined      },
+  { img: worldChatCase,  icon: "/assets/world/case/world-chat-icon.svg",  iconScale: 0.5625, solid: false, title: "World Chat",  sub: "Chat with real humans",      href: "/world/chat"  },
+  { img: worldOrbCase,   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, solid: false, title: "Orb App",     sub: "Manage your Orb operations", href: undefined      },
+];
 
 const INK = "#282328";
 const MUTE = "#989190";
@@ -63,7 +80,7 @@ function ArrowUpRight() {
 }
 
 // ── Card ───────────────────────────────────────────────────────────────────
-function Card({ card }: { card: (typeof CARDS)[number] }) {
+function Card({ card, priority }: { card: CaseCard; priority?: boolean }) {
   const [hovered, setHovered] = useState(false);
   const clipId = `wcs-cove-${useId().replace(/:/g, "")}`;
 
@@ -122,12 +139,14 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
         </defs>
       </svg>
 
-      {/* Photo — clipped to the card/cove shape */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* Photo — clipped to the card/cove shape (clipPath survives next/image's
+          generated <img>; the objectBoundingBox clip scales with the card). */}
+      <CoverImage
         src={card.img}
         alt={card.title}
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", clipPath: `url(#${clipId})` }}
+        sizes="(max-width: 520px) 100vw, (max-width: 880px) 50vw, 25vw"
+        priority={priority}
+        clipPath={`url(#${clipId})`}
       />
 
       {/* Floating icon badge (stays put while the photo scoops away on hover) */}
@@ -174,7 +193,7 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
               whiteSpace: "nowrap",
             }}
           >
-            <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: INK }}>
+            <span style={{ fontFamily: "var(--font-system), sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: INK }}>
               View project
             </span>
             <ArrowUpRight />
@@ -196,10 +215,10 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
 
       {/* Label — title + subtitle, 20px System Unlicensed Trial Medium, 6px gap */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 20 }}>
-        <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: INK }}>
+        <span style={{ fontFamily: "var(--font-system), sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: INK }}>
           {card.title}
         </span>
-        <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: MUTE }}>
+        <span style={{ fontFamily: "var(--font-system), sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: MUTE }}>
           {card.sub}
         </span>
       </div>
@@ -225,7 +244,7 @@ export default function WorldPage() {
           style={{
             margin: "104px 0 0",
             maxWidth: 616,
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 500,
             fontSize: "clamp(34px, 3.8vw, 56px)",
             lineHeight: 0.95,
@@ -243,8 +262,8 @@ export default function WorldPage() {
 
       {/* Card grid — near full-bleed: 10px gutters, 4px column gaps */}
       <div className="wcs-grid" style={{ display: "grid", columnGap: 4, padding: "84px 10px 0", margin: 0 }}>
-        {CARDS.map((c) => (
-          <Card key={c.title} card={c} />
+        {CARDS.map((c, i) => (
+          <Card key={c.title} card={c} priority={i === 0} />
         ))}
       </div>
 

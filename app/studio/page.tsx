@@ -1,10 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
+import CoverImage from "../CoverImage";
 import CtaButton from "../CtaButton";
 
-const FONT = "'System Unlicensed Trial', sans-serif";
+import studio1 from "../../public/assets/Image 1.png";
+import studio2 from "../../public/assets/Image 2.png";
+import studio3 from "../../public/assets/Image 3.png";
+
+const FONT = "var(--font-system), sans-serif";
 
 const T = {
   heroBase: {
@@ -83,25 +89,25 @@ export default function StudioPage() {
 
           {/* ── Image grid ────────────────────────────────────────────────── */}
 
-          {/* Mobile + Tablet: flex-col, full-width images */}
+          {/* Mobile + Tablet: flex-col, full-width images (intrinsic aspect ratio) */}
           <div className="flex flex-col gap-4 mb-[80px] lg:hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 1.png"
+            <Image
+              src={studio1}
               alt="Studio photo"
-              style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              sizes="(max-width: 1024px) 100vw, 1240px"
+              style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
             />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 2.png"
+            <Image
+              src={studio2}
               alt="Studio photo"
-              style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              sizes="(max-width: 1024px) 100vw, 1240px"
+              style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
             />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 3.png"
+            <Image
+              src={studio3}
               alt="Studio photo"
-              style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              sizes="(max-width: 1024px) 100vw, 1240px"
+              style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
             />
           </div>
 
@@ -112,24 +118,16 @@ export default function StudioPage() {
            *   img3 (cols 3-4, r2): left=50.32%, width=49.84%, top=33.77%, height=66.23%
            */}
           <div className="hidden lg:block relative mb-[120px]" style={{ aspectRatio: "1240 / 604" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 1.png"
-              alt="Studio photo"
-              style={{ position: "absolute", top: 0, left: "25.16%", width: "24.84%", height: "33.11%", objectFit: "cover", borderRadius: "16px", display: "block" }}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 2.png"
-              alt="Studio photo"
-              style={{ position: "absolute", top: "33.77%", left: 0, width: "24.84%", height: "33.11%", objectFit: "cover", borderRadius: "16px", display: "block" }}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Image 3.png"
-              alt="Studio photo"
-              style={{ position: "absolute", top: "33.77%", left: "50.32%", width: "49.84%", height: "66.23%", objectFit: "cover", borderRadius: "16px", display: "block" }}
-            />
+            {/* Each cell is a positioned box; CoverImage fills + crops it. */}
+            <div style={{ position: "absolute", top: 0, left: "25.16%", width: "24.84%", height: "33.11%", borderRadius: "16px", overflow: "hidden" }}>
+              <CoverImage src={studio1} alt="Studio photo" sizes="25vw" />
+            </div>
+            <div style={{ position: "absolute", top: "33.77%", left: 0, width: "24.84%", height: "33.11%", borderRadius: "16px", overflow: "hidden" }}>
+              <CoverImage src={studio2} alt="Studio photo" sizes="25vw" />
+            </div>
+            <div style={{ position: "absolute", top: "33.77%", left: "50.32%", width: "49.84%", height: "66.23%", borderRadius: "16px", overflow: "hidden" }}>
+              <CoverImage src={studio3} alt="Studio photo" sizes="50vw" />
+            </div>
           </div>
 
           {/* ── Footer ────────────────────────────────────────────────────── */}

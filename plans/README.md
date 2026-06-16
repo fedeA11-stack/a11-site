@@ -17,6 +17,7 @@ gates the later plans use for verification are reliable.
 | 001  | Scope ESLint to app source + add `typecheck` script | P1 | S | — | DONE (executor commit `dd0e7e3`, branch `worktree-agent-a7773566c9de72dab`, base `0c23ed1`) — reviewed & approved, not yet merged |
 | 002  | Delete unused `CraftButton` / `ProjectImage` components | P1 | S | — | DONE (executor commit `993f3fd`, branch `worktree-agent-a72a33ad465429ad7`, base `0c23ed1`) — reviewed & approved, not yet merged |
 | 003  | Remove ~71 MB of unreferenced assets from `public/` | P1 | S | — | DONE (executor commit `fa39f9c`, branch `worktree-agent-a77503f896fdf51cd`, base `62b6bd6`=main) — reviewed & approved, not yet merged |
+| 004  | Image & font loading optimization (next/image + next/font) | P1 | M | — | DONE (branch `feat/loading-optimization`, base `c6e5cd1`) — eng-reviewed, build/typecheck/lint/preview-verified, not yet committed |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (reason) | REJECTED (rationale)
 

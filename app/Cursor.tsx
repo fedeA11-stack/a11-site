@@ -91,7 +91,7 @@ function CursorPill() {
         display:       "flex",
         alignItems:    "center",
         gap:           4,
-        fontFamily:    "'System Unlicensed Trial', sans-serif",
+        fontFamily:    "var(--font-system), sans-serif",
         fontSize:      14,
         fontWeight:    500,
         lineHeight:    1,

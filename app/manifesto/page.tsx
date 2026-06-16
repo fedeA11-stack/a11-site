@@ -3,7 +3,7 @@
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
 
-const FONT = "'System Unlicensed Trial', sans-serif";
+const FONT = "var(--font-system), sans-serif";
 
 // Figma: flex-col, label text on top, 6×6 dot below, gap: 10px
 function FloatingLabel({

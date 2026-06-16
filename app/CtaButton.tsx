@@ -14,7 +14,7 @@ const SHARED_STYLE: React.CSSProperties = {
   borderRadius:   0,
   background:     "#282328",
   border:         "none",
-  fontFamily:     "'System Unlicensed Trial', sans-serif",
+  fontFamily:     "var(--font-system), sans-serif",
   fontWeight:     500,
   fontSize:       "15px",
   lineHeight:     0.95,
