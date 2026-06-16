@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
+import CtaButton from "../CtaButton";
 
 const FONT = "'System Unlicensed Trial', sans-serif";
 
@@ -76,33 +76,7 @@ export default function StudioPage() {
                 </p>
 
                 {/* CTA button */}
-                <Link
-                  href="/manifesto"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    backgroundColor: "#282328",
-                    padding: "10px 20px",
-                    height: "44px",
-                    gap: "16px",
-                    position: "relative",
-                    cursor: "pointer",
-                    textDecoration: "none",
-                  }}
-                >
-                  <span style={T.cta}>Read our Manifesto</span>
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "10px",
-                      width: "4px",
-                      height: "4px",
-                      borderRadius: "1px",
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-                </Link>
+                <CtaButton label="Read our Manifesto" href="/manifesto" />
               </div>
             </div>
           </div>

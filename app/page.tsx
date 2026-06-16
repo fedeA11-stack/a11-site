@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
+import CtaButton from "./CtaButton";
 
 // ─── Entrance reveal ───────────────────────────────────────────────────────────
 // Fade + small rise. Triggers once as the element scrolls into view so cards far
@@ -248,59 +249,6 @@ function CTASection({
   textGap?: number;
   href?: string;
 }) {
-  const sharedProps = {
-    className:
-      "relative inline-flex items-center justify-center whitespace-nowrap capitalize",
-    style: {
-      height: "44px",
-      padding: "10px 20px",
-      borderRadius: 0,
-      background: "#282828",
-      border: "none",
-      fontFamily: "'System Unlicensed Trial', sans-serif",
-      fontWeight: 500,
-      fontSize: "15px",
-      lineHeight: 0.95,
-      letterSpacing: "-0.3px",
-      color: "#ffffff",
-      textDecoration: "none",
-      cursor: "pointer",
-      transition:
-        "scale 0.15s cubic-bezier(0.2, 0, 0, 1), opacity 0.15s cubic-bezier(0.2, 0, 0, 1)",
-    } as React.CSSProperties,
-    onMouseEnter: (e: React.MouseEvent<HTMLElement>) =>
-      (e.currentTarget.style.opacity = "0.9"),
-    onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
-      e.currentTarget.style.opacity = "1";
-      e.currentTarget.style.scale = "1";
-    },
-    onMouseDown: (e: React.MouseEvent<HTMLElement>) =>
-      (e.currentTarget.style.scale = "0.96"),
-    onMouseUp: (e: React.MouseEvent<HTMLElement>) =>
-      (e.currentTarget.style.scale = "1"),
-  };
-
-  // Button — Figma node 1725:9389: h 44px, px 20px, py 10px, square corners,
-  // fill #282828. The 4×4 white dot is positioned 10px from the top-right
-  // corner (over the right padding), not inline with the label.
-  const buttonInner = (
-    <>
-      {buttonLabel}
-      <span
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          width: "4px",
-          height: "4px",
-          borderRadius: "1px",
-          background: "#ffffff",
-        }}
-      />
-    </>
-  );
-
   return (
     <div
       className="flex flex-col items-center pt-[147px] pb-[147px]"
@@ -323,15 +271,7 @@ function CTASection({
         {text}
       </p>
 
-      {href ? (
-        <Link href={href} {...sharedProps}>
-          {buttonInner}
-        </Link>
-      ) : (
-        <button type="button" {...sharedProps}>
-          {buttonInner}
-        </button>
-      )}
+      <CtaButton label={buttonLabel} href={href} />
     </div>
   );
 }
