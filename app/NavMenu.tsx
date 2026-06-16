@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const FONT = "'System Unlicensed Trial', sans-serif";
+const FONT = "var(--font-system), sans-serif";
 
 // Aligns nav edges to the 1240px content grid.
 // On 1512px: (1512 − 1240) / 2 = 136px. Falls back to 32px on narrow screens.

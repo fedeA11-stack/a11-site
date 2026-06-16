@@ -1,70 +1,8 @@
 @import "tailwindcss";
 
-/* ── System Unlicensed Trial – self-hosted ──────────────────────────────── */
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-LightItalic.otf') format('opentype');
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-Italic.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-MediumItalic.otf') format('opentype');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'System Unlicensed Trial';
-  src: url('/fonts/SystemUnlicensedTrial-BoldItalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
+/* ── System Unlicensed Trial ─────────────────────────────────────────────────
+   Self-hosted via next/font/local in app/layout.tsx, which sets the
+   --font-system CSS variable (with a size-adjusted fallback) on <html>. */
 
 :root {
   --background: #ffffff;
@@ -74,8 +12,12 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-system: 'System Unlicensed Trial', sans-serif;
 }
+
+html {
+  scrollbar-gutter: stable;
+}
+
 
 body {
   background: var(--background);

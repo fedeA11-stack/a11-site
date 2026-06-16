@@ -9,7 +9,7 @@ import NavMenu from "../../NavMenu";
 const T = {
   /** Section headline — 64px TWK Book */
   h2: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(36px, 4.44vw, 64px)",
     lineHeight: 0.96,
@@ -19,7 +19,7 @@ const T = {
   },
   /** Large display — 88px TWK Book */
   h1: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(42px, 6.11vw, 88px)",
     lineHeight: 0.96,
@@ -29,7 +29,7 @@ const T = {
   },
   /** Body — 20px TWK Regular */
   body: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(16px, 1.39vw, 20px)",
     lineHeight: 1.3,
@@ -38,7 +38,7 @@ const T = {
   },
   /** Small label */
   label: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(14px, 1.11vw, 16px)",
     lineHeight: 1.3,
@@ -61,7 +61,6 @@ function SectionHeader({ title, body }: { title: string; body: string }) {
         gridTemplateColumns: "1fr 1fr",
         gap: "clamp(24px, 3.33vw, 48px)",
         alignItems: "start",
-        padding: "0 32px",
       }}
     >
       <h2 style={T.h2}>{title}</h2>
@@ -75,7 +74,7 @@ function FullImage({
   src, alt, bg = "#F6F3EE", caption,
 }: { src: string; alt: string; bg?: string; caption?: string }) {
   return (
-    <div style={{ padding: "0 32px" }}>
+    <div>
       <div
         style={{
           position: "relative",
@@ -129,7 +128,6 @@ function TwoColImages({
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: "clamp(8px, 0.69vw, 10px)",
-        padding: "0 32px",
       }}
     >
       {[left, right].map((img, i) => (
@@ -154,8 +152,10 @@ export default function WorldMoneyPage() {
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh" }}>
       <NavMenu />
 
+      <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0">
+
       {/* ── Back link ──────────────────────────────────────────────────────── */}
-      <div style={{ padding: "32px 32px 0" }}>
+      <div style={{ padding: "32px 0 0" }}>
         <Link
           href="/world"
           style={{
@@ -177,7 +177,7 @@ export default function WorldMoneyPage() {
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: "clamp(40px, 5.56vw, 80px) 32px clamp(32px, 3.33vw, 48px)",
+          padding: "clamp(40px, 5.56vw, 80px) 0 clamp(32px, 3.33vw, 48px)",
           display: "flex",
           flexDirection: "column",
           gap: "clamp(16px, 1.39vw, 20px)",
@@ -199,7 +199,7 @@ export default function WorldMoneyPage() {
       {/* ── Stats ──────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: "clamp(40px, 5.56vw, 80px) 32px",
+          padding: "clamp(40px, 5.56vw, 80px) 0",
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
         }}
@@ -222,7 +222,7 @@ export default function WorldMoneyPage() {
           >
             <span
               style={{
-                fontFamily: "'System Unlicensed Trial', sans-serif",
+                fontFamily: "var(--font-system), sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(48px, 6.67vw, 96px)",
                 lineHeight: 0.96,
@@ -240,7 +240,7 @@ export default function WorldMoneyPage() {
       <Divider />
 
       {/* ── "Wallet designed for everyone" ─────────────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 32px", display: "flex", flexDirection: "column", gap: "clamp(16px, 1.39vw, 20px)" }}>
+      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0", display: "flex", flexDirection: "column", gap: "clamp(16px, 1.39vw, 20px)" }}>
         <h2 style={{ ...T.h2, fontSize: "clamp(32px, 4.44vw, 64px)" }}>
           Wallet designed<br />for everyone
         </h2>
@@ -263,7 +263,7 @@ export default function WorldMoneyPage() {
       </div>
 
       {/* ── Section header: New Financial Rails ───────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 32px" }}>
+      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
         <SectionHeader
           title="New Financial Rails Familiar Actions"
           body="The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control."
@@ -279,7 +279,7 @@ export default function WorldMoneyPage() {
       {/* ── Quote ──────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: "clamp(48px, 6.67vw, 96px) 32px",
+          padding: "clamp(48px, 6.67vw, 96px) 0",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -317,7 +317,7 @@ export default function WorldMoneyPage() {
       <Divider />
 
       {/* ── Section header: From Wallet Balance ────────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 32px" }}>
+      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
         <SectionHeader
           title="From Wallet Balance To Real-World Use"
           body="World Card extended the wallet beyond holding and transferring assets, creating a familiar way for people to use their digital assets in everyday purchases. By bringing wallet value into real-world payments."
@@ -341,7 +341,7 @@ export default function WorldMoneyPage() {
       </div>
 
       {/* ── Section header: Helping users understand the value ─────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 32px" }}>
+      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
         <SectionHeader
           title="Helping Users Understand The Value"
           body="Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value."
@@ -359,7 +359,7 @@ export default function WorldMoneyPage() {
       {/* ── Discover More ───────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: "clamp(48px, 6.67vw, 96px) 32px",
+          padding: "clamp(48px, 6.67vw, 96px) 0",
           display: "flex",
           flexDirection: "column",
           gap: 32,
@@ -438,10 +438,10 @@ export default function WorldMoneyPage() {
       <section
         data-footer=""
         style={{
-          margin: "0 32px 32px",
+          margin: "0 0 32px",
           background: "#282328",
           borderRadius: "clamp(8px, 0.94vw, 13.5px)",
-          padding: "clamp(64px, 8.89vw, 128px) 32px",
+          padding: "clamp(64px, 8.89vw, 128px) 0",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -451,7 +451,7 @@ export default function WorldMoneyPage() {
       >
         <p
           style={{
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 400,
             fontSize: "clamp(28px, 4.17vw, 60px)",
             lineHeight: 1.1,
@@ -470,7 +470,7 @@ export default function WorldMoneyPage() {
             border: "1px solid rgba(255,255,255,0.4)",
             borderRadius: 6,
             padding: "11px 24px",
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 400,
             fontSize: 16,
             lineHeight: 1.3,
@@ -482,6 +482,8 @@ export default function WorldMoneyPage() {
           Let&apos;s talk
         </a>
       </section>
+
+      </div>
     </div>
   );
 }

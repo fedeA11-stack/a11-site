@@ -1,9 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import Image, { type StaticImageData } from "next/image";
 import { motion } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
+import CoverImage from "./CoverImage";
+
+// Case photos + project logos — static imports give next/image the intrinsic
+// dimensions and a build-time blur placeholder (zero CLS).
+import worldCase from "../public/assets/World-Case.png";
+import freeholdCase from "../public/assets/Freehold-Case.png";
+import districtCase from "../public/assets/District-case.png";
+import tokenStudioCase from "../public/assets/Token studio-case.png";
+import atlansCase from "../public/assets/Atlans-case.png";
+import relaiCase from "../public/assets/Relai-case.png";
+import worldLogo from "../public/assets/world logo.png";
+import freeholdLogoGrey from "../public/assets/freehold logo grey.png";
+import districtLogo from "../public/assets/district logo.png";
+import freeholdLogo from "../public/assets/freehold logo.png";
+import atlansLogo from "../public/assets/atlans logo.png";
 
 // ─── Entrance reveal ───────────────────────────────────────────────────────────
 // Fade + small rise. Triggers once as the element scrolls into view so cards far
@@ -31,7 +47,7 @@ function Reveal({
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
   num: string;
-  image: string;
+  image: StaticImageData;
   name: string;
   description: string;
   textColor: string;
@@ -42,7 +58,7 @@ type Project = {
   labelTop: number;
   descTop: number;
   // Project logo — exact Figma positions per card
-  logo?: string;
+  logo?: StaticImageData;
   logoHeight: number; // px, from Figma (31.105px)
   logoLeft: number;   // px, from Figma absolute positions
 };
@@ -50,7 +66,7 @@ type Project = {
 const PROJECTS: Project[] = [
   {
     num: "01",
-    image: "/assets/World-Case.png",
+    image: worldCase,
     name: "World",
     description: "Five years,\nnine people.\nFour Apps for\nreal humans",
     textColor: "#282828",
@@ -59,13 +75,13 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.32px",
     labelTop: 56,   // Figma confirmed
     descTop: 112,   // Figma confirmed
-    logo: "/assets/world logo.png",
+    logo: worldLogo,
     logoHeight: 31,
     logoLeft: 72,
   },
   {
     num: "02",
-    image: "/assets/Freehold-Case.png",
+    image: freeholdCase,
     name: "Freehold",
     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",
     textColor: "#303030",
@@ -73,13 +89,13 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 62,
     descTop: 124,
-    logo: "/assets/freehold logo grey.png",
+    logo: freeholdLogoGrey,
     logoHeight: 31,
     logoLeft: 174,
   },
   {
     num: "03",
-    image: "/assets/District-case.png",
+    image: districtCase,
     name: "Districts",
     description: "RWA tokenization,\nstart to finish",
     textColor: "#45474a",
@@ -87,13 +103,13 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 147,
     descTop: 209,
-    logo: "/assets/district logo.png",
+    logo: districtLogo,
     logoHeight: 31,
     logoLeft: 72,
   },
   {
     num: "04",
-    image: "/assets/Token studio-case.png",
+    image: tokenStudioCase,
     name: "Token Studio",
     description: "Tokenize, launch,\nmanage. On-chain\nRWAs",
     textColor: "#4d2820",
@@ -101,13 +117,13 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 80,
     descTop: 142,
-    logo: "/assets/freehold logo.png",
+    logo: freeholdLogo,
     logoHeight: 31,
     logoLeft: 80,
   },
   {
     num: "05",
-    image: "/assets/Atlans-case.png",
+    image: atlansCase,
     name: "Atlans",
     description: "Athletic platform\nof Discovery and\nconnection",
     textColor: "#ffffff",
@@ -115,13 +131,13 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 123,
     descTop: 186,
-    logo: "/assets/atlans logo.png",
+    logo: atlansLogo,
     logoHeight: 31,
     logoLeft: 80,
   },
   {
     num: "06",
-    image: "/assets/Relai-case.png",
+    image: relaiCase,
     name: "Relai",
     description: "Bitcoin-only savings\napp focused on\nsimple self-custody.",
     textColor: "#282828",
@@ -147,7 +163,7 @@ function Chevron({ color }: { color: string }) {
 // Figma: 1240 × 769px card (node 3488:10724)
 // Label:       top = 56px   left = 72px
 // Description: top = 112px  left = 72px  maxWidth = 521px (42% × 1240px)
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, priority }: { project: Project; priority?: boolean }) {
   const c = project.textColor;
 
   const card = (
@@ -159,12 +175,12 @@ function ProjectCard({ project }: { project: Project }) {
         cursor: project.href ? "none" : "default",
       }}
     >
-      {/* Background image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* Background image — fills the card; the only full-width content on the page */}
+      <CoverImage
         src={project.image}
         alt={project.name}
-        className="absolute inset-0 w-full h-full object-cover block"
+        sizes="(max-width: 1280px) 100vw, 1240px"
+        priority={priority}
       />
 
       {/* Label — top/left per card from Figma */}
@@ -173,7 +189,7 @@ function ProjectCard({ project }: { project: Project }) {
         style={{
           top: project.labelTop,
           left: 72,
-          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontFamily: "var(--font-system), sans-serif",
           fontWeight: 500,
           fontSize: project.labelPx,
           lineHeight: 1,
@@ -192,7 +208,7 @@ function ProjectCard({ project }: { project: Project }) {
         style={{
           top: project.descTop,
           left: 72,
-          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontFamily: "var(--font-system), sans-serif",
           fontWeight: 500,
           fontSize: "42px",
           lineHeight: 0.95,
@@ -206,8 +222,7 @@ function ProjectCard({ project }: { project: Project }) {
       </p>
 
       {project.logo && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={project.logo}
           alt=""
           aria-hidden
@@ -257,7 +272,7 @@ function CTASection({
       borderRadius: 0,
       background: "#282828",
       border: "none",
-      fontFamily: "'System Unlicensed Trial', sans-serif",
+      fontFamily: "var(--font-system), sans-serif",
       fontWeight: 500,
       fontSize: "15px",
       lineHeight: 0.95,
@@ -310,7 +325,7 @@ function CTASection({
       <p
         className="m-0 text-center whitespace-pre-wrap"
         style={{
-          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontFamily: "var(--font-system), sans-serif",
           fontWeight: 500,
           fontSize: "44.436px",
           lineHeight: 0.94,
@@ -359,7 +374,7 @@ export default function WorkPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", duration: 0.4, bounce: 0 }}
           style={{
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 500,
             fontSize: "32px",
             lineHeight: 0.95,
@@ -379,7 +394,7 @@ export default function WorkPage() {
        */}
       <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px]">
         {/* Group 1: World + Freehold */}
-        <Reveal><ProjectCard project={PROJECTS[0]} /></Reveal>
+        <Reveal><ProjectCard project={PROJECTS[0]} priority /></Reveal>
         <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
 
         {/* CTA 1 — text-to-button gap: 36px (Figma: 2339.31 - 2303.33 = 35.98px) */}

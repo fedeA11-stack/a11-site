@@ -1,16 +1,26 @@
 "use client";
 
+import { type StaticImageData } from "next/image";
 import Link from "next/link";
 import NavMenu from "../../NavMenu";
 import FooterBanner from "../../FooterBanner";
 import PhoneVideo from "./PhoneVideo";
+import CoverImage from "../../CoverImage";
+
+// Only these three assets actually exist on disk today; the rest of this page's
+// images (chat-private/split/gift, quote-andy, discover-*) are referenced but
+// missing — they 404 on the live site and are left as raw <img> until the
+// assets land. See plan 004 NOT-in-scope.
+import chatMain from "../../../public/assets/world-chat/chat-main.png";
+import chatGroup from "../../../public/assets/world-chat/chat-group.png";
+import chatVerifiedUser from "../../../public/assets/world-chat/chat-verified-user.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Typography tokens
 // ─────────────────────────────────────────────────────────────────────────────
 const T = {
   h1: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(42px, 6.11vw, 88px)",
     lineHeight: 0.96,
@@ -18,7 +28,7 @@ const T = {
     color: "#282328",
   },
   h2: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(32px, 3.89vw, 56px)",
     lineHeight: 0.96,
@@ -26,7 +36,7 @@ const T = {
     color: "#282328",
   },
   body: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(16px, 1.39vw, 20px)",
     lineHeight: 1.3,
@@ -34,7 +44,7 @@ const T = {
     color: "#282328",
   },
   label: {
-    fontFamily: "'System Unlicensed Trial', sans-serif",
+    fontFamily: "var(--font-system), sans-serif",
     fontWeight: 400,
     fontSize: "clamp(13px, 1vw, 15px)",
     lineHeight: 1.3,
@@ -42,7 +52,7 @@ const T = {
   },
 };
 
-const PAD = "0 32px";
+const PAD = "0";
 const RADIUS = "clamp(8px, 0.94vw, 13.5px)";
 const BEIGE = "#F0EBE5";
 
@@ -62,12 +72,18 @@ function SectionHeader({ title, body }: { title: string; body: string }) {
   );
 }
 
-function FullImage({ src, alt, bg = BEIGE }: { src: string; alt: string; bg?: string }) {
+// src may be a static import (optimized via next/image) or a string path for
+// assets that don't exist on disk yet (rendered as a raw <img>, unchanged).
+function FullImage({ src, alt, bg = BEIGE, priority }: { src: StaticImageData | string; alt: string; bg?: string; priority?: boolean }) {
   return (
     <div style={{ padding: PAD }}>
-      <div style={{ borderRadius: RADIUS, overflow: "hidden", background: bg, width: "100%", aspectRatio: "1447 / 1009" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: bg, width: "100%", aspectRatio: "1447 / 1009" }}>
+        {typeof src === "string" ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        ) : (
+          <CoverImage src={src} alt={alt} sizes="100vw" priority={priority} />
+        )}
       </div>
     </div>
   );
@@ -82,11 +98,15 @@ function TwoCol({ left, right }: { left: React.ReactNode; right: React.ReactNode
   );
 }
 
-function ImageCell({ src, alt, bg = BEIGE, aspect = "693 / 690" }: { src: string; alt: string; bg?: string; aspect?: string }) {
+function ImageCell({ src, alt, bg = BEIGE, aspect = "693 / 690" }: { src: StaticImageData | string; alt: string; bg?: string; aspect?: string }) {
   return (
-    <div style={{ borderRadius: RADIUS, overflow: "hidden", background: bg, aspectRatio: aspect }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+    <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: bg, aspectRatio: aspect }}>
+      {typeof src === "string" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      ) : (
+        <CoverImage src={src} alt={alt} sizes="(max-width: 768px) 100vw, 50vw" />
+      )}
     </div>
   );
 }
@@ -99,7 +119,7 @@ export default function WorldChatPage() {
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <NavMenu />
 
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px, 5.56vw, 80px)" }}>
+      <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px, 5.56vw, 80px)" }}>
 
         {/* ── Back link ──────────────────────────────────────────────────────── */}
         <div style={{ padding: PAD, paddingTop: "clamp(24px, 2.78vw, 40px)" }}>
@@ -121,13 +141,13 @@ export default function WorldChatPage() {
           </p>
         </div>
 
-        {/* ── Hero image ─────────────────────────────────────────────────────── */}
-        <FullImage src="/assets/world-chat/chat-main.png" alt="World Chat app — hand holding phone showing chat list" bg="#2A1F17" />
+        {/* ── Hero image (LCP — the 9MB source, biggest asset on the site) ────── */}
+        <FullImage src={chatMain} alt="World Chat app — hand holding phone showing chat list" bg="#2A1F17" priority />
 
         {/* ── Designing Trust At Scale ────────────────────────────────────────── */}
         <div style={{ padding: PAD, display: "flex", flexDirection: "column", gap: "clamp(16px, 1.67vw, 24px)" }}>
           <h2 style={{
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 400,
             fontSize: "clamp(40px, 4.44vw, 64px)",
             lineHeight: 0.96,
@@ -138,7 +158,7 @@ export default function WorldChatPage() {
             Designing<br />Trust At Scale
           </h2>
           <p style={{
-            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontFamily: "var(--font-system), sans-serif",
             fontWeight: 450,
             fontSize: "clamp(16px, 1.39vw, 20px)",
             lineHeight: 1.3,
@@ -162,16 +182,12 @@ export default function WorldChatPage() {
           {/* Right — two stacked images filling the same height as left */}
           <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 1.67vw, 24px)" }}>
             {/* Top: group chat with notification */}
-            <div style={{ borderRadius: RADIUS, overflow: "hidden", background: BEIGE, flex: 1 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/world-chat/chat-group.png" alt="Friends group with chat notification"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: BEIGE, flex: 1 }}>
+              <CoverImage src={chatGroup} alt="Friends group with chat notification" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
             {/* Bottom: Joseph Wilson verified human */}
-            <div style={{ borderRadius: RADIUS, overflow: "hidden", background: BEIGE, flex: 1 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/world-chat/chat-verified-user.png" alt="Joseph Wilson verified human"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: BEIGE, flex: 1 }}>
+              <CoverImage src={chatVerifiedUser} alt="Joseph Wilson verified human" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
           </div>
         </div>
@@ -193,7 +209,7 @@ export default function WorldChatPage() {
               </div>
             </div>
           }
-          right={<ImageCell src="/assets/world-chat/chat-verified-user.png" alt="Joseph Wilson verified human profile" aspect="693 / 690" />}
+          right={<ImageCell src={chatVerifiedUser} alt="Joseph Wilson verified human profile" aspect="693 / 690" />}
         />
 
         {/* ── Disappearing messages full ───────────────────────────────────────── */}
@@ -212,6 +228,8 @@ export default function WorldChatPage() {
           left={
             <div style={{ borderRadius: RADIUS, overflow: "hidden", background: BEIGE, aspectRatio: "693 / 690", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ width: 80, height: 80, borderRadius: "50%", overflow: "hidden" }}>
+                {/* Intentional raw <img>: tiny external flag from flagcdn, not worth a remotePatterns + optimization roundtrip. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="https://flagcdn.com/w160/us.png" alt="US flag" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
             </div>
