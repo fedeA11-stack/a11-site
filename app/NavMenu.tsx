@@ -23,6 +23,14 @@ export default function NavMenu() {
   const pathname = usePathname();
   const [time, setTime] = useState("SFO, --:--:-- --");
 
+  // Active when the route matches. "Work" (/) also owns the project pages
+  // (/world, /world/chat, …); placeholder "#" links never highlight.
+  const isActive = (href: string) => {
+    if (href === "#") return false;
+    if (href === "/") return pathname === "/" || pathname.startsWith("/world");
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   // Live SFO clock
   useEffect(() => {
     const update = () => {
@@ -110,7 +118,7 @@ export default function NavMenu() {
                   href={link.href}
                   style={{
                     color:          "#ffffff",
-                    opacity:        pathname === link.href ? 1 : 0.5,
+                    opacity:        isActive(link.href) ? 1 : 0.5,
                     textDecoration: "none",
                     pointerEvents:  "auto",
                   }}
