@@ -18,8 +18,13 @@ const NAV_LINKS = [
   { label: "Contact",    href: "#"        },
 ];
 
+// A breadcrumb trail rendered in place of the centered nav links (used by the
+// case-study template). Last segment is the current page (full opacity); earlier
+// segments are muted and optionally linked.
+export type Crumb = { label: string; href?: string };
+
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function NavMenu() {
+export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
   const pathname = usePathname();
   const [time, setTime] = useState("SFO, --:--:-- --");
 
@@ -96,16 +101,16 @@ export default function NavMenu() {
             />
           </Link>
 
-          {/* ── Center: Nav links — gap 48px, 14px, capitalize ─────────── */}
+          {/* ── Center: breadcrumb (case-study pages) or nav links ──────── */}
           <nav
-            aria-label="Main navigation"
+            aria-label={breadcrumb ? "Breadcrumb" : "Main navigation"}
             style={{ flexShrink: 0, display: "flex", justifyContent: "center" }}
           >
             <div
               style={{
                 display:       "flex",
                 alignItems:    "center",
-                gap:           48,
+                gap:           breadcrumb ? 8 : 48,
                 fontFamily:    FONT,
                 fontWeight:    500,
                 fontSize:      14,
@@ -115,28 +120,52 @@ export default function NavMenu() {
                 whiteSpace:    "nowrap",
               }}
             >
-              {NAV_LINKS.map((link) => {
-                const active = isActive(link.href);
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    style={{
-                      color:          "#ffffff",
-                      opacity:        active ? 1 : 0.5,
-                      textDecoration: "none",
-                      pointerEvents:  "auto",
-                      // ≥40px hit area (13px top/bottom + 14px line = 40px), no baseline shift
-                      padding:        "13px 0",
-                      transition:     "opacity 0.15s cubic-bezier(0.2, 0, 0, 1)",
-                    }}
-                    onMouseEnter={active ? undefined : e => (e.currentTarget.style.opacity = "0.8")}
-                    onMouseLeave={active ? undefined : e => (e.currentTarget.style.opacity = "0.5")}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+              {breadcrumb
+                ? breadcrumb.map((crumb, i) => {
+                    const isLast = i === breadcrumb.length - 1;
+                    const label = (
+                      <span style={{ color: "#ffffff", opacity: isLast ? 1 : 0.5 }}>
+                        {crumb.label}
+                      </span>
+                    );
+                    return (
+                      <span key={crumb.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        {crumb.href && !isLast ? (
+                          <Link
+                            href={crumb.href}
+                            style={{ textDecoration: "none", pointerEvents: "auto", padding: "13px 0" }}
+                          >
+                            {label}
+                          </Link>
+                        ) : (
+                          label
+                        )}
+                        {!isLast && <span style={{ color: "#ffffff", opacity: 0.3 }}>/</span>}
+                      </span>
+                    );
+                  })
+                : NAV_LINKS.map((link) => {
+                    const active = isActive(link.href);
+                    return (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        style={{
+                          color:          "#ffffff",
+                          opacity:        active ? 1 : 0.5,
+                          textDecoration: "none",
+                          pointerEvents:  "auto",
+                          // ≥40px hit area (13px top/bottom + 14px line = 40px), no baseline shift
+                          padding:        "13px 0",
+                          transition:     "opacity 0.15s cubic-bezier(0.2, 0, 0, 1)",
+                        }}
+                        onMouseEnter={active ? undefined : e => (e.currentTarget.style.opacity = "0.8")}
+                        onMouseLeave={active ? undefined : e => (e.currentTarget.style.opacity = "0.5")}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
             </div>
           </nav>
 

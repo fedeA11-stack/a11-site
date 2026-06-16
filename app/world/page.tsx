@@ -33,9 +33,9 @@ type CaseCard = {
 
 const CARDS: CaseCard[] = [
   { img: worldMoneyCover, hoverImg: worldMoneyApp, icon: "/assets/world/case/world-money-icon.svg", iconScale: 0.5625, title: "World App",  sub: "Manage your investments",   href: "/world/money" },
-  { img: worldIdCover,    hoverImg: worldIdApp,    icon: "/assets/world/case/world-id-icon.svg",    iconScale: 0.5625, title: "World ID",   sub: "Prove you’re a real human", href: undefined      },
+  { img: worldIdCover,    hoverImg: worldIdApp,    icon: "/assets/world/case/world-id-icon.svg",    iconScale: 0.5625, title: "World ID",   sub: "Prove you’re a real human", href: "/world/id"    },
   { img: worldChatCover,  hoverImg: worldChatApp,  icon: "/assets/world/case/world-chat-icon.svg",  iconScale: 0.5625, title: "World Chat", sub: "Chat with real humans",      href: "/world/chat"  },
-  { img: worldOrbCover,   hoverImg: worldOrbApp,   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, title: "Orb App",    sub: "Manage your Orb operations", href: undefined      },
+  { img: worldOrbCover,   hoverImg: worldOrbApp,   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, title: "Orb App",    sub: "Manage your Orb operations", href: "/world/orb"   },
 ];
 
 const INK = "#282328";
