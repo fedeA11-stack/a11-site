@@ -51,7 +51,7 @@ export default function StudioPage() {
           <div className="flex flex-col md:flex-row pt-16 md:pt-24 lg:pt-[156px] pb-16 md:pb-24 lg:pb-[140px]">
 
             {/* Left column — headline */}
-            <div className="md:flex-[0_0_50%] lg:pr-[48px] mb-8 md:mb-0">
+            <div className="md:flex-1 mb-8 md:mb-0 min-w-0">
               <h1
                 style={T.heroBase}
                 className="text-[32px] sm:text-[40px] md:text-[44px] lg:text-[56px]"
@@ -62,7 +62,7 @@ export default function StudioPage() {
 
             {/* Right column — body text + CTA */}
             {/* Desktop offset: body starts 236px below section top (from Figma) */}
-            <div className="md:flex-[0_0_50%] md:pt-[80px] lg:pt-[236px]">
+            <div className="md:flex-1 md:pt-[80px] lg:pt-[236px] min-w-0">
               <div style={{ maxWidth: "461px" }}>
                 <p style={{ ...T.body, marginBottom: "32px" }}>
                   We have been designing digital products together since 2019. Our longest engagement was five years with Tools for Humanity, where we designed World App from scratch – now one of the most widely used mobile wallets in the world.
@@ -128,32 +128,30 @@ export default function StudioPage() {
             />
           </div>
 
-          {/* Desktop: exact Figma staggered absolute layout */}
+          {/* Desktop: staggered grid — all values as % of container (1240×604 Figma frame) */}
           {/*
-           * Figma staggered 4-col grid (each col ~308px, gap 4px):
-           *   img1 (small 308×200): col 2, top row
-           *   img2 (small 308×200): col 1, bottom row
-           *   img3 (large 618×400): cols 3-4, bottom
-           * Section height = 604px
+           *   img1 (col 2, row 1): left=25.16%, width=24.84%, top=0,      height=33.11%
+           *   img2 (col 1, row 2): left=0,      width=24.84%, top=33.77%, height=33.11%
+           *   img3 (cols 3-4, r2): left=50.32%, width=49.84%, top=33.77%, height=66.23%
            */}
-          <div className="hidden lg:block relative h-[604px] mb-[120px]">
+          <div className="hidden lg:block relative mb-[120px]" style={{ aspectRatio: "1240 / 604" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/Image 1.png"
               alt="Studio photo"
-              style={{ position: "absolute", top: 0, left: "312px", width: "308px", height: "200px", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              style={{ position: "absolute", top: 0, left: "25.16%", width: "24.84%", height: "33.11%", objectFit: "cover", borderRadius: "16px", display: "block" }}
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/Image 2.png"
               alt="Studio photo"
-              style={{ position: "absolute", top: "204px", left: 0, width: "308px", height: "200px", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              style={{ position: "absolute", top: "33.77%", left: 0, width: "24.84%", height: "33.11%", objectFit: "cover", borderRadius: "16px", display: "block" }}
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/Image 3.png"
               alt="Studio photo"
-              style={{ position: "absolute", top: "204px", left: "624px", width: "618px", height: "400px", objectFit: "cover", borderRadius: "16px", display: "block" }}
+              style={{ position: "absolute", top: "33.77%", left: "50.32%", width: "49.84%", height: "66.23%", objectFit: "cover", borderRadius: "16px", display: "block" }}
             />
           </div>
 

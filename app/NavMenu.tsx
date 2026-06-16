@@ -59,19 +59,8 @@ export default function NavMenu() {
           pointerEvents: "none",
         }}
       >
-        {/*
-         * Inner row — padded to the 1240px grid.
-         * Three children: Logo | flex-1 centered links | Time
-         */}
-        <div
-          style={{
-            height:      "100%",
-            paddingLeft:  GRID,
-            paddingRight: GRID,
-            display:      "flex",
-            alignItems:   "center",
-          }}
-        >
+        {/* Inner row — same container as page content for grid alignment */}
+        <div className="max-w-[1240px] mx-auto w-full px-4 md:px-8 lg:px-0 flex items-center h-full">
           {/* ── Left: Logo mark 32×36px ────────────────────────────────── */}
           <Link
             href="/"
