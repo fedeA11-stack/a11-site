@@ -9,7 +9,7 @@ import NavMenu from "../../NavMenu";
 const T = {
   /** Section headline — 64px TWK Book */
   h2: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(36px, 4.44vw, 64px)",
     lineHeight: 0.96,
@@ -19,7 +19,7 @@ const T = {
   },
   /** Large display — 88px TWK Book */
   h1: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(42px, 6.11vw, 88px)",
     lineHeight: 0.96,
@@ -29,7 +29,7 @@ const T = {
   },
   /** Body — 20px TWK Regular */
   body: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(16px, 1.39vw, 20px)",
     lineHeight: 1.3,
@@ -38,7 +38,7 @@ const T = {
   },
   /** Small label */
   label: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(14px, 1.11vw, 16px)",
     lineHeight: 1.3,
@@ -222,7 +222,7 @@ export default function WorldMoneyPage() {
           >
             <span
               style={{
-                fontFamily: "'TWK Continental', serif",
+                fontFamily: "'System Unlicensed Trial', sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(48px, 6.67vw, 96px)",
                 lineHeight: 0.96,
@@ -451,7 +451,7 @@ export default function WorldMoneyPage() {
       >
         <p
           style={{
-            fontFamily: "'TWK Continental', serif",
+            fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 400,
             fontSize: "clamp(28px, 4.17vw, 60px)",
             lineHeight: 1.1,
@@ -470,7 +470,7 @@ export default function WorldMoneyPage() {
             border: "1px solid rgba(255,255,255,0.4)",
             borderRadius: 6,
             padding: "11px 24px",
-            fontFamily: "'TWK Continental', serif",
+            fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 400,
             fontSize: 16,
             lineHeight: 1.3,

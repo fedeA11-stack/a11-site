@@ -1,7 +1,7 @@
 "use client";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const FONT = "'TWK Continental', serif";
+const FONT = "'System Unlicensed Trial', sans-serif";
 
 // ── Component ─────────────────────────────────────────────────────────────────
 // Renders the footer banner + bottom bar.
@@ -38,7 +38,7 @@ export default function FooterBanner() {
             right:         "27.15%",
             margin:        0,
             fontFamily:    FONT,
-            fontWeight:    400,
+            fontWeight:    500,
             fontSize:      "42px",
             lineHeight:    0.95,
             letterSpacing: "-0.84px",
@@ -58,7 +58,7 @@ export default function FooterBanner() {
             left:          "6.45%",
             right:         "27.15%",
             fontFamily:    FONT,
-            fontWeight:    400,
+            fontWeight:    500,
             fontSize:      "42px",
             lineHeight:    0.95,
             letterSpacing: "-0.84px",
@@ -101,7 +101,7 @@ export default function FooterBanner() {
             style={{
               margin:        0,
               fontFamily:    FONT,
-              fontWeight:    400,
+              fontWeight:    500,
               fontSize:      "16px",
               lineHeight:    1.4,
               letterSpacing: "-0.32px",
@@ -124,11 +124,11 @@ export default function FooterBanner() {
             }}
           >
             {/* "Social" label — Medium weight */}
-            <span style={{ fontWeight: 400 }}>Social</span>
+            <span style={{ fontWeight: 500 }}>Social</span>
             {/* Individual links — Regular weight */}
-            <span style={{ fontWeight: 450 }}>Twitter,</span>
-            <span style={{ fontWeight: 450 }}>Cosmos,</span>
-            <span style={{ fontWeight: 450 }}>Linkedin</span>
+            <span style={{ fontWeight: 400 }}>Twitter,</span>
+            <span style={{ fontWeight: 400 }}>Cosmos,</span>
+            <span style={{ fontWeight: 400 }}>Linkedin</span>
           </div>
         </div>
 
@@ -137,7 +137,7 @@ export default function FooterBanner() {
           style={{
             margin:        0,
             fontFamily:    FONT,
-            fontWeight:    400,
+            fontWeight:    500,
             fontSize:      "16px",
             lineHeight:    1.4,
             letterSpacing: "-0.32px",

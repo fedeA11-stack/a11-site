@@ -10,7 +10,7 @@ import PhoneVideo from "./PhoneVideo";
 // ─────────────────────────────────────────────────────────────────────────────
 const T = {
   h1: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(42px, 6.11vw, 88px)",
     lineHeight: 0.96,
@@ -18,7 +18,7 @@ const T = {
     color: "#282328",
   },
   h2: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(32px, 3.89vw, 56px)",
     lineHeight: 0.96,
@@ -26,7 +26,7 @@ const T = {
     color: "#282328",
   },
   body: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(16px, 1.39vw, 20px)",
     lineHeight: 1.3,
@@ -34,7 +34,7 @@ const T = {
     color: "#282328",
   },
   label: {
-    fontFamily: "'TWK Continental', serif",
+    fontFamily: "'System Unlicensed Trial', sans-serif",
     fontWeight: 400,
     fontSize: "clamp(13px, 1vw, 15px)",
     lineHeight: 1.3,
@@ -127,7 +127,7 @@ export default function WorldChatPage() {
         {/* ── Designing Trust At Scale ────────────────────────────────────────── */}
         <div style={{ padding: PAD, display: "flex", flexDirection: "column", gap: "clamp(16px, 1.67vw, 24px)" }}>
           <h2 style={{
-            fontFamily: "'TWK Continental', serif",
+            fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 400,
             fontSize: "clamp(40px, 4.44vw, 64px)",
             lineHeight: 0.96,
@@ -138,7 +138,7 @@ export default function WorldChatPage() {
             Designing<br />Trust At Scale
           </h2>
           <p style={{
-            fontFamily: "'TWK Continental', serif",
+            fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 450,
             fontSize: "clamp(16px, 1.39vw, 20px)",
             lineHeight: 1.3,

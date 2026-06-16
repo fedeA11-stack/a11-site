@@ -198,7 +198,7 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
               whiteSpace: "nowrap",
             }}
           >
-            <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: "#fff" }}>
+            <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: "#fff" }}>
               View project
             </span>
             <ArrowUpRight />
@@ -218,12 +218,12 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
         media
       )}
 
-      {/* Label — title + subtitle, 20px TWK Continental Medium, 6px gap */}
+      {/* Label — title + subtitle, 20px System Unlicensed Trial Medium, 6px gap */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 20 }}>
-        <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: INK }}>
+        <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: INK }}>
           {card.title}
         </span>
-        <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: MUTE }}>
+        <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: MUTE }}>
           {card.sub}
         </span>
       </div>
@@ -259,7 +259,7 @@ export default function WorldPage() {
                 key={item}
                 href={i === 0 ? "/" : "#"}
                 style={{
-                  fontFamily: "'TWK Continental', sans-serif",
+                  fontFamily: "'System Unlicensed Trial', sans-serif",
                   fontWeight: 500,
                   fontSize: 14,
                   lineHeight: 1,
@@ -277,7 +277,7 @@ export default function WorldPage() {
           <span
             className="wcs-clock"
             style={{
-              fontFamily: "'TWK Continental', sans-serif",
+              fontFamily: "'System Unlicensed Trial', sans-serif",
               fontWeight: 500,
               fontSize: 14,
               lineHeight: 1,
@@ -298,7 +298,7 @@ export default function WorldPage() {
             margin: "92px 0 0",
             padding: "0 var(--pad)",
             maxWidth: "calc(616px + 2 * var(--pad))",
-            fontFamily: "'TWK Continental', sans-serif",
+            fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 500,
             fontSize: "clamp(34px, 3.8vw, 56px)",
             lineHeight: 0.95,

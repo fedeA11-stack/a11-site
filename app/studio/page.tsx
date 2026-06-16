@@ -3,12 +3,12 @@
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
 
-const FONT = "'TWK Continental', serif";
+const FONT = "'System Unlicensed Trial', sans-serif";
 
 const T = {
   heroBase: {
     fontFamily: FONT,
-    fontWeight: 400,
+    fontWeight: 500,
     lineHeight: 0.95,
     letterSpacing: "-1.68px",
     color: "#282328",
@@ -27,7 +27,7 @@ const T = {
   },
   cta: {
     fontFamily: FONT,
-    fontWeight: 400,
+    fontWeight: 500,
     fontSize: "15px",
     lineHeight: 0.95,
     letterSpacing: "-0.3px",

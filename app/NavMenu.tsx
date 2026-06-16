@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const FONT = "'TWK Continental', serif";
+const FONT = "'System Unlicensed Trial', sans-serif";
 
 // Aligns nav edges to the 1240px content grid.
 // On 1512px: (1512 − 1240) / 2 = 136px. Falls back to 32px on narrow screens.
@@ -96,7 +96,7 @@ export default function NavMenu() {
                 alignItems:    "center",
                 gap:           48,
                 fontFamily:    FONT,
-                fontWeight:    400,
+                fontWeight:    500,
                 fontSize:      14,
                 lineHeight:    1,
                 letterSpacing: "-0.14px",
@@ -126,7 +126,7 @@ export default function NavMenu() {
             style={{
               margin:        0,
               fontFamily:    FONT,
-              fontWeight:    400,
+              fontWeight:    500,
               fontSize:      14,
               lineHeight:    1,
               letterSpacing: "-0.14px",

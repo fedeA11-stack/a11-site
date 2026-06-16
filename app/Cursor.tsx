@@ -86,7 +86,7 @@ function CursorPill() {
         background:    "#ffffff",
         borderRadius:  9999,
         padding:       "6px 16px",
-        fontFamily:    "'TWK Continental', serif",
+        fontFamily:    "'System Unlicensed Trial', sans-serif",
         fontSize:      14,
         fontWeight:    400,
         lineHeight:    1,

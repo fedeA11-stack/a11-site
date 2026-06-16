@@ -68,7 +68,7 @@ export default function CraftButton() {
       />
       <span
         style={{
-          fontFamily: "'TWK Continental', serif",
+          fontFamily: "'System Unlicensed Trial', sans-serif",
           fontWeight: 400,
           fontSize:   12,
           lineHeight: 1,

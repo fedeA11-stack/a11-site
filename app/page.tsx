@@ -149,8 +149,8 @@ function ProjectCard({ project }: { project: Project }) {
         style={{
           top: project.labelTop,
           left: 72,
-          fontFamily: "'TWK Continental', serif",
-          fontWeight: 400,
+          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontWeight: 500,
           fontSize: project.labelPx,
           lineHeight: 1,
           letterSpacing: project.labelTracking,
@@ -168,8 +168,8 @@ function ProjectCard({ project }: { project: Project }) {
         style={{
           top: project.descTop,
           left: 72,
-          fontFamily: "'TWK Continental', serif",
-          fontWeight: 400,
+          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontWeight: 500,
           fontSize: "42px",
           lineHeight: 0.95,
           letterSpacing: "-1.26px",
@@ -230,8 +230,8 @@ function CTASection({
       <p
         className="m-0 text-center whitespace-pre-wrap"
         style={{
-          fontFamily: "'TWK Continental', serif",
-          fontWeight: 400,
+          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontWeight: 500,
           fontSize: "44.436px",
           lineHeight: 0.94,
           letterSpacing: "-0.8887px",
@@ -252,8 +252,8 @@ function CTASection({
           borderRadius: "111.091px",
           background: "#282328",
           border: "none",
-          fontFamily: "'TWK Continental', serif",
-          fontWeight: 400,
+          fontFamily: "'System Unlicensed Trial', sans-serif",
+          fontWeight: 500,
           fontSize: "15.553px",
           lineHeight: 1.09,
           color: "#ffffff",
@@ -286,8 +286,8 @@ export default function WorkPage() {
         <p
           className="m-0 text-center whitespace-pre-wrap"
           style={{
-            fontFamily: "'TWK Continental', serif",
-            fontWeight: 400,
+            fontFamily: "'System Unlicensed Trial', sans-serif",
+            fontWeight: 500,
             fontSize: "32px",
             lineHeight: 0.95,
             letterSpacing: "-0.64px",
