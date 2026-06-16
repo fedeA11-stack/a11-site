@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const FONT = "'TWK Continental', serif";
@@ -11,14 +12,15 @@ const FONT = "'TWK Continental', serif";
 const GRID = "max(32px, calc((100% - 1240px) / 2))";
 
 const NAV_LINKS = [
-  { label: "Work",       href: "/",    active: true  },
-  { label: "Studio",     href: "#",    active: false },
-  { label: "Playground", href: "#",    active: false },
-  { label: "Contact",    href: "#",    active: false },
+  { label: "Work",       href: "/"        },
+  { label: "Studio",     href: "/studio"  },
+  { label: "Playground", href: "#"        },
+  { label: "Contact",    href: "#"        },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function NavMenu() {
+  const pathname = usePathname();
   const [time, setTime] = useState("SFO, --:--:-- --");
 
   // Live SFO clock
@@ -119,7 +121,7 @@ export default function NavMenu() {
                   href={link.href}
                   style={{
                     color:          "#ffffff",
-                    opacity:        link.active ? 1 : 0.5,
+                    opacity:        pathname === link.href ? 1 : 0.5,
                     textDecoration: "none",
                     pointerEvents:  "auto",
                   }}
