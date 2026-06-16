@@ -57,7 +57,7 @@ function buildCovePath(t: number): string {
 function ArrowUpRight() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden style={{ display: "block" }}>
-      <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke={INK} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -169,12 +169,12 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
               height: 40,
               padding: "0 14px",
               borderRadius: 100,
-              background: INK,
-              boxShadow: "0 8px 24px rgba(40,35,40,0.22)",
+              background: "#ffffff",
+              boxShadow: "0 8px 24px rgba(40,35,40,0.18)",
               whiteSpace: "nowrap",
             }}
           >
-            <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: "#fff" }}>
+            <span style={{ fontFamily: "'System Unlicensed Trial', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: INK }}>
               View project
             </span>
             <ArrowUpRight />

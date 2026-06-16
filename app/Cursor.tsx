@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
  */
 function CursorPill() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const labelRef  = useRef<HTMLSpanElement>(null);
   const posRef    = useRef({ x: -200, y: -200 });
   const targetRef = useRef({ x: -200, y: -200 });
   const rafRef    = useRef<number | null>(null);
@@ -42,7 +43,7 @@ function CursorPill() {
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
       const label = (target as HTMLElement).dataset.cursor ?? "";
-      div.textContent = label;
+      if (labelRef.current) labelRef.current.textContent = label;
       div.style.opacity = "1";
       div.style.pointerEvents = "none";
       visRef.current = true;
@@ -85,17 +86,27 @@ function CursorPill() {
         transition:    "opacity 0.18s ease",
         background:    "#ffffff",
         borderRadius:  9999,
-        padding:       "6px 16px",
+        height:        "40px",
+        padding:       "0 14px",
+        display:       "flex",
+        alignItems:    "center",
+        gap:           4,
         fontFamily:    "'System Unlicensed Trial', sans-serif",
         fontSize:      14,
-        fontWeight:    400,
+        fontWeight:    500,
         lineHeight:    1,
+        letterSpacing: "-0.14px",
         color:         "#282328",
         whiteSpace:    "nowrap",
-        boxShadow:     "0 1px 2px rgba(40,35,40,0.08), 0 4px 14px rgba(40,35,40,0.12)",
+        boxShadow:     "0 8px 24px rgba(40,35,40,0.18)",
         userSelect:    "none",
       }}
-    />
+    >
+      <span ref={labelRef} />
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden style={{ display: "block", flexShrink: 0 }}>
+        <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke="#282328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
   );
 }
 
