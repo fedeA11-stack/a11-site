@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import NavMenu from "../NavMenu";
 
 // ── Cards — Figma World_CaseStudy (1725:10129 / hover 1725:10175) ──────────
 // Photos are badge-free; the icon badge is a floating element so the card can
@@ -14,7 +15,6 @@ const CARDS = [
   { img: "/assets/world/case/world-orb.jpg",   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, solid: false, title: "Orb App",     sub: "Manage your Orb operations", href: undefined      },
 ] as const;
 
-const NAV = ["Work", "Studio", "Playground", "Contact"] as const;
 const INK = "#282328";
 const MUTE = "#989190";
 
@@ -51,30 +51,6 @@ function buildCovePath(t: number): string {
     d += `${i === 0 ? "M" : "L"} ${ix.toFixed(4)} ${iy.toFixed(4)} Q ${x.toFixed(4)} ${y.toFixed(4)} ${ox.toFixed(4)} ${oy.toFixed(4)} `;
   }
   return d + "Z";
-}
-
-// ── Live SFO clock — "SFO, 10:25:26 PM" ────────────────────────────────────
-function useSfoClock() {
-  const [t, setT] = useState("SFO, 10:25:26 PM");
-  useEffect(() => {
-    const fmt = () =>
-      "SFO, " +
-      new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/Los_Angeles",
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      }).format(new Date());
-    const tick = () => setT(fmt());
-    const raf = requestAnimationFrame(tick);
-    const id = setInterval(tick, 1000);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearInterval(id);
-    };
-  }, []);
-  return t;
 }
 
 // ── ↗ arrow for the hover pill ─────────────────────────────────────────────
@@ -233,8 +209,6 @@ function Card({ card }: { card: (typeof CARDS)[number] }) {
 
 // ── Page ────────────────────────────────────────────────────────────────────
 export default function WorldPage() {
-  const clock = useSfoClock();
-
   return (
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh" }}>
       <style>{`
@@ -242,60 +216,15 @@ export default function WorldPage() {
         .wcs-grid { grid-template-columns: repeat(4, 1fr); }
         @media (max-width: 880px) { .wcs-grid { grid-template-columns: repeat(2, 1fr); row-gap: 28px; } }
         @media (max-width: 520px) { .wcs-grid { grid-template-columns: 1fr; row-gap: 28px; } }
-        @media (max-width: 760px) { .wcs-nav, .wcs-clock { display: none; } }
       `}</style>
 
+      <NavMenu />
+
       <div className="wcs-wrap" style={{ maxWidth: 1512, margin: "0 auto", width: "100%" }}>
-        {/* ── Nav ─────────────────────────────────────────────────────────── */}
-        <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "55px var(--pad) 0" }}>
-          <Link href="/" style={{ display: "block", flexShrink: 0 }} aria-label="A11 Product Studio">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/logo.svg" alt="A11" style={{ height: 36, width: "auto", display: "block" }} />
-          </Link>
-
-          <nav className="wcs-nav" style={{ display: "flex", alignItems: "center", gap: 48 }}>
-            {NAV.map((item, i) => (
-              <Link
-                key={item}
-                href={i === 0 ? "/" : "#"}
-                style={{
-                  fontFamily: "'System Unlicensed Trial', sans-serif",
-                  fontWeight: 500,
-                  fontSize: 14,
-                  lineHeight: 1,
-                  letterSpacing: "-0.14px",
-                  color: i === 0 ? INK : MUTE,
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
-
-          <span
-            className="wcs-clock"
-            style={{
-              fontFamily: "'System Unlicensed Trial', sans-serif",
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: 1,
-              letterSpacing: "-0.14px",
-              color: MUTE,
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {clock}
-          </span>
-        </header>
-
         {/* ── Headline ────────────────────────────────────────────────────── */}
         <h1
           style={{
-            margin: "92px 0 0",
+            margin: "104px 0 0",
             padding: "0 var(--pad)",
             maxWidth: "calc(616px + 2 * var(--pad))",
             fontFamily: "'System Unlicensed Trial', sans-serif",
