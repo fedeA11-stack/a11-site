@@ -42,7 +42,7 @@ const T = {
   },
 };
 
-const PAD = "0 32px";
+const PAD = "0";
 const RADIUS = "clamp(8px, 0.94vw, 13.5px)";
 const BEIGE = "#F0EBE5";
 
@@ -99,7 +99,7 @@ export default function WorldChatPage() {
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <NavMenu />
 
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px, 5.56vw, 80px)" }}>
+      <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px, 5.56vw, 80px)" }}>
 
         {/* ── Back link ──────────────────────────────────────────────────────── */}
         <div style={{ padding: PAD, paddingTop: "clamp(24px, 2.78vw, 40px)" }}>

@@ -66,7 +66,10 @@ export default function FooterBanner() {
             textDecoration: "underline",
             textUnderlineOffset: "4px",
             display:       "block",
+            transition:    "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = "0.6")}
+          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
         >
           We should talk.
         </a>
