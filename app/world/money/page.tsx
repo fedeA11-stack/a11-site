@@ -1,489 +1,85 @@
-"use client";
+import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
+import { ALL_PROJECTS } from "../../caseProjects";
 
-import Link from "next/link";
-import NavMenu from "../../NavMenu";
+import heroImg from "../../../public/assets/world-money/wm-hero.jpg";
+import wm11 from "../../../public/assets/world-money/wm-1-1.jpg";
+import wm12 from "../../../public/assets/world-money/wm-1-2.jpg";
+import wm13 from "../../../public/assets/world-money/wm-1-3.png";
+import wm14 from "../../../public/assets/world-money/wm-1-4.png";
+import wm21 from "../../../public/assets/world-money/wm-2-1.jpg";
+import wm22 from "../../../public/assets/world-money/wm-2-2.png";
+import wm23 from "../../../public/assets/world-money/wm-2-3.png";
+import wm31 from "../../../public/assets/world-money/wm-3-1.jpg";
+import wm32 from "../../../public/assets/world-money/wm-3-2.jpg";
+import wm41 from "../../../public/assets/world-money/wm-4-1.png";
+import wm42 from "../../../public/assets/world-money/wm-4-2.jpg";
+import wm43 from "../../../public/assets/world-money/wm-4-3.jpg";
+import wm44 from "../../../public/assets/world-money/wm-4-4.jpg";
+import wm45 from "../../../public/assets/world-money/wm-4-5.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Shared style helpers
+// World Money — content from Figma frame 1871:12124, rendered through the
+// canonical case-study template.
 // ─────────────────────────────────────────────────────────────────────────────
-const T = {
-  /** Section headline — 64px TWK Book */
-  h2: {
-    fontFamily: "var(--font-system), sans-serif",
-    fontWeight: 400,
-    fontSize: "clamp(36px, 4.44vw, 64px)",
-    lineHeight: 0.96,
-    letterSpacing: "-0.02em",
-    color: "#282328",
-    textTransform: "capitalize" as const,
-  },
-  /** Large display — 88px TWK Book */
-  h1: {
-    fontFamily: "var(--font-system), sans-serif",
-    fontWeight: 400,
-    fontSize: "clamp(42px, 6.11vw, 88px)",
-    lineHeight: 0.96,
-    letterSpacing: "-0.02em",
-    color: "#282328",
-    textTransform: "capitalize" as const,
-  },
-  /** Body — 20px TWK Regular */
-  body: {
-    fontFamily: "var(--font-system), sans-serif",
-    fontWeight: 400,
-    fontSize: "clamp(16px, 1.39vw, 20px)",
-    lineHeight: 1.3,
-    letterSpacing: "-0.02em",
-    color: "#282328",
-  },
-  /** Small label */
-  label: {
-    fontFamily: "var(--font-system), sans-serif",
-    fontWeight: 400,
-    fontSize: "clamp(14px, 1.11vw, 16px)",
-    lineHeight: 1.3,
-    letterSpacing: "-0.01em",
-    color: "rgba(40,35,40,0.4)",
-  },
+const BG = "#F0EBE5";
+
+const data: CaseStudyData = {
+  breadcrumb: "World Money",
+  section: { label: "World", href: "/world" },
+  title: "Designing the no.1\nwallet in the world",
+  description:
+    "World Money was designed to help millions of people receive, manage, and use digital assets through a simple experience, even if they had never made a crypto transaction before.",
+  hero: { src: heroImg, alt: "World Money wallet", bg: BG },
+  sections: [
+    {
+      stats: [
+        { value: "45M+", label: "Total users" },
+        { value: "36M+", label: "Monthly transactions" },
+        { value: "2M+", label: "Daily users" },
+      ],
+    },
+    {
+      title: "Wallet designed for everyone",
+      body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks, or blockchain infrastructure, they simply needed to understand what they owned, how to receive it, and how to use it safely.",
+      media: [
+        { kind: "full", aspect: "1116 / 900", image: { src: wm11, alt: "World Money wallet home", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: wm12, alt: "World Money balance overview", bg: BG } },
+        { kind: "full", aspect: "1116 / 550", image: { src: wm13, alt: "World Money asset detail", bg: BG } },
+        { kind: "full", aspect: "1116 / 405", image: { src: wm14, alt: "World Money receive flow", bg: BG } },
+      ],
+    },
+    {
+      title: "New financial rails, familiar actions",
+      body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control.",
+      media: [
+        { kind: "full", aspect: "1116 / 900", image: { src: wm21, alt: "World Money send flow", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: wm22, alt: "World Money transaction confirmation", bg: BG } },
+        { kind: "full", aspect: "1116 / 600", image: { src: wm23, alt: "World Money activity history", bg: BG } },
+      ],
+    },
+    {
+      title: "From wallet balance to real-world use",
+      body: "World Card extended the wallet beyond holding and transferring assets, creating a familiar way for people to use their digital assets in everyday purchases, bringing wallet value into real-world payments.",
+      media: [
+        { kind: "full", aspect: "1116 / 750", image: { src: wm31, alt: "World Card", bg: BG } },
+        { kind: "full", aspect: "1116 / 900", image: { src: wm32, alt: "World Card in use", bg: BG } },
+      ],
+    },
+    {
+      title: "Helping users understand the value",
+      body: "Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value.",
+      media: [
+        { kind: "full", aspect: "1116 / 750", image: { src: wm41, alt: "World Money grants intro", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: wm42, alt: "World Money claim flow", bg: BG } },
+        { kind: "full", aspect: "1842 / 1036", image: { src: wm43, alt: "World Money grant visual metaphor", bg: BG } },
+        { kind: "full", aspect: "1116 / 600", image: { src: wm44, alt: "World Money ownership detail", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: wm45, alt: "World Money grant value", bg: BG } },
+      ],
+    },
+  ],
+  projects: ALL_PROJECTS,
 };
 
-/** Horizontal rule */
-function Divider() {
-  return <div style={{ height: 1, background: "rgba(40,35,40,0.12)", width: "100%" }} />;
-}
-
-/** Two-column section header: big title left, body text right */
-function SectionHeader({ title, body }: { title: string; body: string }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "clamp(24px, 3.33vw, 48px)",
-        alignItems: "start",
-      }}
-    >
-      <h2 style={T.h2}>{title}</h2>
-      <p style={{ ...T.body, color: "#282328", maxWidth: 695 }}>{body}</p>
-    </div>
-  );
-}
-
-/** Full-width image block with rounded corners */
-function FullImage({
-  src, alt, bg = "#F6F3EE", caption,
-}: { src: string; alt: string; bg?: string; caption?: string }) {
-  return (
-    <div>
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "1448 / 969",
-          borderRadius: "clamp(8px, 0.94vw, 13.5px)",
-          overflow: "hidden",
-          background: bg,
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt={alt}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        />
-        {caption && (
-          <p
-            style={{
-              ...T.label,
-              position: "absolute",
-              bottom: 24,
-              left: 24,
-            }}
-          >
-            {caption}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/** Two equal-column image blocks */
-function TwoColImages({
-  left, right,
-}: {
-  left: { src: string; alt: string; bg?: string };
-  right: { src: string; alt: string; bg?: string };
-}) {
-  const cell = {
-    position: "relative" as const,
-    width: "100%",
-    aspectRatio: "719 / 1211",
-    borderRadius: "clamp(8px, 0.94vw, 13.5px)",
-    overflow: "hidden" as const,
-  };
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "clamp(8px, 0.69vw, 10px)",
-      }}
-    >
-      {[left, right].map((img, i) => (
-        <div key={i} style={{ ...cell, background: img.bg ?? "#F6F3EE" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={img.src}
-            alt={img.alt}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Page
-// ─────────────────────────────────────────────────────────────────────────────
-export default function WorldMoneyPage() {
-  return (
-    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh" }}>
-      <NavMenu />
-
-      <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0">
-
-      {/* ── Back link ──────────────────────────────────────────────────────── */}
-      <div style={{ padding: "32px 0 0" }}>
-        <Link
-          href="/world"
-          style={{
-            ...T.label,
-            color: "#282328",
-            textDecoration: "none",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M10 3L5 8l5 5" stroke="#282328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          World
-        </Link>
-      </div>
-
-      {/* ── Hero ───────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: "clamp(40px, 5.56vw, 80px) 0 clamp(32px, 3.33vw, 48px)",
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(16px, 1.39vw, 20px)",
-        }}
-      >
-        <h1 style={T.h1}>
-          Designing no.1<br />
-          wallet in the world
-        </h1>
-        <p style={{ ...T.body, maxWidth: "min(627px, 100%)" }}>
-          World Money was designed to help millions of people receive, manage, and use digital
-          assets through a simple experience, even if they had never made a crypto transaction before.
-        </p>
-      </section>
-
-      {/* ── Hero image ─────────────────────────────────────────────────────── */}
-      <FullImage src="/assets/world/wm-hero.png" alt="World Money app in use" bg="#282328" />
-
-      {/* ── Stats ──────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: "clamp(40px, 5.56vw, 80px) 0",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-        }}
-      >
-        {[
-          { value: "45M+", label: "Total Users" },
-          { value: "36M+", label: "Monthly Transactions" },
-          { value: "2M+", label: "Daily Users" },
-        ].map((stat, i) => (
-          <div
-            key={stat.label}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 8,
-              textAlign: "center",
-              borderLeft: i > 0 ? "1px solid rgba(40,35,40,0.12)" : "none",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-system), sans-serif",
-                fontWeight: 400,
-                fontSize: "clamp(48px, 6.67vw, 96px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.02em",
-                color: "#282328",
-              }}
-            >
-              {stat.value}
-            </span>
-            <span style={T.label}>{stat.label}</span>
-          </div>
-        ))}
-      </section>
-
-      <Divider />
-
-      {/* ── "Wallet designed for everyone" ─────────────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0", display: "flex", flexDirection: "column", gap: "clamp(16px, 1.39vw, 20px)" }}>
-        <h2 style={{ ...T.h2, fontSize: "clamp(32px, 4.44vw, 64px)" }}>
-          Wallet designed<br />for everyone
-        </h2>
-        <p style={{ ...T.body, maxWidth: "min(627px, 100%)" }}>
-          For many people entering World Money was their first experience with digital assets.
-          They were not thinking about networks, or blockchain infrastructure, they simply needed
-          to understand what they owned, how to receive it, and how to use it safely.
-        </p>
-      </section>
-
-      {/* ── Two-col: Home + Earn screens ───────────────────────────────────── */}
-      <TwoColImages
-        left={{ src: "/assets/world/wm-home-screen.png", alt: "World Money home screen", bg: "#F6F3EE" }}
-        right={{ src: "/assets/world/wm-earn-bg.png", alt: "World Money earn screen", bg: "#F3F2F2" }}
-      />
-
-      {/* ── Large phone in hand ────────────────────────────────────────────── */}
-      <div style={{ paddingTop: "clamp(8px, 0.69vw, 10px)" }}>
-        <FullImage src="/assets/world/wm-phone-bg.png" alt="World Money wallet balance detail" bg="#F6F3EE" />
-      </div>
-
-      {/* ── Section header: New Financial Rails ───────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
-        <SectionHeader
-          title="New Financial Rails Familiar Actions"
-          body="The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control."
-        />
-      </section>
-
-      {/* ── Two-col: Send + Transfer ────────────────────────────────────────── */}
-      <TwoColImages
-        left={{ src: "/assets/world/wm-starbucks-photo.png", alt: "World Money send screen", bg: "#F6F3EE" }}
-        right={{ src: "/assets/world/wm-starbucks-hand.png", alt: "World Money transaction history", bg: "#F3F2F2" }}
-      />
-
-      {/* ── Quote ──────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: "clamp(48px, 6.67vw, 96px) 0",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 40,
-        }}
-      >
-        <blockquote
-          style={{
-            ...T.h2,
-            fontSize: "clamp(20px, 2.22vw, 32px)",
-            textAlign: "center",
-            maxWidth: "min(741px, 100%)",
-            margin: 0,
-            fontStyle: "normal",
-            textTransform: "none",
-          }}
-        >
-          &ldquo;This is exactly what we needed, a wallet experience that made crypto feel
-          simple, familiar, and safe.&rdquo;
-        </blockquote>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/world/wm-quote-avatar.png"
-            alt="Patrick Traughber"
-            style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
-          />
-          <div>
-            <p style={{ ...T.body, fontWeight: 500, margin: 0 }}>Patrick Traughber</p>
-            <p style={{ ...T.label, margin: 0 }}>Head of Finance Products</p>
-          </div>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ── Section header: From Wallet Balance ────────────────────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
-        <SectionHeader
-          title="From Wallet Balance To Real-World Use"
-          body="World Card extended the wallet beyond holding and transferring assets, creating a familiar way for people to use their digital assets in everyday purchases. By bringing wallet value into real-world payments."
-        />
-      </section>
-
-      {/* ── Full-width World Card ───────────────────────────────────────────── */}
-      <FullImage
-        src="/assets/world/wm-card.png"
-        alt="World Card designed by TFH Design Lab"
-        bg="#F6F3EE"
-        caption="Card designed by TFH Design Lab"
-      />
-
-      {/* ── Two-col: Starbucks real-world payment ──────────────────────────── */}
-      <div style={{ paddingTop: "clamp(8px, 0.69vw, 10px)" }}>
-        <TwoColImages
-          left={{ src: "/assets/world/wm-full-1.png", alt: "World Money card real-world use", bg: "#F6F3EE" }}
-          right={{ src: "/assets/world/wm-full-2.png", alt: "World Money payment detail", bg: "#F6F3EE" }}
-        />
-      </div>
-
-      {/* ── Section header: Helping users understand the value ─────────────── */}
-      <section style={{ padding: "clamp(40px, 5.56vw, 80px) 0" }}>
-        <SectionHeader
-          title="Helping Users Understand The Value"
-          body="Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value."
-        />
-      </section>
-
-      {/* ── Coin section ────────────────────────────────────────────────────── */}
-      <FullImage src="/assets/world/wm-coin.png" alt="World coin — Belongs to every human" bg="#F6F3EE" />
-
-      {/* ── Grants screen phone ─────────────────────────────────────────────── */}
-      <div style={{ paddingTop: "clamp(8px, 0.69vw, 10px)" }}>
-        <FullImage src="/assets/world/wm-grants-screen.png" alt="World Grants phone screen" bg="#F6F3EE" />
-      </div>
-
-      {/* ── Discover More ───────────────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: "clamp(48px, 6.67vw, 96px) 0",
-          display: "flex",
-          flexDirection: "column",
-          gap: 32,
-        }}
-      >
-        <h2 style={T.h2}>Discover more</h2>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "clamp(8px, 0.69vw, 10px)",
-          }}
-        >
-          {[
-            {
-              img: "/assets/world/wm-discover-freehold.png",
-              bg: "#1a2e1a",
-              name: "Freehold",
-              desc: "A non-custodial, multi-chain DeFi wallet app",
-              href: "#",
-            },
-            {
-              img: "/assets/world/wm-discover-atlans.png",
-              bg: "#c8a96e",
-              name: "Atlans",
-              desc: "Athletic platform of Discovery and connection",
-              href: "#",
-            },
-            {
-              img: null,
-              bg: "linear-gradient(180deg, #000 0%, #007bff 100%)",
-              name: "World Money",
-              desc: "Helping users understand the value",
-              href: "/world/money",
-            },
-          ].map((card) => (
-            <div key={card.name} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "476 / 474",
-                  borderRadius: "clamp(6px, 0.69vw, 10px)",
-                  overflow: "hidden",
-                  background: card.bg,
-                }}
-              >
-                {card.img && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={card.img}
-                    alt={card.name}
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                )}
-              </div>
-              <p
-                style={{
-                  ...T.body,
-                  fontSize: "clamp(16px, 1.67vw, 24px)",
-                  margin: 0,
-                  textTransform: "capitalize",
-                }}
-              >
-                <strong style={{ fontWeight: 500 }}>{card.name}</strong>
-                {" "}
-                <span style={{ color: "rgba(40,35,40,0.45)" }}>{card.desc}</span>
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Dark CTA footer ─────────────────────────────────────────────────── */}
-      <section
-        data-footer=""
-        style={{
-          margin: "0 0 32px",
-          background: "#282328",
-          borderRadius: "clamp(8px, 0.94vw, 13.5px)",
-          padding: "clamp(64px, 8.89vw, 128px) 0",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 40,
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "var(--font-system), sans-serif",
-            fontWeight: 400,
-            fontSize: "clamp(28px, 4.17vw, 60px)",
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: "#ffffff",
-            margin: 0,
-            maxWidth: "min(700px, 100%)",
-          }}
-        >
-          If you&apos;re ambitious enough to work with us, we should talk.
-        </p>
-        <a
-          href="mailto:hello@a11studio.com"
-          style={{
-            display: "inline-block",
-            border: "1px solid rgba(255,255,255,0.4)",
-            borderRadius: 6,
-            padding: "11px 24px",
-            fontFamily: "var(--font-system), sans-serif",
-            fontWeight: 400,
-            fontSize: 16,
-            lineHeight: 1.3,
-            color: "#ffffff",
-            textDecoration: "none",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          Let&apos;s talk
-        </a>
-      </section>
-
-      </div>
-    </div>
-  );
+export default function WorldMoneyV2Page() {
+  return <CaseStudy data={data} />;
 }
