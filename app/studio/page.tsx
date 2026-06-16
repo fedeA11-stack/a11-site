@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
 
@@ -75,7 +76,8 @@ export default function StudioPage() {
                 </p>
 
                 {/* CTA button */}
-                <div
+                <Link
+                  href="/manifesto"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -85,6 +87,7 @@ export default function StudioPage() {
                     gap: "16px",
                     position: "relative",
                     cursor: "pointer",
+                    textDecoration: "none",
                   }}
                 >
                   <span style={T.cta}>Read our Manifesto</span>
@@ -99,7 +102,7 @@ export default function StudioPage() {
                       backgroundColor: "#ffffff",
                     }}
                   />
-                </div>
+                </Link>
               </div>
             </div>
           </div>
