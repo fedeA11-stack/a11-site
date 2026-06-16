@@ -1,8 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
+
+// ─── Entrance reveal ───────────────────────────────────────────────────────────
+// Fade + small rise. Triggers once as the element scrolls into view so cards far
+// down the page animate when seen, not all at once on first paint.
+function Reveal({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      className="w-full"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ type: "spring", duration: 0.4, bounce: 0, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
@@ -175,6 +199,7 @@ function ProjectCard({ project }: { project: Project }) {
           letterSpacing: "-1.26px",
           color: c,
           maxWidth: "521px",
+          textWrap: "pretty",
         }}
       >
         {project.description}
@@ -258,7 +283,16 @@ function CTASection({
           lineHeight: 1.09,
           color: "#ffffff",
           cursor: "pointer",
+          transition:
+            "scale 0.15s cubic-bezier(0.2, 0, 0, 1), opacity 0.15s cubic-bezier(0.2, 0, 0, 1)",
         }}
+        onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
+        onMouseLeave={e => {
+          e.currentTarget.style.opacity = "1";
+          e.currentTarget.style.scale = "1";
+        }}
+        onMouseDown={e => (e.currentTarget.style.scale = "0.96")}
+        onMouseUp={e => (e.currentTarget.style.scale = "1")}
       >
         {buttonLabel}
       </button>
@@ -283,8 +317,11 @@ export default function WorkPage() {
        */}
       {/* pt: Figma tagline y=248 − nav height 80px = 168px. pb: first card y=516 − tagline bottom 338px = 178px */}
       <div className="max-w-[1240px] mx-auto pt-[168px] pb-[178px] flex justify-center">
-        <p
+        <motion.p
           className="m-0 text-center whitespace-pre-wrap"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", duration: 0.4, bounce: 0 }}
           style={{
             fontFamily: "'System Unlicensed Trial', sans-serif",
             fontWeight: 500,
@@ -297,7 +334,7 @@ export default function WorkPage() {
           }}
         >
           {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
-        </p>
+        </motion.p>
       </div>
 
       {/* ── Cards + CTAs ──────────────────────────────────────────────────────
@@ -306,8 +343,8 @@ export default function WorkPage() {
        */}
       <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px]">
         {/* Group 1: World + Freehold */}
-        <ProjectCard project={PROJECTS[0]} />
-        <ProjectCard project={PROJECTS[1]} />
+        <Reveal><ProjectCard project={PROJECTS[0]} /></Reveal>
+        <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
 
         {/* CTA 1 — text-to-button gap: 36px (Figma: 2339.31 - 2303.33 = 35.98px) */}
         <CTASection
@@ -317,8 +354,8 @@ export default function WorkPage() {
         />
 
         {/* Group 2: Districts + Token Studio */}
-        <ProjectCard project={PROJECTS[2]} />
-        <ProjectCard project={PROJECTS[3]} />
+        <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
+        <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
 
         {/* CTA 2 — text-to-button gap: 45px (Figma: 4361.58 - 4316.72 = 44.86px) */}
         <CTASection
@@ -328,8 +365,8 @@ export default function WorkPage() {
         />
 
         {/* Group 3: Atlans + Relai */}
-        <ProjectCard project={PROJECTS[4]} />
-        <ProjectCard project={PROJECTS[5]} />
+        <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
+        <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
       </main>
 
       {/* Footer — same 1240px container, 10px gap from last card. Includes banner + bottom bar. */}

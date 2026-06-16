@@ -115,20 +115,28 @@ export default function NavMenu() {
                 whiteSpace:    "nowrap",
               }}
             >
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  style={{
-                    color:          "#ffffff",
-                    opacity:        isActive(link.href) ? 1 : 0.5,
-                    textDecoration: "none",
-                    pointerEvents:  "auto",
-                  }}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    style={{
+                      color:          "#ffffff",
+                      opacity:        active ? 1 : 0.5,
+                      textDecoration: "none",
+                      pointerEvents:  "auto",
+                      // ≥40px hit area (13px top/bottom + 14px line = 40px), no baseline shift
+                      padding:        "13px 0",
+                      transition:     "opacity 0.15s cubic-bezier(0.2, 0, 0, 1)",
+                    }}
+                    onMouseEnter={active ? undefined : e => (e.currentTarget.style.opacity = "0.8")}
+                    onMouseLeave={active ? undefined : e => (e.currentTarget.style.opacity = "0.5")}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
           </nav>
 

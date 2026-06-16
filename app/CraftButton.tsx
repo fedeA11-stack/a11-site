@@ -54,10 +54,16 @@ export default function CraftButton() {
         textDecoration: "none",
         whiteSpace:     "nowrap",
         cursor:         "pointer",
-        transition:     "bottom 0.2s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        transition:
+          "bottom 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.15s cubic-bezier(0.2, 0, 0, 1), scale 0.15s cubic-bezier(0.2, 0, 0, 1)",
       }}
       onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
-      onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+      onMouseLeave={e => {
+        e.currentTarget.style.opacity = "1";
+        e.currentTarget.style.scale = "1";
+      }}
+      onMouseDown={e => (e.currentTarget.style.scale = "0.96")}
+      onMouseUp={e => (e.currentTarget.style.scale = "1")}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
