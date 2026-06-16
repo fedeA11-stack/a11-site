@@ -1,0 +1,5 @@
+<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="13.4649" cy="13.4649" r="13.4649" fill="url(#g)"/>
+<path d="M20.2891 11.5348L14.7529 15.1823V21.5455H12.1885V15.2301L6.58008 11.5348L8.0166 9.49182L13.4346 12.9821L18.8516 9.49182L20.2891 11.5348ZM13.4688 6.49182C14.5053 6.49182 15.4023 7.33219 15.4023 8.36877C15.4022 9.40524 14.5052 10.2457 13.4688 10.2457C12.4323 10.2457 11.5353 9.40519 11.5352 8.36877C11.5352 7.33195 12.4322 6.4919 13.4688 6.49182Z" fill="white"/>
+<defs><radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(13.4649 -0.167638) rotate(90) scale(27.0975)"><stop stop-color="#1F1F1F"/><stop offset="1" stop-color="#1F1F1F" stop-opacity="0.9"/></radialGradient></defs>
+</svg>

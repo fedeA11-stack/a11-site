@@ -1,214 +1,326 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useId, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
-import NavMenu from "../NavMenu";
 
-// ── Dock icons — dark SVG symbols on white cells ───────────────────────────
-const DOCK_ICONS = [
-  { label: "World Money", src: "/assets/world/world-money-icon.svg", href: "/world/money" },
-  { label: "World ID",    src: "/assets/world/world-id-icon.svg",    href: undefined },
-  { label: "World Chat",  src: "/assets/world/world-chat-icon.svg",  href: "/world/chat" },
-  { label: "World Orb",   src: "/assets/world/world-org-icon.svg",   href: undefined },
+// ── Cards — Figma World_CaseStudy (1725:10129 / hover 1725:10175) ──────────
+// Photos are badge-free; the icon badge is a floating element so the card can
+// scoop a cove around it on hover. iconScale = icon px ÷ 48px badge.
+const CARDS = [
+  { img: "/assets/world/case/world-money.jpg", icon: "/assets/world/case/world-money-icon.svg", iconScale: 0.5625, solid: true,  title: "World Money", sub: "Manage your investments",   href: "/world/money" },
+  { img: "/assets/world/case/world-id.jpg",    icon: "/assets/world/case/world-id-icon.svg",    iconScale: 0.5625, solid: false, title: "World ID",    sub: "Prove you’re a real human", href: undefined      },
+  { img: "/assets/world/case/world-chat.jpg",  icon: "/assets/world/case/world-chat-icon.svg",  iconScale: 0.5625, solid: false, title: "World Chat",  sub: "Chat with real humans",      href: "/world/chat"  },
+  { img: "/assets/world/case/world-orb.jpg",   icon: "/assets/world/case/world-orb-icon.svg",   iconScale: 0.6667, solid: false, title: "Orb App",     sub: "Manage your Orb operations", href: undefined      },
 ] as const;
 
-// ── Fluid sizes (Figma: 82.5px cell, 18.75px gap/pad, 41.25px radius) ──────
-// scales from 82.5px @ 1440vw → 60px @ 375vw
-const CELL        = "clamp(60px, calc(3.7vw + 47px), 82.5px)";
-const ICON_SIZE   = "calc(clamp(60px, calc(3.7vw + 47px), 82.5px) * 0.56)";
-const DOCK_GAP    = "clamp(12px, 1.3vw, 18.75px)";
-const DOCK_PAD    = "clamp(12px, 1.3vw, 18.75px)";
-const DOCK_RADIUS = "clamp(30px, 2.86vw, 41.25px)";
-const ICON_RADIUS = "clamp(15px, 1.55vw, 22.286px)";
+const NAV = ["Work", "Studio", "Playground", "Contact"] as const;
+const INK = "#282328";
+const MUTE = "#989190";
 
-// ── × separator ───────────────────────────────────────────────────────────
-function CrossSeparator() {
+// ── Card-shape cove (Figma 1725:10209 mask, normalised to the 370px frame) ──
+// The other three card corners stay at r16. D→E→F is the top-right notch the
+// photo scoops out on hover; at rest (t=0) they collapse into a plain r16
+// corner so the morph runs from rounded-rectangle → cove. (Figma coordinates
+// are 180°-rotated, so the mask's bottom-left notch lands on the top-right.)
+const S = 370;
+const R = 16 / S; // 0.0432 — card corner radius
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+function buildCovePath(t: number): string {
+  // [x, y, cornerRadius] in objectBoundingBox units (0–1)
+  const pts: [number, number, number][] = [
+    [0, 0, R],                                                                       // top-left
+    [lerp(1 - R, 1 - 90.1 / S, t), 0, lerp(0, 20 / S, t)],                            // D — top edge
+    [lerp(1, 1 - 73.2 / S, t), lerp(0, 1 - 292.1 / S, t), lerp(R, 24.5 / S, t)],      // E — notch peak
+    [1, lerp(R, 1 - 277 / S, t), lerp(0, 20 / S, t)],                                 // F — right edge
+    [1, 1, R],                                                                        // bottom-right
+    [0, 1, R],                                                                        // bottom-left
+  ];
+  const n = pts.length;
+  let d = "";
+  for (let i = 0; i < n; i++) {
+    const [x, y, r] = pts[i];
+    const [px, py] = pts[(i - 1 + n) % n];
+    const [nx, ny] = pts[(i + 1) % n];
+    const vpx = px - x, vpy = py - y, lp = Math.hypot(vpx, vpy) || 1;
+    const vnx = nx - x, vny = ny - y, ln = Math.hypot(vnx, vny) || 1;
+    const rr = Math.min(r, lp / 2, ln / 2);
+    const ix = x + (vpx / lp) * rr, iy = y + (vpy / lp) * rr; // arrival tangent
+    const ox = x + (vnx / ln) * rr, oy = y + (vny / ln) * rr; // departure tangent
+    d += `${i === 0 ? "M" : "L"} ${ix.toFixed(4)} ${iy.toFixed(4)} Q ${x.toFixed(4)} ${y.toFixed(4)} ${ox.toFixed(4)} ${oy.toFixed(4)} `;
+  }
+  return d + "Z";
+}
+
+// ── Live SFO clock — "SFO, 10:25:26 PM" ────────────────────────────────────
+function useSfoClock() {
+  const [t, setT] = useState("SFO, 10:25:26 PM");
+  useEffect(() => {
+    const fmt = () =>
+      "SFO, " +
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Los_Angeles",
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(new Date());
+    const tick = () => setT(fmt());
+    const raf = requestAnimationFrame(tick);
+    const id = setInterval(tick, 1000);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearInterval(id);
+    };
+  }, []);
+  return t;
+}
+
+// ── ↗ arrow for the hover pill ─────────────────────────────────────────────
+function ArrowUpRight() {
   return (
-    <div style={{ position: "relative", width: 15, height: 15, flexShrink: 0 }}>
-      {[45, -45].map((deg) => (
-        <div
-          key={deg}
-          style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
-        >
-          <div style={{ width: 1, height: 20, background: "#282328", transform: `rotate(${deg}deg)` }} />
-        </div>
-      ))}
-    </div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden style={{ display: "block" }}>
+      <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
-// ── Icon cell ─────────────────────────────────────────────────────────────
-function DockIcon({
-  icon, hovered, onEnter, onLeave,
-}: {
-  icon: (typeof DOCK_ICONS)[number];
-  hovered: boolean;
-  onEnter: () => void;
-  onLeave: () => void;
-}) {
-  const inner = (
-    <motion.div
-      animate={{ y: hovered ? -2 : 0 }}
-      transition={{ type: "tween", duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+// ── Card ───────────────────────────────────────────────────────────────────
+function Card({ card }: { card: (typeof CARDS)[number] }) {
+  const [hovered, setHovered] = useState(false);
+  const clipId = `wcs-cove-${useId().replace(/:/g, "")}`;
+
+  // Cove morph — spring-driven 0→1, written straight onto the clip path's d.
+  const covePath = useRef<SVGPathElement>(null);
+  const target = useMotionValue(0);
+  const prog = useSpring(target, { stiffness: 260, damping: 30, mass: 0.5 });
+  useEffect(() => {
+    target.set(hovered ? 1 : 0);
+  }, [hovered, target]);
+  useEffect(() => {
+    const write = (v: number) => covePath.current?.setAttribute("d", buildCovePath(v));
+    write(prog.get());
+    return prog.on("change", write);
+  }, [prog]);
+
+  // Cursor-following pill (spring-smoothed position relative to the card).
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 700, damping: 45, mass: 0.4 });
+  const sy = useSpring(my, { stiffness: 700, damping: 45, mass: 0.4 });
+
+  const setFromEvent = (e: React.MouseEvent, jump = false) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    mx.set(x);
+    my.set(y);
+    if (jump) {
+      sx.jump(x);
+      sy.jump(y);
+    }
+  };
+
+  const media = (
+    <div
+      onMouseEnter={(e) => {
+        setFromEvent(e, true);
+        setHovered(true);
+      }}
+      onMouseMove={(e) => setFromEvent(e)}
+      onMouseLeave={() => setHovered(false)}
       style={{
-        position: "absolute", inset: 0,
-        background: "#ffffff",
-        borderRadius: ICON_RADIUS,
-        boxShadow: "0px 2px 8px rgba(40,35,40,0.06), 0px 8px 24px rgba(40,35,40,0.08)",
-        overflow: "hidden",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        cursor: icon.href ? "pointer" : "default",
+        position: "relative",
+        width: "100%",
+        aspectRatio: "1 / 1",
+        cursor: card.href ? "pointer" : "default",
       }}
     >
+      {/* clip-path geometry (objectBoundingBox → scales with the card) */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
+        <defs>
+          <clipPath id={clipId} clipPathUnits="objectBoundingBox">
+            <path ref={covePath} d={buildCovePath(0)} />
+          </clipPath>
+        </defs>
+      </svg>
+
+      {/* Photo — clipped to the card/cove shape */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={icon.src}
-        alt={icon.label}
-        style={{ width: ICON_SIZE, height: ICON_SIZE, display: "block" }}
+        src={card.img}
+        alt={card.title}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", clipPath: `url(#${clipId})` }}
       />
-    </motion.div>
+
+      {/* Floating icon badge (stays put while the photo scoops away on hover) */}
+      <div
+        style={{
+          position: "absolute",
+          left: "6.5%",
+          bottom: "6.5%",
+          width: "12.97%",
+          aspectRatio: "1 / 1",
+          borderRadius: "27%",
+          background: card.solid ? "#ffffff" : "rgba(255,255,255,0.9)",
+          backdropFilter: "blur(21px)",
+          WebkitBackdropFilter: "blur(21px)",
+          boxShadow: "0 8.4px 31px rgba(40,35,40,0.10)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={card.icon} alt="" aria-hidden style={{ width: `${card.iconScale * 100}%`, height: `${card.iconScale * 100}%`, display: "block" }} />
+      </div>
+
+      {/* Cursor-following "View project ↗" pill.
+          Follower sits at the cursor (springed x/y); a static wrapper does the
+          -50%/-50% centering so framer's scale animation can't clobber it. */}
+      <motion.div style={{ position: "absolute", top: 0, left: 0, x: sx, y: sy, pointerEvents: "none", zIndex: 2 }}>
+        <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
+          <motion.div
+            initial={false}
+            animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0.85 }}
+            transition={{ type: "tween", duration: 0.18, ease: [0.22, 0.61, 0.36, 1] }}
+            style={{
+              transformOrigin: "center",
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              height: 40,
+              padding: "0 14px",
+              borderRadius: 100,
+              background: INK,
+              boxShadow: "0 8px 24px rgba(40,35,40,0.22)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 14, lineHeight: 1, letterSpacing: "-0.14px", color: "#fff" }}>
+              View project
+            </span>
+            <ArrowUpRight />
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
   );
 
   return (
-    <div
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      style={{ position: "relative", width: CELL, height: CELL, flexShrink: 0 }}
-    >
-      {icon.href ? (
-        <Link href={icon.href} style={{ display: "block", position: "absolute", inset: 0 }}>
-          {inner}
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      {card.href ? (
+        <Link href={card.href} style={{ display: "block" }}>
+          {media}
         </Link>
-      ) : inner}
+      ) : (
+        media
+      )}
+
+      {/* Label — title + subtitle, 20px TWK Continental Medium, 6px gap */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 20 }}>
+        <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: INK }}>
+          {card.title}
+        </span>
+        <span style={{ fontFamily: "'TWK Continental', sans-serif", fontWeight: 500, fontSize: 20, lineHeight: 0.9, letterSpacing: "-0.4px", color: MUTE }}>
+          {card.sub}
+        </span>
+      </div>
     </div>
   );
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────
+// ── Page ────────────────────────────────────────────────────────────────────
 export default function WorldPage() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const clock = useSfoClock();
 
   return (
-    <div style={{
-      backgroundColor: "#ffffff",
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-    }}>
-      <NavMenu />
+    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh" }}>
+      <style>{`
+        .wcs-wrap { --pad: clamp(24px, 8.93vw, 135px); }
+        .wcs-grid { grid-template-columns: repeat(4, 1fr); }
+        @media (max-width: 880px) { .wcs-grid { grid-template-columns: repeat(2, 1fr); row-gap: 28px; } }
+        @media (max-width: 520px) { .wcs-grid { grid-template-columns: 1fr; row-gap: 28px; } }
+        @media (max-width: 760px) { .wcs-nav, .wcs-clock { display: none; } }
+      `}</style>
 
-      {/* Hero — vertically centred in remaining viewport height */}
-      <main style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "48px 32px 0",
-        position: "relative",
-      }}>
-        {/* Center content group (logos + text + dock) */}
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 40,
-          width: "100%",
-        }}>
-
-          {/* Logo lockup: World × A11  — Figma gap: 25px, sizes 52×52 / 48×53 */}
-          <div style={{ display: "flex", alignItems: "center", gap: 25 }}>
-            {/* World logo — invert to dark (SVG has white fill) */}
+      <div className="wcs-wrap" style={{ maxWidth: 1512, margin: "0 auto", width: "100%" }}>
+        {/* ── Nav ─────────────────────────────────────────────────────────── */}
+        <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "55px var(--pad) 0" }}>
+          <Link href="/" style={{ display: "block", flexShrink: 0 }} aria-label="A11 Product Studio">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/world/world-mark-white.svg"
-              alt="World"
-              style={{ width: 52, height: 52, flexShrink: 0, filter: "invert(1)" }}
-            />
-            <CrossSeparator />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/logo.svg"
-              alt="A11 Product Studio"
-              style={{ width: 48, height: 53, flexShrink: 0 }}
-            />
-          </div>
+            <img src="/assets/logo.svg" alt="A11" style={{ height: 36, width: "auto", display: "block" }} />
+          </Link>
 
-          {/* Tagline — Figma: 24px, TWK Continental, center, max-w 627px, lh 1.3, ls -0.48px */}
-          <p style={{
-            margin: 0,
-            fontFamily: "'TWK Continental', serif",
-            fontWeight: 400,
-            fontSize: "clamp(18px, 1.8vw, 24px)",
-            lineHeight: 1.3,
-            letterSpacing: "-0.48px",
-            textAlign: "center",
-            color: "#282328",
-            maxWidth: "min(627px, 100%)",
-          }}>
-            Not just one app, we built the whole ecosystem for proof of human.
-            {" "}5 years, 9 designers and thousands of explorations.{"\n"}
-            We don&apos;t regret a single one.
-          </p>
-
-          {/* Dock — Figma: backdrop-blur 28.125px, bg rgba(239,234,229,0.4),
-               border 0.938px rgba(235,235,235,0.42), gap/pad 18.75px, radius 41.25px */}
-          <div style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: DOCK_GAP,
-            padding: DOCK_PAD,
-            borderRadius: DOCK_RADIUS,
-            border: "0.938px solid rgba(235,235,235,0.42)",
-            background: "rgba(239,234,229,0.4)",
-            backdropFilter: "blur(28.125px)",
-            WebkitBackdropFilter: "blur(28.125px)",
-            // overflow visible so tooltip can escape the dock container
-            overflow: "visible",
-            flexShrink: 0,
-          }}>
-            {DOCK_ICONS.map((icon, i) => (
-              <DockIcon
-                key={icon.label}
-                icon={icon}
-                hovered={hoveredIndex === i}
-                onEnter={() => setHoveredIndex(i)}
-                onLeave={() => setHoveredIndex(null)}
-              />
+          <nav className="wcs-nav" style={{ display: "flex", alignItems: "center", gap: 48 }}>
+            {NAV.map((item, i) => (
+              <Link
+                key={item}
+                href={i === 0 ? "/" : "#"}
+                style={{
+                  fontFamily: "'TWK Continental', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 14,
+                  lineHeight: 1,
+                  letterSpacing: "-0.14px",
+                  color: i === 0 ? INK : MUTE,
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {item}
+              </Link>
             ))}
-          </div>
-        </div>
-      </main>
+          </nav>
 
-      {/* Read Full Story — Figma: 20px TWK Continental, chevron, ls -0.4px
-           pinned to bottom of viewport with fixed padding */}
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        padding: "56px 32px",
-      }}>
-        <button style={{
-          background: "none", border: "none", padding: 0,
-          cursor: "pointer",
-          display: "flex", alignItems: "center", gap: 4,
-        }}>
-          <span style={{
-            fontFamily: "'TWK Continental', serif",
-            fontWeight: 400,
-            fontSize: 20,
-            lineHeight: 0.96,
-            letterSpacing: "-0.4px",
-            color: "#282328",
-            whiteSpace: "nowrap",
-            textTransform: "capitalize",
-          }}>
-            Read Full Story
+          <span
+            className="wcs-clock"
+            style={{
+              fontFamily: "'TWK Continental', sans-serif",
+              fontWeight: 500,
+              fontSize: 14,
+              lineHeight: 1,
+              letterSpacing: "-0.14px",
+              color: MUTE,
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {clock}
           </span>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M5 8l5 5 5-5" stroke="#282328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        </header>
+
+        {/* ── Headline ────────────────────────────────────────────────────── */}
+        <h1
+          style={{
+            margin: "92px 0 0",
+            padding: "0 var(--pad)",
+            maxWidth: "calc(616px + 2 * var(--pad))",
+            fontFamily: "'TWK Continental', sans-serif",
+            fontWeight: 500,
+            fontSize: "clamp(34px, 3.8vw, 56px)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.03em",
+            color: INK,
+          }}
+        >
+          Five years, nine people,
+          <br />
+          four apps, number one
+          <br />
+          crypto wallet.
+        </h1>
+
+        {/* ── Card grid (near full-bleed: 10px gutters, 4px gaps) ──────────── */}
+        <div className="wcs-grid" style={{ display: "grid", columnGap: 4, padding: "84px 10px 0", margin: 0 }}>
+          {CARDS.map((c) => (
+            <Card key={c.title} card={c} />
+          ))}
+        </div>
+
+        <div style={{ height: 120 }} aria-hidden />
       </div>
     </div>
   );
