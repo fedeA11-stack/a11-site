@@ -9,12 +9,15 @@ const FONT = "'System Unlicensed Trial', sans-serif";
 function FloatingLabel({
   text,
   style,
+  className,
 }: {
   text: string;
   style: React.CSSProperties;
+  className?: string;
 }) {
   return (
     <div
+      className={className}
       style={{
         position: "absolute",
         display: "flex",
@@ -56,6 +59,28 @@ function FloatingLabel({
 export default function ManifestoPage() {
   return (
     <div className="bg-white min-h-screen">
+      <style>{`
+        @keyframes mf-float-a {
+          0%, 100% { transform: translate(0px, 0px);    opacity: 1; }
+          50%       { transform: translate(4px, -20px);  opacity: 0.78; }
+        }
+        @keyframes mf-float-b {
+          0%, 100% { transform: translate(0px, 0px);    opacity: 1; }
+          50%       { transform: translate(-5px, -16px); opacity: 0.80; }
+        }
+        @keyframes mf-float-c {
+          0%, 100% { transform: translate(0px, 0px);    opacity: 1; }
+          50%       { transform: translate(6px, -22px);  opacity: 0.76; }
+        }
+        @keyframes mf-float-d {
+          0%, 100% { transform: translate(0px, 0px);    opacity: 1; }
+          50%       { transform: translate(-4px, -18px); opacity: 0.80; }
+        }
+        .mf-a { animation: mf-float-a 6s   ease-in-out infinite 0s; }
+        .mf-b { animation: mf-float-b 7s   ease-in-out infinite 1.4s; }
+        .mf-c { animation: mf-float-c 8s   ease-in-out infinite 2.8s; }
+        .mf-d { animation: mf-float-d 5.5s ease-in-out infinite 0.7s; }
+      `}</style>
       <NavMenu />
 
       {/*
@@ -112,18 +137,22 @@ export default function ManifestoPage() {
           {/* ── Floating decorative labels ──────────────────────────────── */}
           <FloatingLabel
             text="Ambition"
+            className="mf-a"
             style={{ left: "248px", top: "100px" }}
           />
           <FloatingLabel
             text="Precision"
-            style={{ right: "156px", top: "263px" }}
+            className="mf-b"
+            style={{ right: "80px", top: "180px" }}
           />
           <FloatingLabel
             text="Vision"
+            className="mf-c"
             style={{ left: "0px", top: "515px" }}
           />
           <FloatingLabel
             text="Challenge"
+            className="mf-d"
             style={{ right: "0px", top: "497px" }}
           />
 
