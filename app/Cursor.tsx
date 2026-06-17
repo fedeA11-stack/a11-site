@@ -26,12 +26,15 @@ function CursorLayer() {
   const targetRef = useRef({ x: -200, y: -200 }); // raw mouse position
   const rafRef    = useRef<number | null>(null);
   const pillActive = useRef(false); // is the pill currently active
+  const shownRef   = useRef(false); // has the cursor been revealed (first move)
 
-  // Hide both layers on route change. Clicking a [data-cursor] tile navigates
-  // client-side, so the element unmounts without firing mouseleave.
+  // On route change, reset the pill and RESTORE the dot. Clicking a [data-cursor]
+  // tile navigates client-side, so the element unmounts without firing
+  // mouseleave — leaving the dot hidden forever. This brings it back.
   useEffect(() => {
     if (pillRef.current) pillRef.current.style.opacity = "0";
     pillActive.current = false;
+    if (dotRef.current && shownRef.current) dotRef.current.style.opacity = "1";
   }, [pathname]);
 
   useEffect(() => {
@@ -55,20 +58,21 @@ function CursorLayer() {
     // Hide the OS cursor only on fine-pointer devices.
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-    let shown = false;
     function onMove(e: MouseEvent) {
       targetRef.current.x = e.clientX;
       targetRef.current.y = e.clientY;
-      if (!shown) {
+      if (!shownRef.current) {
         // Snap on first move so the dot doesn't fly in from the corner, and
         // only NOW hide the native cursor — avoids a blank gap (native hidden
         // while the dot is still at opacity 0) on load / after navigation.
         posRef.current.x = e.clientX;
         posRef.current.y = e.clientY;
-        dot!.style.opacity = "1";
         if (fine) document.documentElement.style.cursor = "none";
-        shown = true;
+        shownRef.current = true;
       }
+      // Self-heal: any move re-shows the dot unless a pill is genuinely active.
+      // Guards against the dot getting stuck hidden after navigation / odd events.
+      if (!pillActive.current && dot!.style.opacity !== "1") dot!.style.opacity = "1";
     }
 
     function onEnter(e: MouseEvent) {
@@ -87,13 +91,26 @@ function CursorLayer() {
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
       pill!.style.opacity = "0";
-      if (shown) dot!.style.opacity = "1";
+      if (shownRef.current) dot!.style.opacity = "1";
       pillActive.current = false;
+    }
+
+    // Show / hide as the pointer leaves and re-enters the window, so the dot
+    // isn't permanently parked on screen — it appears on move / page-enter only.
+    const root = document.documentElement;
+    function onWindowLeave() {
+      dot!.style.opacity = "0";
+      pill!.style.opacity = "0";
+    }
+    function onWindowEnter() {
+      if (shownRef.current && !pillActive.current) dot!.style.opacity = "1";
     }
 
     document.addEventListener("mousemove",  onMove,  { passive: true });
     document.addEventListener("mouseenter", onEnter, { passive: true, capture: true });
     document.addEventListener("mouseleave", onLeave, { passive: true, capture: true });
+    root.addEventListener("mouseleave", onWindowLeave, { passive: true });
+    root.addEventListener("mouseenter", onWindowEnter, { passive: true });
 
     rafRef.current = requestAnimationFrame(tick);
 
@@ -101,6 +118,8 @@ function CursorLayer() {
       document.removeEventListener("mousemove",  onMove);
       document.removeEventListener("mouseenter", onEnter, true);
       document.removeEventListener("mouseleave", onLeave, true);
+      root.removeEventListener("mouseleave", onWindowLeave);
+      root.removeEventListener("mouseenter", onWindowEnter);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       document.documentElement.style.cursor = "";
     };
