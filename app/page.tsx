@@ -1,12 +1,25 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import CtaButton from "./CtaButton";
+import SmoothScroll from "./SmoothScroll";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Home / Work — pellmell.fr-style pinned-hero reveal.
+//
+// The signature effect: the hero is PINNED full-screen, and on the first scroll
+// the work grid slides up and over it (HeroReveal). The hero drifts + fades as
+// it's covered, then re-reveals when you scroll back to the top. The first case
+// study (ZoomScale) starts scaled down and grows to full size as it enters — the
+// rest of the cards are static. Lenis (SmoothScroll) supplies the inertia glide
+// that makes the hand-off feel continuous. All motion respects reduced-motion.
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Case photos + project logos — static imports give next/image the intrinsic
 // dimensions and a build-time blur placeholder (zero CLS).
@@ -23,8 +36,6 @@ import freeholdLogo from "../public/assets/freehold logo.png";
 import atlansLogo from "../public/assets/atlans logo.png";
 
 // ─── Entrance reveal ───────────────────────────────────────────────────────────
-// Fade + small rise. Triggers once as the element scrolls into view so cards far
-// down the page animate when seen, not all at once on first paint.
 function Reveal({
   children,
   delay = 0,
@@ -55,13 +66,11 @@ type Project = {
   href?: string;
   labelPx: number;
   labelTracking: string;
-  // Exact top offsets from Figma (mask-position y values per card)
   labelTop: number;
   descTop: number;
-  // Project logo — exact Figma positions per card
   logo?: StaticImageData;
-  logoHeight: number; // px, from Figma (31.105px)
-  logoLeft: number;   // px, from Figma absolute positions
+  logoHeight: number;
+  logoLeft: number;
 };
 
 const PROJECTS: Project[] = [
@@ -74,8 +83,8 @@ const PROJECTS: Project[] = [
     href: "/world",
     labelPx: 16,
     labelTracking: "-0.32px",
-    labelTop: 56,   // Figma confirmed
-    descTop: 112,   // Figma confirmed
+    labelTop: 56,
+    descTop: 112,
     logo: worldLogo,
     logoHeight: 31,
     logoLeft: 72,
@@ -156,7 +165,34 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// ─── Slash ────────────────────────────────────────────────────────────────────
+// ─── Featured scroll-zoom ──────────────────────────────────────────────────────
+// pellmell-style entrance — used ONLY on the first case study. The ENTIRE card
+// (image + label + description + logo) starts scaled down and grows to full size
+// as the card travels up toward the viewport center. Because the scale is applied
+// to the card wrapper, every child — typography included — scales as one unit.
+function ZoomScale({ children }: { children: React.ReactNode }) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  // Bind directly to scroll progress — Lenis already smooths the scroll input, so
+  // an extra spring here just lags the scale behind the content (double-smoothing).
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+  const scaleMV = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+
+  return (
+    <motion.div
+      ref={ref}
+      // transform-origin: top anchors the card's top edge — the part that peeks at
+      // rest — so it grows downward into place instead of ballooning from center.
+      style={{ scale: reduce ? 1 : scaleMV, transformOrigin: "center top", willChange: "transform" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Chevron({ color }: { color: string }) {
   return (
@@ -165,11 +201,10 @@ function Chevron({ color }: { color: string }) {
   );
 }
 
-// ─── Project card ─────────────────────────────────────────────────────────────
-// Figma: 1240 × 769px card (node 3488:10724)
-// Label:       top = 56px   left = 72px
-// Description: top = 112px  left = 72px  maxWidth = 521px (42% × 1240px)
-function ProjectCard({ project, priority }: { project: Project; priority?: boolean }) {
+// ─── Project card ──────────────────────────────────────────────────────────────
+// Static by default; `zoom` enables the featured pellmell-style scroll-zoom (used
+// only on the first case study).
+function ProjectCard({ project, priority, zoom }: { project: Project; priority?: boolean; zoom?: boolean }) {
   const c = project.textColor;
 
   const card = (
@@ -181,7 +216,6 @@ function ProjectCard({ project, priority }: { project: Project; priority?: boole
         cursor: project.href ? "none" : "default",
       }}
     >
-      {/* Background image — fills the card; the only full-width content on the page */}
       <CoverImage
         src={project.image}
         alt={project.name}
@@ -189,7 +223,6 @@ function ProjectCard({ project, priority }: { project: Project; priority?: boole
         priority={priority}
       />
 
-      {/* Label — top/left per card from Figma */}
       <div
         className="absolute flex items-center gap-[9px] whitespace-nowrap capitalize"
         style={{
@@ -208,7 +241,6 @@ function ProjectCard({ project, priority }: { project: Project; priority?: boole
         <span>{project.name}</span>
       </div>
 
-      {/* Description — top/left per card from Figma, maxWidth: 521px */}
       <p
         className="absolute m-0 whitespace-pre-wrap capitalize"
         style={{
@@ -245,19 +277,19 @@ function ProjectCard({ project, priority }: { project: Project; priority?: boole
     </div>
   );
 
+  const content = zoom ? <ZoomScale>{card}</ZoomScale> : card;
+
   if (project.href) {
     return (
       <Link href={project.href} className="block">
-        {card}
+        {content}
       </Link>
     );
   }
-  return card;
+  return content;
 }
 
 // ─── CTA interstitial ─────────────────────────────────────────────────────────
-// Figma: ~147px top/bottom padding, gap between text and button varies:
-//   CTA1: text-to-button gap = 36px   CTA2: text-to-button gap = 45px
 function CTASection({
   text,
   buttonLabel,
@@ -270,11 +302,7 @@ function CTASection({
   href?: string;
 }) {
   return (
-    <div
-      className="flex flex-col items-center pt-[147px] pb-[147px]"
-      style={{ gap: textGap }}
-    >
-      {/* CTA text: 44.436px, leading 0.94, tracking -0.8887px, w: 714.315px */}
+    <div className="flex flex-col items-center pt-[147px] pb-[147px]" style={{ gap: textGap }}>
       <p
         className="m-0 text-center whitespace-pre-wrap"
         style={{
@@ -290,86 +318,121 @@ function CTASection({
       >
         {text}
       </p>
-
       <CtaButton label={buttonLabel} href={href} />
     </div>
+  );
+}
+
+// ─── Hero pin + reveal ─────────────────────────────────────────────────────────
+// The hero is fixed full-screen (z-0). A sentinel reserves the scroll distance
+// for the reveal. The work grid (z-1, opaque) follows the sentinel, so the first
+// scroll slides it up and over the pinned hero. We read the sentinel's scroll
+// progress to drift + fade the hero as it gets covered — and it all plays in
+// reverse when you scroll back up.
+function HeroReveal() {
+  const reduce = useReducedMotion();
+  const sentinel = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sentinel,
+    offset: ["start start", "end start"],
+  });
+
+  // Paired transforms all finish together at progress 0.85 so the hero fades and
+  // drifts as one unit (not opacity-then-drift).
+  const opacityMV = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const scaleMV = useTransform(scrollYProgress, [0, 0.85], [1, 0.92]);
+  const yMV = useTransform(scrollYProgress, [0, 0.85], [0, -60]);
+
+  return (
+    <>
+      <motion.section
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: reduce ? 1 : opacityMV,
+          scale: reduce ? 1 : scaleMV,
+          y: reduce ? 0 : yMV,
+          willChange: "transform, opacity",
+        }}
+      >
+        <p
+          className="m-0 text-center whitespace-pre-wrap"
+          style={{
+            fontFamily: "var(--font-system), sans-serif",
+            fontWeight: 500,
+            fontSize: "clamp(32px, 4.6vw, 64px)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.02em",
+            color: "#282328",
+            maxWidth: "90vw",
+          }}
+        >
+          {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
+        </p>
+      </motion.section>
+
+      {/*
+       * Reserves scroll distance for the reveal — but stops short of a full
+       * viewport so the first case study already peeks ~15% of its height at
+       * rest. The card is 1240/769 and full-width up to 1240px, so 15% of its
+       * height ≈ min(9.3vw, 115px). We add back the 80px nav spacer + 10px grid
+       * top (90px) that sit above the grid, so the visible card peek lands on 15%.
+       */}
+      <div
+        ref={sentinel}
+        style={{ height: "calc(100vh - 90px - min(9.3vw, 115px))" }}
+        aria-hidden
+      />
+    </>
   );
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function WorkPage() {
   return (
-    <div className="bg-white min-h-screen">
-      <NavMenu />
+    <SmoothScroll>
+      <div style={{ position: "relative", background: "#fff" }} className="min-h-screen">
+        <NavMenu />
 
-      {/*
-       * All content uses max-w-[1240px] mx-auto — equivalent to 135px horizontal
-       * padding on Figma's 1512px canvas (135px left, ~137px right).
-       */}
+        {/* Pinned hero — the work grid below slides up over it on first scroll */}
+        <HeroReveal />
 
-      {/* ── Hero tagline ──────────────────────────────────────────────────────
-       * Figma: tagline at y=248, nav bottom ~y=90 → pt = 248-90 = 158px
-       * Tagline bottom at y=338, first card at y=516 → pb = 516-338 = 178px
-       */}
-      {/* pt: Figma tagline y=248 − nav height 80px = 168px. pb: first card y=516 − tagline bottom 338px = 178px */}
-      <div className="max-w-[1240px] mx-auto pt-[168px] pb-[178px] flex justify-center">
-        <motion.p
-          className="m-0 text-center whitespace-pre-wrap"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-          style={{
-            fontFamily: "var(--font-system), sans-serif",
-            fontWeight: 500,
-            fontSize: "32px",
-            lineHeight: 0.95,
-            letterSpacing: "-0.64px",
-            color: "#282328",
-            width: "366px",
-            maxWidth: "100%",
-          }}
-        >
-          {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
-        </motion.p>
+        {/* Work grid — opaque layer that reveals over the hero (z-1) */}
+        <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
+          <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
+            {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
+            <ProjectCard project={PROJECTS[0]} priority zoom />
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
+
+            <CTASection
+              text={"Built with craft. Driven by passion.\nShipped without excuses."}
+              buttonLabel="Discover Studio"
+              textGap={36}
+              href="/studio"
+            />
+
+            <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
+
+            <CTASection
+              text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
+              buttonLabel="Read Manifesto"
+              textGap={45}
+            />
+
+            <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
+          </main>
+
+          <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
+            <FooterBanner />
+          </div>
+        </div>
       </div>
-
-      {/* ── Cards + CTAs ──────────────────────────────────────────────────────
-       * Cards gap: 10px (Figma exact)
-       * CTA sections sit inline in the same flex column
-       */}
-      <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px]">
-        {/* Group 1: World + Freehold */}
-        <Reveal><ProjectCard project={PROJECTS[0]} priority /></Reveal>
-        <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
-
-        {/* CTA 1 — text-to-button gap: 36px (Figma: 2339.31 - 2303.33 = 35.98px) */}
-        <CTASection
-          text={"Built with craft. Driven by passion.\nShipped without excuses."}
-          buttonLabel="Discover Studio"
-          textGap={36}
-          href="/studio"
-        />
-
-        {/* Group 2: Districts + Token Studio */}
-        <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
-        <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
-
-        {/* CTA 2 — text-to-button gap: 45px (Figma: 4361.58 - 4316.72 = 44.86px) */}
-        <CTASection
-          text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
-          buttonLabel="Read Manifesto"
-          textGap={45}
-        />
-
-        {/* Group 3: Atlans + Relai */}
-        <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
-        <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
-      </main>
-
-      {/* Footer — same 1240px container, 10px gap from last card. Includes banner + bottom bar. */}
-      <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
-        <FooterBanner />
-      </div>
-    </div>
+    </SmoothScroll>
   );
 }
