@@ -7,6 +7,9 @@ import chatGroup from "../../../public/assets/world-chat/chat-group.png";
 import chatVerifiedUser from "../../../public/assets/world-chat/chat-verified-user.png";
 import chatPrivate from "../../../public/assets/world-chat/chat-private.jpg";
 import chatSophia from "../../../public/assets/world-chat/chat-sophia.png";
+import chat004 from "../../../public/assets/world-chat/chat-004.png";
+import chat005 from "../../../public/assets/world-chat/chat-005.png";
+import chat006 from "../../../public/assets/world-chat/chat-006.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // World Chat — content for the canonical case-study design (Figma 1863:11469).
@@ -17,11 +20,6 @@ const data: CaseStudyData = {
   title: "Built for humans\nto talk to humans",
   description:
     "A communication layer designed for a world where being human can no longer be assumed, simple to use, yet grounded in identity, trust, and interaction.",
-  meta: [
-    { label: "Industry", value: "Technology, Financial" },
-    { label: "Services", value: "UX/UI, Strategy, Visual Design" },
-    { label: "Year", value: "2021 - Ongoing" },
-  ],
   hero: {
     src: chatMain,
     alt: "World Chat app — hand holding phone showing chat list",
@@ -54,9 +52,33 @@ const data: CaseStudyData = {
         {
           kind: "duo",
           images: [
-            { alt: "End-to-end encrypted", icon: "lock", bg: "#F0EBE5" },
+            { src: "/assets/world-chat/End_to_End.mp4", alt: "End-to-end encrypted", video: true, bg: "#F0EBE5" },
             { src: chatSophia, alt: "Sophia Davis — verified human", bg: "#F0EBE5" },
           ],
+        },
+      ],
+    },
+    {
+      title: "Value in\nconversation",
+      body: "Transactions happen directly within chat, making value feel as simple as sending a message. From everyday use to moments of celebration, value becomes part of the conversation.",
+      media: [
+        {
+          kind: "full",
+          aspect: "1242 / 835",
+          image: { src: "/assets/world-chat/Send%20Money_composition.mp4", alt: "Sending money inside a chat", video: true, bg: "#F6F3EE" },
+        },
+        {
+          kind: "duo",
+          aspect: "615 / 612",
+          images: [
+            { src: chat005, alt: "Choosing a token to send", bg: "#F6F3EE" },
+            { src: chat004, alt: "Value shared in conversation", bg: "#F6F3EE" },
+          ],
+        },
+        {
+          kind: "full",
+          aspect: "1242 / 835",
+          image: { src: chat006, alt: "Sending money — phone detail", bg: "#F6F3EE" },
         },
       ],
     },

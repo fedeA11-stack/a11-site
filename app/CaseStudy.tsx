@@ -2,7 +2,8 @@
 
 import { type StaticImageData } from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
@@ -82,21 +83,27 @@ const MUTED = "#989291";
 const VALUE = "#2C2C2C";
 const BEIGE = "#F0EBE5";
 const HAIRLINE = "rgba(40,35,40,0.12)";
+const PROJECT_LINE = "#EFEAE5"; // All-projects row divider (Figma beige hairline)
 const RADIUS = "clamp(8px, 0.94vw, 13.5px)";
 const CELL_GAP = "clamp(8px, 0.73vw, 11px)";
 
 const T = {
-  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(34px, 3.9vw, 56px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK },
-  h2: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(30px, 3.4vw, 44px)", lineHeight: 0.96, letterSpacing: "-0.02em", color: INK },
-  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(15px, 1.4vw, 18px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK },
-  label: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(14px, 1.1vw, 16px)", lineHeight: 1.4, color: MUTED },
-  value: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(15px, 1.4vw, 18px)", lineHeight: 1.4, color: VALUE },
+  // Figma: hero title 2 lines in 136px box → ~64px. Section h2 84px box → ~44px.
+  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(40px, 4.8vw, 64px)", lineHeight: 0.98, letterSpacing: "-0.03em", color: INK },
+  h2: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(32px, 3.6vw, 44px)", lineHeight: 0.96, letterSpacing: "-0.02em", color: INK },
+  // Figma: body 26px line-box ÷ 1.3 = 20px.
+  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(16px, 1.55vw, 20px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK },
+  label: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(14px, 1.25vw, 16px)", lineHeight: 1.4, color: MUTED },
+  value: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(16px, 1.55vw, 20px)", lineHeight: 1.4, color: VALUE },
 };
 
-// Vertical rhythm
-const SECTION_GAP = "clamp(80px, 9vw, 140px)";
-const HERO_GAP = "clamp(48px, 5.3vw, 80px)";
-const HEADER_GAP = "clamp(40px, 5.3vw, 80px)";
+// Vertical rhythm (Figma 1512 frame, content 1242px)
+//   Between sections / before a divider:        140px
+//   Hero block→image, image→stats, stats→rule:   80px
+//   Section header→media:                         80px
+const SECTION_GAP = "clamp(96px, 10.5vw, 140px)";
+const HERO_GAP = "clamp(56px, 6.6vw, 80px)";
+const HEADER_GAP = "clamp(56px, 6.6vw, 80px)";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Cell — renders a single image / video / placeholder inside a rounded tile
@@ -172,22 +179,28 @@ function Section({ section }: { section: CSSection }) {
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
-        // Figma stacks the heading over its copy in one left column (gap 24).
-        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 1.6vw, 24px)" }}>
-          {section.title && <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{section.title}</h2>}
-          {section.body && <p style={{ ...T.body, margin: 0, maxWidth: 627 }}>{section.body}</p>}
+        // Two-column header — title left (max 30%), body right (max 50%), space between.
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 24, alignItems: "start" }}>
+          {section.title && <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line", maxWidth: "30%" }}>{section.title}</h2>}
+          {section.body && <p style={{ ...T.body, margin: 0, maxWidth: "50%" }}>{section.body}</p>}
         </div>
       )}
 
       {section.stats && section.stats.length > 0 && (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)` }}>
+        // Figma: stats row centered at ~1025px (not full-bleed); number→label gap 16px.
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: "0 auto" }}>
           {section.stats.map((s, i) => (
-            <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none" }}>
-              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(48px, 6.5vw, 88px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK }}>{s.value}</span>
+            <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none" }}>
+              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(52px, 7vw, 96px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK }}>{s.value}</span>
               <span style={{ ...T.label, margin: 0 }}>{s.label}</span>
             </div>
           ))}
         </div>
+      )}
+
+      {/* Figma: full-width hairline separating the stats row from the next section. */}
+      {section.stats && section.stats.length > 0 && (
+        <div style={{ height: 1, background: HAIRLINE, width: "100%" }} />
       )}
 
       {section.quote && (() => {
@@ -217,8 +230,10 @@ function Section({ section }: { section: CSSection }) {
             {attribution}
           </blockquote>
         ) : (
-          <blockquote style={{ margin: 0, padding: "clamp(40px, 5vw, 72px) 0", borderTop: `1px solid ${HAIRLINE}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(28px, 3vw, 40px)", textAlign: "center" }}>
-            <p style={{ ...T.h2, margin: 0, maxWidth: 900, fontWeight: 400, textTransform: "capitalize" }}>{q.text}</p>
+          // Figma: 140px above (section gap), author→divider 140px below.
+          <blockquote style={{ margin: 0, padding: `0 0 ${SECTION_GAP}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 32, textAlign: "center" }}>
+            {/* Figma: 708px-wide centered quote, ~32px, sentence case (no capitalize). */}
+            <p style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(24px, 2.6vw, 34px)", lineHeight: 1.2, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 708 }}>{q.text}</p>
             {attribution}
           </blockquote>
         );
@@ -236,67 +251,120 @@ function Section({ section }: { section: CSSection }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// All projects — editorial list with a hover preview that fades in on the right
+// All projects — editorial list with a hover preview that follows the cursor
+// (flabbergast.agency style): the image eases toward the pointer and scales in.
 // ─────────────────────────────────────────────────────────────────────────────
 function AllProjects({ projects }: { projects: CSProject[] }) {
+  const pathname = usePathname();
+
+  // Exclude the current page, then show the 4 that follow it (wrapping around).
+  // Deterministic rotation → each page shows a different set, no hydration drift.
+  const shown = (() => {
+    const idx = projects.findIndex((p) => p.href === pathname);
+    const ordered = idx === -1 ? projects : [...projects.slice(idx + 1), ...projects.slice(0, idx)];
+    return ordered.slice(0, 4);
+  })();
+
   const [hovered, setHovered] = useState<number | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const previewRef   = useRef<HTMLDivElement>(null);
+  const posRef       = useRef({ x: 0, y: 0 });   // smoothed (current) position
+  const targetRef    = useRef({ x: 0, y: 0 });   // raw pointer (relative to list)
+  const rafRef       = useRef<number | null>(null);
+  const lastIndex    = useRef(0);                // keep last image during fade-out
+
+  // Lerp the preview toward the pointer every frame → it trails the cursor.
+  useEffect(() => {
+    const el = previewRef.current;
+    if (!el) return;
+    const LERP = 0.1;
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    function tick() {
+      posRef.current.x = lerp(posRef.current.x, targetRef.current.x, LERP);
+      posRef.current.y = lerp(posRef.current.y, targetRef.current.y, LERP);
+      el!.style.transform = `translate3d(${posRef.current.x - el!.offsetWidth / 2}px, ${posRef.current.y - el!.offsetHeight / 2}px, 0)`;
+      rafRef.current = requestAnimationFrame(tick);
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
+  }, []);
+
+  function onMove(e: React.MouseEvent) {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    targetRef.current.x = e.clientX - rect.left;
+    targetRef.current.y = e.clientY - rect.top;
+  }
+
+  const active = hovered !== null && !!shown[hovered]?.preview;
+  const displayIndex = hovered ?? lastIndex.current;
+  const preview = shown[displayIndex]?.preview;
 
   return (
     <section style={{ marginTop: SECTION_GAP, position: "relative" }}>
       <h2 style={{ ...T.h1, margin: 0 }}>All projects</h2>
 
-      <div style={{ marginTop: "clamp(40px, 5.3vw, 80px)", borderTop: `1px solid ${HAIRLINE}`, position: "relative" }}>
-        {/* Hover preview — anchored to the right of the list */}
+      {/* Figma: ~80px from title to first row; rows divided by a hairline below each (no top line). */}
+      <div ref={containerRef} onMouseMove={onMove} style={{ marginTop: "clamp(32px, 4vw, 48px)", position: "relative" }}>
+        {/* Cursor-following preview — eases toward the pointer, scales in on hover */}
         <div
+          ref={previewRef}
           aria-hidden
           style={{
             position: "absolute",
-            right: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "clamp(220px, 28vw, 360px)",
-            aspectRatio: "4 / 3",
-            borderRadius: RADIUS,
-            overflow: "hidden",
+            left: 0,
+            top: 0,
+            width: "clamp(280px, 30vw, 460px)",
             pointerEvents: "none",
-            opacity: hovered !== null && projects[hovered]?.preview ? 1 : 0,
-            transition: "opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)",
-            zIndex: 1,
+            opacity: active ? 1 : 0,
+            scale: active ? "1" : "0.85",
+            transition: "opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), scale 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)",
+            zIndex: 3,
+            willChange: "transform",
           }}
         >
-          {hovered !== null && projects[hovered]?.preview && (
-            typeof projects[hovered].preview === "string" ? (
+          {/* Photos already include the correct shape — show them whole, no crop/clip. */}
+          {preview && (
+            typeof preview === "string" ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={projects[hovered].preview as string} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={preview} alt="" style={{ width: "100%", height: "auto", display: "block" }} />
             ) : (
-              <CoverImage src={projects[hovered].preview as StaticImageData} alt="" sizes="360px" />
+              <CoverImage src={preview as StaticImageData} alt="" sizes="460px" />
             )
           )}
         </div>
 
-        {projects.map((p, i) => {
-          const active = hovered === i;
+        {shown.map((p, i) => {
+          // Figma: all dark by default; on hover the hovered row stays dark, the
+          // rest fade to muted (#989190). Lines: base #EFEAE5; the hovered row is
+          // bracketed by INK lines (its own bottom + the one above it).
+          const dimmed = hovered !== null && hovered !== i;
+          const lineActive = hovered === i || hovered === i + 1;
+          const lineColor = hovered === null ? PROJECT_LINE : (lineActive ? INK : PROJECT_LINE);
           const row = (
             <div
-              onMouseEnter={() => setHovered(i)}
+              onMouseEnter={() => { lastIndex.current = i; setHovered(i); }}
               onMouseLeave={() => setHovered(null)}
               style={{
                 position: "relative",
                 zIndex: 2,
                 display: "flex",
                 alignItems: "center",
-                padding: "clamp(16px, 1.6vw, 24px) 0",
-                borderBottom: `1px solid ${HAIRLINE}`,
+                padding: "clamp(24px, 2.2vw, 32px) 0",
+                borderBottom: `1px solid ${lineColor}`,
                 fontFamily: FONT,
                 fontWeight: 400,
-                fontSize: "clamp(18px, 1.9vw, 24px)",
-                lineHeight: 1,
+                fontSize: "clamp(16px, 1.5vw, 20px)",
+                lineHeight: 1.4,
                 letterSpacing: "-0.02em",
-                color: active ? INK : MUTED,
-                transition: "color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)",
+                color: dimmed ? MUTED : INK,
+                transition: "color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)",
               }}
             >
-              {p.name}
+              {/* Figma: number prefix (01–04) at left, name offset to ~56px */}
+              <span style={{ width: 56, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+              <span>{p.name}</span>
             </div>
           );
           return p.href ? (
@@ -329,10 +397,11 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
       <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 
         {/* ── Hero: title, then intro copy + meta stacked beneath (Figma layout) ─ */}
-        <div style={{ paddingTop: "clamp(40px, 6vw, 100px)", display: "flex", flexDirection: "column", gap: "clamp(24px, 2.2vw, 32px)" }}>
+        {/* Figma: ~80px below the nav; title→description gap = 24px. */}
+        <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>
           <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
           {(data.description || (data.meta && data.meta.length > 0)) && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: 627 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
               {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
               {data.meta && data.meta.length > 0 && (
                 <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
