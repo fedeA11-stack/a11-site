@@ -1,7 +1,12 @@
 "use client";
 
+import { motion } from "framer-motion";
 import CoverImage from "./CoverImage";
+import { Reveal, ImageReveal, makeSurfaceVariants, itemVariants } from "./Reveal";
 import footerBg from "../public/assets/footer.png";
+
+// Banner unveils with the mask matching its own 8.887px radius.
+const bannerVariants = makeSurfaceVariants(8.887);
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const FONT = "var(--font-system), sans-serif";
@@ -11,32 +16,37 @@ const FONT = "var(--font-system), sans-serif";
 // Parent is responsible for horizontal container (max-w-[1240px] mx-auto).
 export default function FooterBanner() {
   return (
-    <div>
+    <Reveal amount={0.3}>
       {/*
        * Dark banner — 422.146px tall, bg #282328, rounded 8.887px.
        * Text positions are absolute within this container, exact from Figma:
        *   body copy  → top: 77.76px,  left: 6.45%
        *   CTA link   → top: 297.72px, left: 6.45%, underlined
        */}
-      <section
+      <motion.section
         data-footer=""
+        variants={bannerVariants}
         style={{
           position:           "relative",
           width:              "100%",
           height:             "422.146px",
           borderRadius:       "8.887px",
           overflow:           "hidden",
+          willChange:         "transform, opacity, clip-path",
         }}
       >
-        {/* Banner background — was a CSS background-image, now optimized via next/image */}
-        <CoverImage
-          src={footerBg}
-          alt=""
-          sizes="(max-width: 1280px) 100vw, 1240px"
-        />
+        {/* Banner background — parallax settle, clipped by the section's overflow */}
+        <ImageReveal amount={0.3}>
+          <CoverImage
+            src={footerBg}
+            alt=""
+            sizes="(max-width: 1280px) 100vw, 1240px"
+          />
+        </ImageReveal>
 
         {/* "If you're ambitious enough to work with us." */}
-        <p
+        <motion.p
+          variants={itemVariants}
           style={{
             position:      "absolute",
             top:           "77.76px",
@@ -53,10 +63,11 @@ export default function FooterBanner() {
           }}
         >
           {`If you're ambitious\nenough to work with us.`}
-        </p>
+        </motion.p>
 
         {/* "We should talk." — underlined CTA */}
-        <a
+        <motion.a
+          variants={itemVariants}
           href="mailto:hello@a11studio.com"
           style={{
             position:      "absolute",
@@ -78,8 +89,8 @@ export default function FooterBanner() {
           onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
         >
           We should talk.
-        </a>
-      </section>
+        </motion.a>
+      </motion.section>
 
       {/*
        * Bottom bar — gap 81px below banner (from Figma: gap-[81px] in parent flex).
@@ -88,7 +99,8 @@ export default function FooterBanner() {
        *   Right: Privacy Policy
        * Font: 16px, leading 1.4, tracking -0.32px
        */}
-      <div
+      <motion.div
+        variants={itemVariants}
         style={{
           marginTop:     "81px",
           display:       "flex",
@@ -155,7 +167,7 @@ export default function FooterBanner() {
         >
           Privacy Policy
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </Reveal>
   );
 }

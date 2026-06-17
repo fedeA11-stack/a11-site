@@ -9,6 +9,7 @@ import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import CtaButton from "./CtaButton";
 import SmoothScroll from "./SmoothScroll";
+import { Reveal, ImageReveal, surfaceVariants, itemVariants } from "./Reveal";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Home / Work — pellmell.fr-style pinned-hero reveal.
@@ -34,27 +35,6 @@ import freeholdLogoGrey from "../public/assets/freehold logo grey.png";
 import districtLogo from "../public/assets/district logo.png";
 import freeholdLogo from "../public/assets/freehold logo.png";
 import atlansLogo from "../public/assets/atlans logo.png";
-
-// ─── Entrance reveal ───────────────────────────────────────────────────────────
-function Reveal({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      className="w-full"
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ type: "spring", duration: 0.4, bounce: 0, delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
@@ -208,22 +188,38 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
   const c = project.textColor;
 
   const card = (
-    <div
+    <motion.div
       data-cursor={project.href ? "View project" : undefined}
       className="relative w-full overflow-hidden rounded-[4.444px]"
+      variants={surfaceVariants}
       style={{
         aspectRatio: "1240 / 769",
         cursor: project.href ? "none" : "default",
+        willChange: "transform, opacity, clip-path",
       }}
     >
-      <CoverImage
-        src={project.image}
-        alt={project.name}
-        sizes="(max-width: 1280px) 100vw, 1240px"
-        priority={priority}
-      />
+      {/* Featured (zoom) card is owned by ScrollZoom; everything else gets the
+          parallax settle. The box's overflow:hidden clips the over-scaled image. */}
+      {zoom ? (
+        <CoverImage
+          src={project.image}
+          alt={project.name}
+          sizes="(max-width: 1280px) 100vw, 1240px"
+          priority={priority}
+        />
+      ) : (
+        <ImageReveal>
+          <CoverImage
+            src={project.image}
+            alt={project.name}
+            sizes="(max-width: 1280px) 100vw, 1240px"
+            priority={priority}
+          />
+        </ImageReveal>
+      )}
 
-      <div
+      <motion.div
+        variants={itemVariants}
         className="absolute flex items-center gap-[9px] whitespace-nowrap capitalize"
         style={{
           top: project.labelTop,
@@ -239,9 +235,10 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         <span>{project.num}</span>
         <Chevron color={c} />
         <span>{project.name}</span>
-      </div>
+      </motion.div>
 
-      <p
+      <motion.p
+        variants={itemVariants}
         className="absolute m-0 whitespace-pre-wrap capitalize"
         style={{
           top: project.descTop,
@@ -257,24 +254,27 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         }}
       >
         {project.description}
-      </p>
+      </motion.p>
 
       {project.logo && (
-        <Image
-          src={project.logo}
-          alt=""
-          aria-hidden
+        <motion.div
+          variants={itemVariants}
           style={{
             position: "absolute",
             bottom: 64,
             left: project.logoLeft,
             height: project.logoHeight,
-            width: "auto",
-            display: "block",
           }}
-        />
+        >
+          <Image
+            src={project.logo}
+            alt=""
+            aria-hidden
+            style={{ height: "100%", width: "auto", display: "block" }}
+          />
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 
   const content = zoom ? <ZoomScale>{card}</ZoomScale> : card;
@@ -302,24 +302,29 @@ function CTASection({
   href?: string;
 }) {
   return (
-    <div className="flex flex-col items-center pt-[147px] pb-[147px]" style={{ gap: textGap }}>
-      <p
-        className="m-0 text-center whitespace-pre-wrap"
-        style={{
-          fontFamily: "var(--font-system), sans-serif",
-          fontWeight: 500,
-          fontSize: "44.436px",
-          lineHeight: 0.94,
-          letterSpacing: "-0.8887px",
-          color: "#282328",
-          width: "714.315px",
-          maxWidth: "100%",
-        }}
-      >
-        {text}
-      </p>
-      <CtaButton label={buttonLabel} href={href} />
-    </div>
+    <Reveal className="w-full" amount={0.4}>
+      <div className="flex flex-col items-center pt-[147px] pb-[147px]" style={{ gap: textGap }}>
+        <motion.p
+          variants={itemVariants}
+          className="m-0 text-center whitespace-pre-wrap"
+          style={{
+            fontFamily: "var(--font-system), sans-serif",
+            fontWeight: 500,
+            fontSize: "44.436px",
+            lineHeight: 0.94,
+            letterSpacing: "-0.8887px",
+            color: "#282328",
+            width: "714.315px",
+            maxWidth: "100%",
+          }}
+        >
+          {text}
+        </motion.p>
+        <motion.div variants={itemVariants}>
+          <CtaButton label={buttonLabel} href={href} />
+        </motion.div>
+      </div>
+    </Reveal>
   );
 }
 
