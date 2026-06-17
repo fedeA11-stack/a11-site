@@ -1,6 +1,27 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { ReactLenis, useLenis } from "lenis/react";
+
+// ─── Reset scroll on route change ─────────────────────────────────────────────
+// With Lenis driving the scroll, Next's default "scroll to top on navigation"
+// doesn't reach Lenis' internal position — so a case-study page could open
+// mid-way down. Snap Lenis (and the window) back to the top on every route change.
+function ScrollToTop() {
+  const pathname = usePathname();
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, lenis]);
+
+  return null;
+}
 
 // ─── Smooth scroll ──────────────────────────────────────────────────────────
 // Page-scoped Lenis instance. This is the foundation of the pellmell.fr feel —
@@ -23,6 +44,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
           window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       }}
     >
+      <ScrollToTop />
       {children}
     </ReactLenis>
   );

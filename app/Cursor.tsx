@@ -52,15 +52,21 @@ function CursorLayer() {
       rafRef.current = requestAnimationFrame(tick);
     }
 
+    // Hide the OS cursor only on fine-pointer devices.
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
     let shown = false;
     function onMove(e: MouseEvent) {
       targetRef.current.x = e.clientX;
       targetRef.current.y = e.clientY;
       if (!shown) {
-        // Snap on first move so the dot doesn't fly in from the corner.
+        // Snap on first move so the dot doesn't fly in from the corner, and
+        // only NOW hide the native cursor — avoids a blank gap (native hidden
+        // while the dot is still at opacity 0) on load / after navigation.
         posRef.current.x = e.clientX;
         posRef.current.y = e.clientY;
         dot!.style.opacity = "1";
+        if (fine) document.documentElement.style.cursor = "none";
         shown = true;
       }
     }
@@ -84,10 +90,6 @@ function CursorLayer() {
       if (shown) dot!.style.opacity = "1";
       pillActive.current = false;
     }
-
-    // Hide the OS cursor only where a real pointer exists.
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (fine) document.documentElement.style.cursor = "none";
 
     document.addEventListener("mousemove",  onMove,  { passive: true });
     document.addEventListener("mouseenter", onEnter, { passive: true, capture: true });
@@ -167,9 +169,7 @@ function CursorLayer() {
   );
 }
 
-// Wrapper reads the route — no hooks conditionally skipped
+// Rendered once in the root layout — present on every page.
 export default function Cursor() {
-  const pathname = usePathname();
-  if (pathname.startsWith("/world")) return null;
   return <CursorLayer />;
 }

@@ -49,7 +49,7 @@ const data: CaseStudyData = {
     },
     // wallet designed for everyone (y1962)
     {
-      title: "wallet designed for everyone",
+      title: "Wallet designed for everyone",
       body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks, or blockchain infrastructure, they simply needed to understand what they owned, how to receive it, and how to use it safely.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
@@ -63,14 +63,14 @@ const data: CaseStudyData = {
         ] },
       ],
     },
-    // Left testimonial (y4710)
+    // Centered testimonial (Figma y4571 — centered quote)
     {
       quote: {
         text: "This is exactly what we needed, a wallet experience that made crypto feel simple, familiar, and safe.",
         author: "Patrick Traughber",
         role: "Head of Finance Products",
         avatar: wmAvatar,
-        align: "left",
+        align: "center",
       },
     },
     // New financial rails / Familiar actions (y5279)
