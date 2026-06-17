@@ -8,7 +8,6 @@ import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import CtaButton from "./CtaButton";
-import SmoothScroll from "./SmoothScroll";
 import { Reveal, ImageReveal, surfaceVariants, itemVariants } from "./Reveal";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -399,45 +398,43 @@ function HeroReveal() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function WorkPage() {
   return (
-    <SmoothScroll>
-      <div style={{ position: "relative", background: "#fff" }} className="min-h-screen">
-        <NavMenu />
+    <div style={{ position: "relative", background: "#fff" }} className="min-h-screen">
+      <NavMenu />
 
-        {/* Pinned hero — the work grid below slides up over it on first scroll */}
-        <HeroReveal />
+      {/* Pinned hero — the work grid below slides up over it on first scroll */}
+      <HeroReveal />
 
-        {/* Work grid — opaque layer that reveals over the hero (z-1) */}
-        <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
-          <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
-            {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
-            <ProjectCard project={PROJECTS[0]} priority zoom />
-            <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
+      {/* Work grid — opaque layer that reveals over the hero (z-1) */}
+      <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
+        <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
+          {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
+          <ProjectCard project={PROJECTS[0]} priority zoom />
+          <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
 
-            <CTASection
-              text={"Built with craft. Driven by passion.\nShipped without excuses."}
-              buttonLabel="Discover Studio"
-              textGap={36}
-              href="/studio"
-            />
+          <CTASection
+            text={"Built with craft. Driven by passion.\nShipped without excuses."}
+            buttonLabel="Discover Studio"
+            textGap={36}
+            href="/studio"
+          />
 
-            <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
-            <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
+          <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
+          <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
 
-            <CTASection
-              text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
-              buttonLabel="Read Manifesto"
-              textGap={45}
-            />
+          <CTASection
+            text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
+            buttonLabel="Read Manifesto"
+            textGap={45}
+          />
 
-            <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
-            <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
-          </main>
+          <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
+          <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
+        </main>
 
-          <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
-            <FooterBanner />
-          </div>
+        <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
+          <FooterBanner />
         </div>
       </div>
-    </SmoothScroll>
+    </div>
   );
 }

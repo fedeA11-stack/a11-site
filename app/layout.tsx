@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Cursor from "./Cursor";
 import Preloader from "./Preloader";
+import SmoothScroll from "./SmoothScroll";
 
 // ── System Unlicensed Trial — self-hosted via next/font/local ────────────────
 // Replaces the 8 hand-rolled @font-face blocks in globals.css. next/font adds a
@@ -58,7 +59,7 @@ export default function RootLayout({
       <body style={{ margin: 0, padding: 0 }}>
         <Cursor />
         <Preloader />
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
