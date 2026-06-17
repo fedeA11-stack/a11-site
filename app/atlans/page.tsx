@@ -3,18 +3,20 @@ import { ALL_PROJECTS } from "../caseProjects";
 
 import heroImg from "../../public/assets/atlans/atlans-hero.jpg";
 import s1a from "../../public/assets/atlans/atlans-1-1.jpg";
+import s1b from "../../public/assets/atlans/atlans-1-2.jpg";
 import s2a from "../../public/assets/atlans/atlans-2-1.jpg";
 import s2b from "../../public/assets/atlans/atlans-2-2.jpg";
 import s2c from "../../public/assets/atlans/atlans-2-3.jpg";
+import s2d from "../../public/assets/atlans/atlans-2-4.jpg";
 import s3a from "../../public/assets/atlans/atlans-3-1.jpg";
 import s3b from "../../public/assets/atlans/atlans-3-2.jpg";
 import s3c from "../../public/assets/atlans/atlans-3-3.jpg";
-import s4a from "../../public/assets/atlans/atlans-4-1.jpg";
+import s3d from "../../public/assets/atlans/atlans-3-4.jpg";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Atlans — title-only hero (no description). Rendered through the canonical
-// case-study template (Figma 1871:46193). Aspect ratios are the real exported
-// pixel dimensions of each asset.
+// case-study template (Figma 1871:46193). Each tile mirrors a real Figma "img"
+// frame: 1116×750 → "full" rows, 553×550 → side-by-side "duo" rows.
 // ─────────────────────────────────────────────────────────────────────────────
 const data: CaseStudyData = {
   breadcrumb: "Atlans",
@@ -24,29 +26,32 @@ const data: CaseStudyData = {
     {
       title: "The best spots,\ncurated for athletes",
       media: [
-        { kind: "full", aspect: "2232 / 1500", image: { src: s1a, alt: "Atlans — curated spots", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1116 / 750", image: { src: s1a, alt: "Atlans — curated spots map", bg: "#F0EBE5" } },
+        // Irregular: a lone 553×550 tile (Figma 1871:46539) sits on the right with
+        // no left partner, so it renders as a half-width-aspect "full" tile.
+        { kind: "full", aspect: "553 / 550", image: { src: s1b, alt: "Atlans — spot amenities", bg: "#F0EBE5" } },
       ],
     },
     {
       title: "Find your community,\nwherever you are",
       media: [
-        { kind: "full", aspect: "2232 / 1500", image: { src: s2a, alt: "Atlans — community feed", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "1106 / 1100", image: { src: s2b, alt: "Atlans — community profiles", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2232 / 1500", image: { src: s2c, alt: "Atlans — discover people nearby", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1116 / 750", image: { src: s2a, alt: "Atlans — community home", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "553 / 550", images: [
+          { src: s2b, alt: "Atlans — community chat", bg: "#F0EBE5" },
+          { src: s2c, alt: "Atlans — community members", bg: "#F0EBE5" },
+        ] },
+        { kind: "full", aspect: "1116 / 750", image: { src: s2d, alt: "Atlans — discover people nearby", bg: "#F0EBE5" } },
       ],
     },
     {
       title: "Turn every workout into\na shared experience",
       media: [
-        { kind: "full", aspect: "3428 / 1524", image: { src: s3a, alt: "Atlans — shared workout", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2126 / 2674", image: { src: s3b, alt: "Atlans — workout detail", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2232 / 1500", image: { src: s3c, alt: "Atlans — activity overview", bg: "#F0EBE5" } },
-      ],
-    },
-    {
-      title: "We've built emotion,\nnot just another brand",
-      media: [
-        { kind: "full", aspect: "3428 / 1524", image: { src: s4a, alt: "Atlans — brand", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "Atlans — shared workout", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "553 / 550", images: [
+          { src: s3b, alt: "Atlans — workout detail", bg: "#F0EBE5" },
+          { src: s3c, alt: "Atlans — workout stats", bg: "#F0EBE5" },
+        ] },
+        { kind: "full", aspect: "1116 / 750", image: { src: s3d, alt: "Atlans — activity overview", bg: "#F0EBE5" } },
       ],
     },
   ],

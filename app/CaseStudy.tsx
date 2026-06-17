@@ -35,8 +35,8 @@ export type CSImage = {
 
 export type CSMedia =
   | { kind: "full"; image: CSImage; aspect?: string }
-  | { kind: "duo"; images: [CSImage, CSImage] }
-  | { kind: "tallDuo"; tall: CSImage; stack: [CSImage, CSImage] };
+  | { kind: "duo"; images: [CSImage, CSImage]; aspect?: string }
+  | { kind: "tallDuo"; tall: CSImage; stack: [CSImage, CSImage]; tallAspect?: string; stackAspect?: string };
 
 export type CSSection = {
   /** Section heading (left column). Supports "\n". Omit for a media-/stats-only block. */
@@ -45,8 +45,8 @@ export type CSSection = {
   body?: string;
   /** Stat row, e.g. [{ value: "45M+", label: "Total users" }]. Rendered as big numbers. */
   stats?: { value: string; label: string }[];
-  /** Pull quote, rendered centered between rules. */
-  quote?: { text: string; author?: string; role?: string };
+  /** Testimonial. `align` "center" (default) = big centered quote between rules; "left" = left-aligned quote with a single bottom rule. Both show the avatar + author/role. */
+  quote?: { text: string; author?: string; role?: string; avatar?: StaticImageData | string; align?: "left" | "center" };
   /** Image/video blocks stacked below the header. */
   media?: CSMedia[];
 };
@@ -141,9 +141,9 @@ function MediaBlock({ media }: { media: CSMedia }) {
 
   if (media.kind === "duo") {
     return (
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
         {media.images.map((img, i) => (
-          <Cell key={i} image={img} aspect="615 / 612" sizes="(max-width: 768px) 100vw, 50vw" />
+          <Cell key={i} image={img} aspect={media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
         ))}
       </div>
     );
@@ -153,10 +153,10 @@ function MediaBlock({ media }: { media: CSMedia }) {
   // the two right tiles + gap sum to the left tile's height automatically.
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
-      <Cell image={media.tall} aspect="615 / 1038" sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />
+      <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />
       <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
         {media.stack.map((img, i) => (
-          <Cell key={i} image={img} aspect="615 / 513" sizes="(max-width: 768px) 100vw, 50vw" />
+          <Cell key={i} image={img} aspect={media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, 50vw" />
         ))}
       </div>
     </div>
@@ -172,9 +172,10 @@ function Section({ section }: { section: CSSection }) {
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 1.6vw, 24px)", alignItems: "start" }}>
-          {section.title ? <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line" }}>{section.title}</h2> : <span />}
-          {section.body && <p style={{ ...T.body, margin: 0, maxWidth: 616 }}>{section.body}</p>}
+        // Figma stacks the heading over its copy in one left column (gap 24).
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 1.6vw, 24px)" }}>
+          {section.title && <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{section.title}</h2>}
+          {section.body && <p style={{ ...T.body, margin: 0, maxWidth: 627 }}>{section.body}</p>}
         </div>
       )}
 
@@ -189,17 +190,39 @@ function Section({ section }: { section: CSSection }) {
         </div>
       )}
 
-      {section.quote && (
-        <blockquote style={{ margin: 0, padding: "clamp(40px, 5vw, 72px) 0", borderTop: `1px solid ${HAIRLINE}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 32, textAlign: "center" }}>
-          <p style={{ ...T.h2, margin: 0, maxWidth: 900, fontWeight: 400 }}>{section.quote.text}</p>
-          {(section.quote.author || section.quote.role) && (
-            <footer style={{ ...T.label, color: INK }}>
-              {section.quote.author}
-              {section.quote.role ? ` · ${section.quote.role}` : ""}
-            </footer>
-          )}
-        </blockquote>
-      )}
+      {section.quote && (() => {
+        const q = section.quote;
+        const left = q.align === "left";
+        const attribution = (q.author || q.role) && (
+          <footer style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {q.avatar && (
+              <div style={{ position: "relative", width: "clamp(48px, 5vw, 64px)", aspectRatio: "1", borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: BEIGE }}>
+                {typeof q.avatar === "string" ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={q.avatar} alt={q.author ?? ""} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                ) : (
+                  <CoverImage src={q.avatar} alt={q.author ?? ""} sizes="64px" />
+                )}
+              </div>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left" }}>
+              {q.author && <span style={{ ...T.value, fontWeight: 500, color: INK }}>{q.author}</span>}
+              {q.role && <span style={{ ...T.label }}>{q.role}</span>}
+            </div>
+          </footer>
+        );
+        return left ? (
+          <blockquote style={{ margin: 0, paddingBottom: "clamp(32px, 4vw, 56px)", borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 44px)" }}>
+            <p style={{ fontFamily: FONT, fontWeight: 400, fontSize: "clamp(24px, 2.7vw, 36px)", lineHeight: 1.15, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 628 }}>{q.text}</p>
+            {attribution}
+          </blockquote>
+        ) : (
+          <blockquote style={{ margin: 0, padding: "clamp(40px, 5vw, 72px) 0", borderTop: `1px solid ${HAIRLINE}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(28px, 3vw, 40px)", textAlign: "center" }}>
+            <p style={{ ...T.h2, margin: 0, maxWidth: 900, fontWeight: 400, textTransform: "capitalize" }}>{q.text}</p>
+            {attribution}
+          </blockquote>
+        );
+      })()}
 
       {section.media && section.media.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
@@ -305,23 +328,24 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
 
       <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 
-        {/* ── Hero: title left, description + meta right ─────────────────────── */}
-        <div style={{ paddingTop: "clamp(40px, 6vw, 100px)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 3vw, 48px)", alignItems: "start" }}>
-          <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line" }}>{data.title}</h1>
-          {/* Right column starts ~at the title's baseline (Figma: title y180, copy y310). */}
-          <div style={{ marginTop: "clamp(40px, 8.6vw, 130px)", display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: 616 }}>
-            {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
-            {data.meta && data.meta.length > 0 && (
-              <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
-                {data.meta.map((m) => (
-                  <div key={m.label}>
-                    <dt style={{ ...T.label, margin: 0 }}>{m.label}</dt>
-                    <dd style={{ ...T.value, margin: 0 }}>{m.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-          </div>
+        {/* ── Hero: title, then intro copy + meta stacked beneath (Figma layout) ─ */}
+        <div style={{ paddingTop: "clamp(40px, 6vw, 100px)", display: "flex", flexDirection: "column", gap: "clamp(24px, 2.2vw, 32px)" }}>
+          <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
+          {(data.description || (data.meta && data.meta.length > 0)) && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: 627 }}>
+              {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
+              {data.meta && data.meta.length > 0 && (
+                <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
+                  {data.meta.map((m) => (
+                    <div key={m.label}>
+                      <dt style={{ ...T.label, margin: 0 }}>{m.label}</dt>
+                      <dd style={{ ...T.value, margin: 0 }}>{m.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </div>
+          )}
         </div>
 
         {/* ── Hero image ─────────────────────────────────────────────────────── */}

@@ -9,12 +9,22 @@ import { usePathname } from "next/navigation";
  * Disabled on /world/* case study pages.
  */
 function CursorPill() {
+  const pathname  = usePathname();
   const cursorRef = useRef<HTMLDivElement>(null);
   const labelRef  = useRef<HTMLSpanElement>(null);
   const posRef    = useRef({ x: -200, y: -200 });
   const targetRef = useRef({ x: -200, y: -200 });
   const rafRef    = useRef<number | null>(null);
   const visRef    = useRef(false);
+
+  // Hide the pill on route change. Clicking a [data-cursor] tile navigates
+  // client-side, so the element unmounts without firing mouseleave — without
+  // this the "View project" pill stays stuck on the destination page.
+  useEffect(() => {
+    const div = cursorRef.current;
+    if (div) div.style.opacity = "0";
+    visRef.current = false;
+  }, [pathname]);
 
   useEffect(() => {
     const el = cursorRef.current as HTMLDivElement | null;

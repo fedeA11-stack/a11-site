@@ -2,20 +2,30 @@ import CaseStudy, { type CaseStudyData } from "../CaseStudy";
 import { ALL_PROJECTS } from "../caseProjects";
 
 import heroImg from "../../public/assets/districts/dis-hero.jpg";
+import disAvatar from "../../public/assets/districts/dis-avatar.png";
 import s1a from "../../public/assets/districts/dis-1-1.jpg";
 import s1b from "../../public/assets/districts/dis-1-2.jpg";
+import s1c from "../../public/assets/districts/dis-1-3.jpg";
 import s2a from "../../public/assets/districts/dis-2-1.jpg";
 import s2b from "../../public/assets/districts/dis-2-2.jpg";
+import s2c from "../../public/assets/districts/dis-2-3.jpg";
 import s3a from "../../public/assets/districts/dis-3-1.jpg";
 import s3b from "../../public/assets/districts/dis-3-2.jpg";
+import s3c from "../../public/assets/districts/dis-3-3.jpg";
+import s3d from "../../public/assets/districts/dis-3-4.jpg";
 import s4a from "../../public/assets/districts/dis-4-1.jpg";
+import s4b from "../../public/assets/districts/dis-4-2.jpg";
+import s4c from "../../public/assets/districts/dis-4-3.jpg";
 import s5a from "../../public/assets/districts/dis-5-1.jpg";
 import s5b from "../../public/assets/districts/dis-5-2.jpg";
+import s5c from "../../public/assets/districts/dis-5-3.jpg";
+import s5d from "../../public/assets/districts/dis-5-4.jpg";
+import s5e from "../../public/assets/districts/dis-5-5.jpg";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Districts — content from Figma frame 1871:30025. Composed scenes (hero,
-// section 1 map) were exported as their bounding parent frames, not as
-// individual overlapping layers.
+// Districts — case study rendered through the canonical case-study template.
+// Tile grid + aspect ratios mirror the Figma `img` frames (root 1871:30025).
+// Stats row, pull quote, duos and a tallDuo all map to Figma's actual layout.
 // ─────────────────────────────────────────────────────────────────────────────
 const data: CaseStudyData = {
   breadcrumb: "Districts",
@@ -24,48 +34,91 @@ const data: CaseStudyData = {
     "Districts turns real cities into a grid of claimable land. We designed the experience that lets anyone own a piece of the map, trade it, and help decide what opens next.",
   hero: { src: heroImg, alt: "Districts — own a piece of the map", bg: "#F0EBE5" },
   sections: [
+    // Stats row (Figma y1469)
+    {
+      stats: [
+        { value: "5,6K+", label: "Districts Minted" },
+        { value: "12,3K+", label: "Token holders" },
+        { value: "36M+", label: "Tokens staked" },
+      ],
+    },
+    // A map you already know (y1870)
     {
       title: "A map you\nalready know",
       body: "Owning digital land only makes sense if you can see it, so we made the map the product. Real cities, rendered as a grid of ownable parcels, every district legible the moment it loads. Buying, bidding, and activity all happen in place, on the map, instead of buried in menus.",
       media: [
-        { kind: "full", aspect: "2981 / 1936", image: { src: s1a, alt: "Districts map with owned parcels", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2152 / 1060", image: { src: s1b, alt: "District detail on the map", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1076 / 723", image: { src: s1a, alt: "Districts map with owned parcels", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "533 / 530", images: [
+          { src: s1b, alt: "District detail on the map", bg: "#F0EBE5" },
+          { src: s1c, alt: "Parcel ownership view", bg: "#F0EBE5" },
+        ] },
       ],
     },
+    // Pull quote (y3563)
     {
       quote: {
-        text: "A11 made a complicated idea feel obvious. They didn't just design screens. They designed the way people understand owning a piece of the world.",
+        text: "“A11 made a complicated idea feel obvious. They didn't just design screens. They designed the way people understand owning a piece of the world.”",
+        author: "Derek Boirun",
+        role: "CEO of Realio",
+        avatar: disAvatar,
       },
     },
+    // A marketplace anyone can use (y4065)
     {
       title: "A marketplace\nanyone can use",
       body: "We built the marketplace around actions everyone already knows: browse, buy now, place a bid. The genuinely crypto steps, funding your wallet and confirming a purchase, stay clear and guided rather than hidden.",
       media: [
-        { kind: "full", aspect: "1877 / 3115", image: { src: s2a, alt: "Districts marketplace flow", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2152 / 1060", image: { src: s2b, alt: "Buy now and place a bid", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1076 / 642", image: { src: s2a, alt: "Districts marketplace overview", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "533 / 530", images: [
+          { src: s2b, alt: "Buy now flow", bg: "#F0EBE5" },
+          { src: s2c, alt: "Place a bid flow", bg: "#F0EBE5" },
+        ] },
       ],
     },
+    // Land that works while you hold it (y5614)
     {
       title: "Land that works\nwhile you hold it",
       body: "Owning a district isn't passive. Staking lives right on the asset. Stake your land and your $DSTRX, watch rewards build, claim in a tap. Earning feels like managing property, not running a protocol.",
       media: [
-        { kind: "full", aspect: "1877 / 1832", image: { src: s3a, alt: "Staking on a district asset", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2152 / 1800", image: { src: s3b, alt: "Rewards building and claiming", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1076 / 740", image: { src: s3a, alt: "Staking on a district asset", bg: "#F0EBE5" } },
+        { kind: "tallDuo",
+          tall: { src: s3b, alt: "Wallet staking detail", bg: "#F0EBE5" },
+          stack: [
+            { src: s3c, alt: "Rewards building", bg: "#F0EBE5" },
+            { src: s3d, alt: "Claiming rewards", bg: "#F0EBE5" },
+          ],
+        },
       ],
     },
+    // Run by its community (y7631)
     {
       title: "Run by\nits community",
       body: "What opens next is decided by the people who own Districts, not a company. Every $DSTRX vote pushes a city closer to opening, and the economy stays open to anyone — nothing you have to take on trust.",
       media: [
-        { kind: "full", aspect: "2152 / 1060", image: { src: s4a, alt: "Community voting to open cities", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1076 / 690", image: { src: s4a, alt: "Community voting to open cities", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "533 / 530", images: [
+          { src: s4b, alt: "Governance proposal", bg: "#F0EBE5" },
+          { src: s4c, alt: "Vote tally toward opening", bg: "#F0EBE5" },
+        ] },
       ],
     },
+    // A world worth entering (y9228)
     {
       title: "A world worth entering",
       body: "The work didn't stop at the product. We shaped the front door too — the landing page, the brand, and the voice it carries online. So the very first thing people meet already feels like a place with a future worth owning.",
       media: [
-        { kind: "full", aspect: "2152 / 1044", image: { src: s5a, alt: "Districts landing page", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "2653 / 1998", image: { src: s5b, alt: "Districts brand and voice", bg: "#F0EBE5" } },
+        // Figma's irregular gallery (y9395–9927): a small left column of two
+        // stacked tiles beside a wide tile, then a wide/narrow pair below.
+        // Approximated with two duos that preserve reading order and proportions.
+        { kind: "duo", aspect: "297 / 256", images: [
+          { src: s5a, alt: "Districts brand mark", bg: "#F0EBE5" },
+          { src: s5c, alt: "Districts identity detail", bg: "#F0EBE5" },
+        ] },
+        { kind: "full", aspect: "769 / 522", image: { src: s5b, alt: "Districts landing page", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "534 / 487", images: [
+          { src: s5d, alt: "Districts brand application", bg: "#F0EBE5" },
+          { src: s5e, alt: "Districts voice and tone", bg: "#F0EBE5" },
+        ] },
       ],
     },
   ],
