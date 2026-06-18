@@ -6,9 +6,11 @@ interface PhoneVideoProps {
   bg?: string;
   /** Border-radius of the outer container */
   radius?: string;
+  /** Only fetch/play the video when true — parent sets this once the tile is in view */
+  active?: boolean;
 }
 
-export default function PhoneVideo({ src, bg = "#F0EBE5", radius }: PhoneVideoProps) {
+export default function PhoneVideo({ src, bg = "#F0EBE5", radius, active = true }: PhoneVideoProps) {
   return (
     <div
       style={{
@@ -35,7 +37,7 @@ export default function PhoneVideo({ src, bg = "#F0EBE5", radius }: PhoneVideoPr
       >
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
-          src={src}
+          src={active ? src : undefined}
           autoPlay
           loop
           muted

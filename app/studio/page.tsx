@@ -3,6 +3,8 @@
 import Image from "next/image";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
+import PageEnter from "../PageEnter";
+import WordReveal from "../WordReveal";
 import CoverImage from "../CoverImage";
 import CtaButton from "../CtaButton";
 
@@ -49,6 +51,7 @@ export default function StudioPage() {
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <NavMenu />
 
+      <PageEnter style={{ flex: 1 }}>
       <main style={{ flex: 1 }}>
         {/* Responsive container: 16px mobile, 32px tablet, 0 desktop (max-width handles margins) */}
         <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0">
@@ -137,6 +140,7 @@ export default function StudioPage() {
 
         </div>
       </main>
+      </PageEnter>
     </div>
   );
 }

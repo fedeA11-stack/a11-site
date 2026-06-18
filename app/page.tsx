@@ -34,6 +34,8 @@ import freeholdLogoGrey from "../public/assets/freehold logo grey.png";
 import districtLogo from "../public/assets/district logo.png";
 import freeholdLogo from "../public/assets/freehold logo.png";
 import atlansLogo from "../public/assets/atlans logo.png";
+import PageEnter from "./PageEnter";
+import WordReveal from "./WordReveal";
 
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
@@ -217,8 +219,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         </ImageReveal>
       )}
 
-      <motion.div
-        variants={itemVariants}
+      <div
         className="absolute flex items-center gap-[9px] whitespace-nowrap capitalize"
         style={{
           top: project.labelTop,
@@ -234,10 +235,9 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         <span>{project.num}</span>
         <Chevron color={c} />
         <span>{project.name}</span>
-      </motion.div>
+      </div>
 
-      <motion.p
-        variants={itemVariants}
+      <p
         className="absolute m-0 whitespace-pre-wrap capitalize"
         style={{
           top: project.descTop,
@@ -253,11 +253,10 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         }}
       >
         {project.description}
-      </motion.p>
+      </p>
 
       {project.logo && (
-        <motion.div
-          variants={itemVariants}
+        <div
           style={{
             position: "absolute",
             bottom: 64,
@@ -271,7 +270,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
             aria-hidden
             style={{ height: "100%", width: "auto", display: "block" }}
           />
-        </motion.div>
+        </div>
       )}
     </motion.div>
   );
@@ -363,8 +362,11 @@ function HeroReveal() {
           willChange: "transform, opacity",
         }}
       >
-        <p
+        <motion.p
           className="m-0 text-center whitespace-pre-wrap"
+          initial={{ opacity: 0, filter: "blur(10px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1], delay: 0.08 }}
           style={{
             fontFamily: "var(--font-system), sans-serif",
             fontWeight: 500,
@@ -376,7 +378,7 @@ function HeroReveal() {
           }}
         >
           {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
-        </p>
+        </motion.p>
       </motion.section>
 
       {/*
@@ -405,7 +407,7 @@ export default function WorkPage() {
       <HeroReveal />
 
       {/* Work grid — opaque layer that reveals over the hero (z-1) */}
-      <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
+      <PageEnter style={{ position: "relative", zIndex: 1, background: "#fff" }}>
         <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
           {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
           <ProjectCard project={PROJECTS[0]} priority zoom />
@@ -434,7 +436,7 @@ export default function WorkPage() {
         <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
           <FooterBanner />
         </div>
-      </div>
+      </PageEnter>
     </div>
   );
 }

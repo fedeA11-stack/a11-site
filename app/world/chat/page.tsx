@@ -27,7 +27,7 @@ const data: CaseStudyData = {
   },
   sections: [
     {
-      title: "Designing\nTrust At Scale",
+      title: "Designing\ntrust at scale",
       body: "As digital interactions scale globally, communication needs to remain reliable, even when identity isn’t visible. New signals within the conversation make it possible to understand who’s on the other side, without exposing personal information.",
       media: [
         {

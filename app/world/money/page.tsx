@@ -2,21 +2,16 @@ import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
 import { ALL_PROJECTS } from "../../caseProjects";
 
 import heroImg from "../../../public/assets/world-money/wm-hero.jpg";
-import wmAvatar from "../../../public/assets/world-money/wm-avatar.png";
-import s1a from "../../../public/assets/world-money/wm-1-1.jpg";
+import wmAvatar from "../../../public/assets/world-money/Patrick.jpg";
 import s1b from "../../../public/assets/world-money/wm-1-2.jpg";
 import s1c from "../../../public/assets/world-money/wm-1-3.jpg";
-import s1d from "../../../public/assets/world-money/wm-1-4.jpg";
 import s1e from "../../../public/assets/world-money/wm-1-5.jpg";
-import s2a from "../../../public/assets/world-money/wm-2-1.jpg";
 import s2b from "../../../public/assets/world-money/wm-2-2.jpg";
-import s2c from "../../../public/assets/world-money/wm-2-3.jpg";
 import s2d from "../../../public/assets/world-money/wm-2-4.jpg";
 import s2e from "../../../public/assets/world-money/wm-2-5.jpg";
 import s3a from "../../../public/assets/world-money/wm-3-1.jpg";
 import s3b from "../../../public/assets/world-money/wm-3-2.jpg";
 import s3c from "../../../public/assets/world-money/wm-3-3.jpg";
-import s4a from "../../../public/assets/world-money/wm-4-1.jpg";
 import s4b from "../../../public/assets/world-money/wm-4-2.jpg";
 import s4c from "../../../public/assets/world-money/wm-4-3.jpg";
 import s4d from "../../../public/assets/world-money/wm-4-4.jpg";
@@ -49,16 +44,16 @@ const data: CaseStudyData = {
     },
     // wallet designed for everyone (y1962)
     {
-      title: "Wallet designed for everyone",
+      title: "Wallet designed\nfor everyone",
       body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks, or blockchain infrastructure, they simply needed to understand what they owned, how to receive it, and how to use it safely.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
-          { src: s1a, alt: "World Money wallet home", bg: BG },
+          { src: "/assets/world-money/WorldMoney_Tabs.mp4", alt: "World Money wallet home", video: true, bg: BG },
           { src: s1b, alt: "World Money balance overview", bg: BG },
         ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s1c, alt: "World Money cash balances", bg: BG } },
         { kind: "duo", aspect: "553 / 550", images: [
-          { src: s1d, alt: "World Money asset detail", bg: BG },
+          { src: "/assets/world-money/REF3_V1.mp4", alt: "World Money asset detail", video: true, bg: BG },
           { src: s1e, alt: "World Money receive flow", bg: BG },
         ] },
       ],
@@ -66,7 +61,7 @@ const data: CaseStudyData = {
     // Centered testimonial (Figma y4571 — centered quote)
     {
       quote: {
-        text: "This is exactly what we needed, a wallet experience that made crypto feel simple, familiar, and safe.",
+        text: "“This is exactly what we needed, a wallet experience that made crypto feel simple, familiar, and safe.”",
         author: "Patrick Traughber",
         role: "Head of Finance Products",
         avatar: wmAvatar,
@@ -75,14 +70,14 @@ const data: CaseStudyData = {
     },
     // New financial rails / Familiar actions (y5279)
     {
-      title: "New financial rails\nFamiliar actions",
+      title: "New financial rails\nfamiliar actions",
       body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
-          { src: s2a, alt: "World Money send flow", bg: BG },
           { src: s2b, alt: "World Money transaction detail", bg: BG },
+          { src: "/assets/world-money/WorldMoneyP2P_1.mp4", alt: "World Money P2P payment", video: true, bg: BG },
         ] },
-        { kind: "full", aspect: "1116 / 750", image: { src: s2c, alt: "World Money invest overview", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF4.mp4", alt: "World Money invest overview", video: true, bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [
           { src: s2d, alt: "World Money activity history", bg: BG },
           { src: s2e, alt: "World Money confirmation", bg: BG },
@@ -91,7 +86,7 @@ const data: CaseStudyData = {
     },
     // From wallet balance to real-world use (y7933)
     {
-      title: "From wallet balance to real-world use",
+      title: "From wallet balance\nto real-world use",
       body: "World Card extended the wallet beyond holding and transferring assets, creating a familiar way for people to use their digital assets in everyday purchases, bringing wallet value into real-world payments.",
       media: [
         { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "World Card", bg: BG } },
@@ -103,10 +98,10 @@ const data: CaseStudyData = {
     },
     // Helping users understand the value (y9977)
     {
-      title: "Helping users understand the value",
+      title: "Helping users\nunderstand the value",
       body: "Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value.",
       media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: s4a, alt: "World Money grants intro", bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF5.mp4", alt: "World Money grants intro", video: true, bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4b, alt: "World Money claim flow", bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4c, alt: "World Money grant visual metaphor", bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [

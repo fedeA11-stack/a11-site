@@ -2,7 +2,7 @@ import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
 import { ALL_PROJECTS } from "../../caseProjects";
 
 import hero from "../../../public/assets/world-id/wid-hero.jpg";
-import ajayAvatar from "../../../public/assets/world-id/wid-avatar.png";
+import ajayAvatar from "../../../public/assets/world-id/Ajay.jpg";
 import s2a from "../../../public/assets/world-id/wid-2-1.jpg";
 import s2b from "../../../public/assets/world-id/wid-2-2.jpg";
 import s3a from "../../../public/assets/world-id/wid-3-1.jpg";
@@ -23,40 +23,46 @@ import s5c from "../../../public/assets/world-id/wid-5-3.jpg";
 const data: CaseStudyData = {
   breadcrumb: "World ID",
   section: { label: "World", href: "/world" },
-  title: "Are you a real human?",
+  title: "Are you real human?",
   description:
     "World ID is the identity layer for humans in the age of AI. The app needed to make a complex, unfamiliar concept feel simple, trustworthy, and immediately useful.",
   hero: { src: hero, alt: "World ID", bg: "#F0EBE5" },
   sections: [
     {
-      title: "You know you're human. Does the internet?",
+      title: "You know you're human.\nDoes the internet?",
       body: "You already know you're a real, breathing human. The internet doesn't. And in the age of AI, more than 70% of it is bots.",
+      media: [
+        { kind: "full", aspect: "1243 / 832", image: { src: "/assets/world-id/Main%20Comp_1.mp4", alt: "World ID main composition", video: true, bg: "#F0EBE5" } },
+      ],
     },
     {
       quote: {
-        text: "By the time I joined, A11 designers had already become part of the product's DNA.",
+        text: "“This is exactly what we needed, a wallet experience that made crypto feel simple, familiar, and safe.”",
         author: "Ajay Patel",
-        role: "Head of World ID",
+        role: "Chief Revenue Officer and Head of World ID",
         avatar: ajayAvatar,
-        align: "left",
+        align: "center",
       },
     },
     {
       title: "Meet the Orb.\nAnd its experience.",
-      body: "You know captchas. Pick the cars. Slide the puzzle piece. Find the crosswalk. Bots can do all of that now. So Tools For Humanity Design Lab built something they can't fake — a camera that just looks at you. No voice. No instructions. No display. That's where the fun started.",
+      body: "You know captchas. Pick the cars. Slide the puzzle piece. Find the crosswalk. Bots can do all of that now. So Tools For Humanity Design Lab built something they can't fake a camera that just looks at you. No voice. No instructions. No display. That's where the fun started.",
       media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: s2a, alt: "The Orb", bg: "#F0EBE5" } },
-        { kind: "full", aspect: "1116 / 550", image: { src: s2b, alt: "The Orb experience", bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1243 / 832", image: { src: "/assets/world-id/preflights.mp4", alt: "The Orb preflights", video: true, bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "615 / 612", images: [
+          { src: "/assets/world-id/Post_verification.mp4", alt: "Post verification flow", video: true, bg: "#F0EBE5" },
+          { src: s2b, alt: "The Orb experience", bg: "#F0EBE5" },
+        ] },
       ],
     },
     {
       title: "If you're a real human,\nknow it, show it",
-      body: "Once you're verified, you receive your World ID — your human credential. Over the years it's taken many forms, but the message has stayed the same. Here's how it evolved. We had a lot of fun with that.",
+      body: "Once you're verified, you receive your World ID. Your human credential. Over the years it's taken many forms, but the message has stayed the same. Here's how it evolved. We had a lot of fun with that.",
       media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "World ID credential", bg: "#F0EBE5" } },
-        { kind: "duo", aspect: "553 / 550", images: [
-          { src: s3b, alt: "World ID credential evolution", bg: "#F0EBE5" },
-          { src: s3c, alt: "World ID credential variants", bg: "#F0EBE5" },
+        { kind: "full", aspect: "1243 / 832", image: { src: s3a, alt: "World ID credential", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "615 / 612", images: [
+          { src: "/assets/world-id/Passport.mp4", alt: "World ID passport", video: true, bg: "#F0EBE5" },
+          { src: "/assets/world-id/WorldID_Card_Rotiation.mp4", alt: "World ID card rotation", video: true, bg: "#F0EBE5" },
         ] },
       ],
     },
@@ -65,7 +71,7 @@ const data: CaseStudyData = {
       body: "Proving you're human isn't just another US-only thing. We're on three continents, with locations all around the globe. We designed an experience that makes it easy to find one and book your own appointment. Anywhere.",
       media: [
         { kind: "full", aspect: "1116 / 750", image: { src: s4a, alt: "World ID locations", bg: "#F0EBE5" } },
-        { kind: "tallDuo", tallAspect: "554 / 648", stackAspect: "553 / 320",
+        { kind: "tallDuo", tallAspect: "615 / 721", stackAspect: "617 / 355",
           tall: { src: s4tall, alt: "World ID location map", bg: "#F0EBE5" },
           stack: [
             { src: s4s1, alt: "World ID appointment booking", bg: "#F0EBE5" },

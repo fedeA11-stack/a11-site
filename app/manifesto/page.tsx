@@ -1,7 +1,9 @@
 "use client";
 
 import NavMenu from "../NavMenu";
+import PageEnter from "../PageEnter";
 import FooterBanner from "../FooterBanner";
+import WordReveal from "../WordReveal";
 
 const FONT = "var(--font-system), sans-serif";
 
@@ -83,6 +85,7 @@ export default function ManifestoPage() {
       `}</style>
       <NavMenu />
 
+      <PageEnter>
       {/*
        * Outer shell: clips the oversized shape but does NOT anchor labels.
        * Labels are anchored inside the 1240px grid container below.
@@ -252,6 +255,7 @@ export default function ManifestoPage() {
       <div className="max-w-[1240px] mx-auto pb-[10px]">
         <FooterBanner />
       </div>
+      </PageEnter>
     </div>
   );
 }

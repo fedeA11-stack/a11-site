@@ -2,7 +2,7 @@ import CaseStudy, { type CaseStudyData } from "../CaseStudy";
 import { ALL_PROJECTS } from "../caseProjects";
 
 import heroImg from "../../public/assets/districts/dis-hero.jpg";
-import disAvatar from "../../public/assets/districts/dis-avatar.png";
+import disAvatar from "../../public/assets/districts/Derek.jpg";
 import s1a from "../../public/assets/districts/dis-1-1.jpg";
 import s1b from "../../public/assets/districts/dis-1-2.jpg";
 import s1c from "../../public/assets/districts/dis-1-3.jpg";
@@ -61,6 +61,7 @@ const data: CaseStudyData = {
         author: "Derek Boirun",
         role: "CEO of Realio",
         avatar: disAvatar,
+        align: "center",
       },
     },
     // A marketplace anyone can use (y4065)
@@ -104,7 +105,7 @@ const data: CaseStudyData = {
     },
     // A world worth entering (y9228)
     {
-      title: "A world worth entering",
+      title: "A world\nworth entering",
       body: "The work didn't stop at the product. We shaped the front door too — the landing page, the brand, and the voice it carries online. So the very first thing people meet already feels like a place with a future worth owning.",
       media: [
         // Figma's irregular gallery (y9395–9927): a small left column of two

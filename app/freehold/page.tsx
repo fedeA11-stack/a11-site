@@ -23,13 +23,13 @@ import s4c from "../../public/assets/freehold/fh-4-3.jpg";
 // ─────────────────────────────────────────────────────────────────────────────
 const data: CaseStudyData = {
   breadcrumb: "Freehold",
-  title: "Invest and Manage\nOn the Move",
+  title: "Invest and manage\non the move",
   description:
     "Freehold brings portfolio tracking, staking rewards, and tokenized real-world assets into a single mobile experience. Built for modern investors, it simplifies onchain wealth management without sacrificing transparency or control.",
   hero: { src: heroImg, alt: "Freehold app — invest and manage on the move", bg: "#F0EBE5" },
   sections: [
     {
-      title: "Designed For\nEveryday Investors",
+      title: "Designed for\neveryday investors",
       body: "Managing digital assets often means navigating fragmented tools, technical concepts, and disconnected experiences. The goal was to create an investment platform that feels intuitive from the very first interaction.",
       media: [
         { kind: "duo", aspect: "533 / 900", images: [
@@ -41,14 +41,14 @@ const data: CaseStudyData = {
       ],
     },
     {
-      title: "Control Without Complexity",
+      title: "Control without\ncomplexity",
       body: "Taking control of digital assets begins with understanding how to protect them. Recovery and backup flows were designed to guide users through every step with clarity and confidence.",
       media: [
         { kind: "full", aspect: "1076 / 723", image: { src: s2a, alt: "Freehold recovery and backup flow", bg: "#F0EBE5" } },
       ],
     },
     {
-      title: "Turn Your Tokens\nInto Earnings",
+      title: "Turn your tokens\ninto earnings",
       body: "Long-term investing isn't only about asset appreciation. Certain digital assets can generate rewards over time, creating additional opportunities for portfolio growth.",
       media: [
         { kind: "duo", aspect: "533 / 900", images: [
@@ -63,7 +63,7 @@ const data: CaseStudyData = {
       ],
     },
     {
-      title: "Building More\nThan A Product",
+      title: "Building more\nthan a product",
       body: "The work extended beyond product design to include the website, visual identity, and supporting digital experiences. Every touchpoint was crafted to feel consistent, familiar, and aligned with the broader vision of the platform.",
       media: [
         { kind: "full", aspect: "1078 / 723", image: { src: s4a, alt: "Freehold website and brand", bg: "#F0EBE5" } },

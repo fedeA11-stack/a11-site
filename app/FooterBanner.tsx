@@ -1,12 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import CoverImage from "./CoverImage";
-import { Reveal, ImageReveal, makeSurfaceVariants, itemVariants } from "./Reveal";
-import footerBg from "../public/assets/footer.png";
-
-// Banner unveils with the mask matching its own 8.887px radius.
-const bannerVariants = makeSurfaceVariants(8.887);
+import { Reveal, itemVariants } from "./Reveal";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const FONT = "var(--font-system), sans-serif";
@@ -18,46 +13,44 @@ export default function FooterBanner() {
   return (
     <Reveal amount={0.3}>
       {/*
-       * Dark banner — 422.146px tall, bg #282328, rounded 8.887px.
+       * Dark banner — 406px tall, bg #282328, rounded 8.887px (Figma).
        * Text positions are absolute within this container, exact from Figma:
-       *   body copy  → top: 77.76px,  left: 6.45%
-       *   CTA link   → top: 297.72px, left: 6.45%, underlined
+       *   body copy  → top: 80px,  left: 6.45%
+       *   CTA link   → top: 276px, left: 6.45%, underlined
        */}
       <motion.section
         data-footer=""
-        variants={bannerVariants}
+        variants={itemVariants}
         style={{
           position:           "relative",
           width:              "100%",
-          height:             "422.146px",
-          borderRadius:       "8.887px",
-          overflow:           "hidden",
-          willChange:         "transform, opacity, clip-path",
+          height:             "406px",
+          willChange:         "transform, opacity",
         }}
       >
-        {/* Banner background — parallax settle, clipped by the section's overflow */}
-        <ImageReveal amount={0.3}>
-          <CoverImage
-            src={footerBg}
-            alt=""
-            sizes="(max-width: 1280px) 100vw, 1240px"
-          />
-        </ImageReveal>
+        {/* Banner shape — vector dark panel with notched feet (Figma footer.svg) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/footer.svg"
+          alt=""
+          aria-hidden
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+        />
 
         {/* "If you're ambitious enough to work with us." */}
         <motion.p
           variants={itemVariants}
           style={{
             position:      "absolute",
-            top:           "77.76px",
+            top:           "80px",
             left:          "6.45%",
             right:         "27.15%",
             margin:        0,
             fontFamily:    FONT,
             fontWeight:    500,
-            fontSize:      "42px",
-            lineHeight:    0.95,
-            letterSpacing: "-0.84px",
+            fontSize:      "44px",
+            lineHeight:    0.9,
+            letterSpacing: "-0.03em",
             color:         "#ffffff",
             whiteSpace:    "pre-wrap",
           }}
@@ -71,14 +64,14 @@ export default function FooterBanner() {
           href="mailto:hello@a11studio.com"
           style={{
             position:      "absolute",
-            top:           "297.72px",
+            top:           "276px",
             left:          "6.45%",
             right:         "27.15%",
             fontFamily:    FONT,
             fontWeight:    500,
-            fontSize:      "42px",
-            lineHeight:    0.95,
-            letterSpacing: "-0.84px",
+            fontSize:      "44px",
+            lineHeight:    0.9,
+            letterSpacing: "-0.03em",
             color:         "#ffffff",
             textDecoration: "underline",
             textUnderlineOffset: "4px",
@@ -93,7 +86,7 @@ export default function FooterBanner() {
       </motion.section>
 
       {/*
-       * Bottom bar — gap 81px below banner (from Figma: gap-[81px] in parent flex).
+       * Bottom bar — gap 20px below banner (Figma: banner 406 → bottom bar 426).
        * Layout: justify-between
        *   Left group (w-459px, justify-between): A11 © 2026 | Social links
        *   Right: Privacy Policy
@@ -102,55 +95,49 @@ export default function FooterBanner() {
       <motion.div
         variants={itemVariants}
         style={{
-          marginTop:     "81px",
-          display:       "flex",
-          alignItems:    "center",
+          marginTop:      "20px",
+          position:       "relative",
+          display:        "flex",
+          alignItems:     "center",
           justifyContent: "space-between",
-          whiteSpace:    "nowrap",
+          whiteSpace:     "nowrap",
         }}
       >
-        {/* Left group — fixed 459px, space-between A11 © 2026 and Social links */}
-        <div
+        {/* Left: A11 © 2026 */}
+        <p
           style={{
-            display:        "flex",
-            alignItems:     "center",
-            justifyContent: "space-between",
-            width:          "459px",
+            margin:        0,
+            fontFamily:    FONT,
+            fontWeight:    500,
+            fontSize:      "16px",
+            lineHeight:    1.4,
+            letterSpacing: "-0.32px",
+            color:         "#282328",
           }}
         >
-          <p
-            style={{
-              margin:        0,
-              fontFamily:    FONT,
-              fontWeight:    500,
-              fontSize:      "16px",
-              lineHeight:    1.4,
-              letterSpacing: "-0.32px",
-              color:         "#282328",
-            }}
-          >
-            A11 © 2026
-          </p>
+          A11 © 2026
+        </p>
 
-          <div
-            style={{
-              display:    "flex",
-              alignItems: "center",
-              gap:        "4px",
-              fontFamily: FONT,
-              fontSize:   "16px",
-              lineHeight: 1.4,
-              letterSpacing: "-0.32px",
-              color:      "#282328",
-            }}
-          >
-            {/* "Social" label — Medium weight */}
-            <span style={{ fontWeight: 500 }}>Social</span>
-            {/* Individual links — Regular weight */}
-            <span style={{ fontWeight: 400 }}>Twitter,</span>
-            <span style={{ fontWeight: 400 }}>Cosmos,</span>
-            <span style={{ fontWeight: 400 }}>Linkedin</span>
-          </div>
+        {/* Center: Social links — absolutely centered */}
+        <div
+          style={{
+            position:      "absolute",
+            left:          "50%",
+            transform:     "translateX(-50%)",
+            display:       "flex",
+            alignItems:    "center",
+            gap:           "4px",
+            fontFamily:    FONT,
+            fontSize:      "16px",
+            lineHeight:    1.4,
+            letterSpacing: "-0.32px",
+            color:         "#282328",
+          }}
+        >
+          <span style={{ fontWeight: 500 }}>Social</span>
+          <span style={{ fontWeight: 400 }}>Twitter,</span>
+          <span style={{ fontWeight: 400 }}>Cosmos,</span>
+          <span style={{ fontWeight: 400 }}>Linkedin</span>
         </div>
 
         {/* Right: Privacy Policy */}

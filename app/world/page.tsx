@@ -3,7 +3,9 @@
 import { type StaticImageData } from "next/image";
 import Link from "next/link";
 import NavMenu from "../NavMenu";
+import PageEnter from "../PageEnter";
 import CoverImage from "../CoverImage";
+import WordReveal from "../WordReveal";
 
 // Default (context) photos — visible at rest.
 import worldMoneyCover from "../../public/assets/world/case/world-money-cover.jpg";
@@ -124,6 +126,7 @@ export default function WorldPage() {
 
       <NavMenu breadcrumb={[{ label: "Work", href: "/" }, { label: "World" }]} />
 
+      <PageEnter>
       <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0">
         {/* Headline */}
         <h1
@@ -154,6 +157,7 @@ export default function WorldPage() {
       </div>
 
       <div style={{ height: 120 }} aria-hidden />
+      </PageEnter>
     </div>
   );
 }

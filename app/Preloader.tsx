@@ -2,6 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Image, { type StaticImageData } from "next/image";
+import logo1 from "../public/assets/preload-logo-1.png";
+import logo2 from "../public/assets/preload-logo-2.png";
+import logo3 from "../public/assets/preload-logo-3.png";
+import logo4 from "../public/assets/preload-logo-4.png";
+import logo5 from "../public/assets/preload-logo-5.png";
 
 // ─── Preloader ──────────────────────────────────────────────────────────────
 // Figma node 1788:27115 ("Preloder"): a white screen with the centered A11 mark
@@ -11,13 +17,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 // The mark hard-cuts between fills (instant swap, no crossfade), resolves on the
 // solid brand mark, then the whole overlay blurs + fades out to reveal the page.
 
-const LOGOS = [
-  "/assets/preload-logo-1.png", // 001 — solid #282328
-  "/assets/preload-logo-2.png", // 002 — charcoal texture
-  "/assets/preload-logo-3.png", // 003 — blue→purple→orange gradient
-  "/assets/preload-logo-4.png", // 004 — sandstone
-  "/assets/preload-logo-5.png", // 005 — metallic
-];
+const LOGOS: StaticImageData[] = [logo1, logo2, logo3, logo4, logo5];
 
 // Cycle through the textured fills, resolve on the solid mark (index 0).
 const SEQUENCE = [1, 2, 3, 4, 0];
@@ -83,18 +83,16 @@ export default function Preloader() {
           {/* Mark — Figma aspect ratio 70:77 */}
           <div style={{ position: "relative", width: 80, height: 88 }}>
             {LOGOS.map((src, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={src}
+              <Image
+                key={i}
                 src={src}
                 alt=""
+                fill
+                priority
+                sizes="80px"
                 style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
                   objectFit: "contain",
-                  opacity: i === current ? 1 : 0, // instant hard cut
+                  opacity: i === current ? 1 : 0,
                 }}
               />
             ))}

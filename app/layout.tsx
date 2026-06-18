@@ -24,6 +24,13 @@ const systemFont = localFont({
   variable: "--font-system",
 });
 
+const geistMono = localFont({
+  src: "../public/fonts/GeistMono-SemiBold.ttf",
+  weight: "600",
+  display: "swap",
+  variable: "--font-geist-mono",
+});
+
 export const metadata: Metadata = {
   // TODO: set metadataBase to the production origin (e.g. new URL("https://a11.studio"))
   // so OpenGraph/Twitter image and canonical URLs resolve absolutely.
@@ -55,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={systemFont.variable}>
+    <html lang="en" className={`${systemFont.variable} ${geistMono.variable}`}>
       <body style={{ margin: 0, padding: 0 }}>
         <Cursor />
         <Preloader />

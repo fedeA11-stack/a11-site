@@ -2,7 +2,7 @@ import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
 import { ALL_PROJECTS } from "../../caseProjects";
 
 import heroImg from "../../../public/assets/orb/orb-hero.jpg";
-import subhoAvatar from "../../../public/assets/orb/orb-avatar.png";
+import subhoAvatar from "../../../public/assets/orb/Subho.png";
 import s1a from "../../../public/assets/orb/orb-1-1.jpg";
 import s1b from "../../../public/assets/orb/orb-1-2.jpg";
 import s1c from "../../../public/assets/orb/orb-1-3.jpg";
@@ -58,16 +58,16 @@ const data: CaseStudyData = {
     // Left-aligned testimonial (y3826)
     {
       quote: {
-        text: "This is what good operator tooling looks like. Less friction, fewer errors, more verifications done.",
+        text: "“This is what good operator tooling looks like. Less friction, fewer errors, more verifications done.”",
         author: "Subho Deep",
-        role: "Tools for Humanity",
+        role: "Staff Product Manager",
         avatar: subhoAvatar,
-        align: "left",
+        align: "center",
       },
     },
     // Intuitive Interfaces For Complex Hardware (y4391)
     {
-      title: "Intuitive Interfaces\nFor Complex Hardware",
+      title: "Intuitive interfaces\nfor complex hardware",
       body: "Orb App was designed to make complex hardware easy to operate, simplifying setup, connectivity, and device management through clear and intuitive interactions.",
       media: [
         { kind: "full", aspect: "1116 / 750", image: { src: s2a, alt: "Orb App device setup", bg: "#F0EBE5" } },
@@ -84,7 +84,7 @@ const data: CaseStudyData = {
     },
     // Visibility Across Global Deployments (y7397)
     {
-      title: "Visibility Across\nGlobal Deployments",
+      title: "Visibility across\nglobal deployments",
       body: "Orb App was designed to support the coordination of teams, devices, and field activity across rapidly expanding operations, while maintaining operational clarity at every level.",
       media: [
         { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "Orb App deployment overview", bg: "#F0EBE5" } },
@@ -97,7 +97,7 @@ const data: CaseStudyData = {
     },
     // Built For Large Scale Operations (y9843)
     {
-      title: "Built For Large Scale Operations",
+      title: "Built for\nlarge scale operations",
       body: "From structured field deployments to lightweight community-led operations, Orb App was designed to support a wide range of workflows and operational models at global scale.",
       media: [
         { kind: "full", aspect: "1116 / 750", image: { src: s4a, alt: "Orb App large-scale operations", bg: "#F0EBE5" } },

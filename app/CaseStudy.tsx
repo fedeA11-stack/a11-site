@@ -1,13 +1,16 @@
 "use client";
 
-import { type StaticImageData } from "next/image";
+import React from "react";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { motion, useInView } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import PhoneVideo from "./world/chat/PhoneVideo";
+import WordReveal from "./WordReveal";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Reusable, data-driven case-study template.
@@ -83,18 +86,17 @@ const MUTED = "#989291";
 const VALUE = "#2C2C2C";
 const BEIGE = "#F0EBE5";
 const HAIRLINE = "rgba(40,35,40,0.12)";
-const PROJECT_LINE = "#EFEAE5"; // All-projects row divider (Figma beige hairline)
 const RADIUS = "clamp(8px, 0.94vw, 13.5px)";
 const CELL_GAP = "clamp(8px, 0.73vw, 11px)";
 
 const T = {
-  // Figma: hero title 2 lines in 136px box → ~64px. Section h2 84px box → ~44px.
-  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(40px, 4.8vw, 64px)", lineHeight: 0.98, letterSpacing: "-0.03em", color: INK },
+  // Figma design system (Studio of the Ambitious — Case Study World, 1243px content):
+  //   hero title 72 / 0.95 · section h2 56 / 0.96 · body 22 / 1.3 · all -0.0Xem.
+  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(44px, 5.8vw, 72px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK },
   h2: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(32px, 3.6vw, 44px)", lineHeight: 0.96, letterSpacing: "-0.02em", color: INK },
-  // Figma: body 26px line-box ÷ 1.3 = 20px.
-  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(16px, 1.55vw, 20px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK },
+  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(17px, 1.77vw, 22px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK },
   label: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(14px, 1.25vw, 16px)", lineHeight: 1.4, color: MUTED },
-  value: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(16px, 1.55vw, 20px)", lineHeight: 1.4, color: VALUE },
+  value: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(17px, 1.77vw, 22px)", lineHeight: 1.4, color: VALUE },
 };
 
 // Vertical rhythm (Figma 1512 frame, content 1242px)
@@ -106,35 +108,62 @@ const HERO_GAP = "clamp(56px, 6.6vw, 80px)";
 const HEADER_GAP = "clamp(56px, 6.6vw, 80px)";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Cell — renders a single image / video / placeholder inside a rounded tile
+// TextReveal — simple fade in for headings / body copy on scroll entry.
+// ─────────────────────────────────────────────────────────────────────────────
+function TextReveal({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
+  return (
+    <motion.div
+      style={style}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+      transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1], delay: delay / 1000 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Cell — fade + scale(1.05→1.0) reveal on scroll entry.
 // ─────────────────────────────────────────────────────────────────────────────
 function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string; sizes: string; phone?: boolean }) {
-  // Phone-framed looping video (tall hero-style tile).
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -60px 0px" });
+
+  const tileVariants = {
+    hidden: { opacity: 0, scale: 1.05 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   if (image.video && phone) {
-    return <PhoneVideo src={typeof image.src === "string" ? image.src : ""} bg={image.bg ?? BEIGE} radius={RADIUS} />;
+    return (
+      <motion.div ref={ref} variants={tileVariants} initial="hidden" animate={inView ? "visible" : "hidden"} transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}>
+        <PhoneVideo src={typeof image.src === "string" ? image.src : ""} bg={image.bg ?? BEIGE} radius={RADIUS} active={inView} />
+      </motion.div>
+    );
   }
 
   return (
-    <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: image.bg ?? BEIGE, aspectRatio: aspect, width: "100%" }}>
-      {image.video && image.src ? (
-        // eslint-disable-next-line jsx-a11y/media-has-caption
-        <video src={image.src as string} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-      ) : image.icon === "lock" ? (
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: "clamp(56px, 7vw, 96px)", aspectRatio: "1", borderRadius: "50%", background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="40%" height="40%" viewBox="0 0 24 24" fill="none">
-              <path d="M17 11H7a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2z" fill="white" />
-              <path d="M8 11V7a4 4 0 118 0v4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+    <motion.div ref={ref} variants={tileVariants} initial="hidden" animate={inView ? "visible" : "hidden"} transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}>
+      <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: image.bg ?? BEIGE, aspectRatio: aspect, width: "100%" }}>
+        {image.video && image.src ? (
+          // eslint-disable-next-line jsx-a11y/media-has-caption
+          <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : image.icon === "lock" ? (
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "clamp(56px, 7vw, 96px)", aspectRatio: "1", borderRadius: "50%", background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="40%" height="40%" viewBox="0 0 24 24" fill="none">
+                <path d="M17 11H7a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2z" fill="white" />
+                <path d="M8 11V7a4 4 0 118 0v4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </div>
           </div>
-        </div>
-      ) : image.src == null ? null : typeof image.src === "string" ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={image.src} alt={image.alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-      ) : (
-        <CoverImage src={image.src} alt={image.alt} sizes={sizes} priority={image.priority} />
-      )}
-    </div>
+        ) : image.src == null ? null : (
+          <CoverImage src={image.src} alt={image.alt} sizes={sizes} priority={image.priority} />
+        )}
+      </div>
+    </motion.div>
   );
 }
 
@@ -171,6 +200,64 @@ function MediaBlock({ media }: { media: CSMedia }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// StatNumber — count-up + slide-up reveal on scroll entry
+// Parses "45M+" → numeric 45, suffix "M+", counts 0→45 over ~1.2s with easeOut.
+// ─────────────────────────────────────────────────────────────────────────────
+function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = useState("0");
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    // Parse number + suffix: "45M+" → [45, "M+"], "2M+" → [2, "M+"]
+    const match = value.match(/^([\d.]+)(.*)$/);
+    if (!match) { setDisplay(value); return; }
+    const target = parseFloat(match[1]);
+    const suffix = match[2];
+    const duration = 1200;
+    const start = performance.now() + delay;
+    let raf: number;
+    function tick(now: number) {
+      const t = Math.max(0, Math.min(1, (now - start) / duration));
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      const current = Math.round(eased * target);
+      setDisplay(`${current}${suffix}`);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [visible, value, delay]);
+
+  return (
+    <span
+      ref={ref}
+      style={{
+        display: "block",
+        fontFamily: FONT, fontWeight: 500,
+        fontSize: "clamp(52px, 7vw, 96px)",
+        lineHeight: 0.95, letterSpacing: "-0.03em", color: INK,
+        opacity: visible ? 1 : 0,
+        transition: `opacity 0.7s cubic-bezier(0.22,0.61,0.36,1) ${delay}ms`,
+      }}
+    >
+      {display}
+    </span>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Section — optional 2-col header (title left, body right), optional stats row,
 // optional pull quote, and a stack of media blocks
 // ─────────────────────────────────────────────────────────────────────────────
@@ -179,10 +266,17 @@ function Section({ section }: { section: CSSection }) {
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
-        // Two-column header — title left (max 30%), body right (max 50%), space between.
         <div style={{ display: "flex", justifyContent: "space-between", gap: 24, alignItems: "start" }}>
-          {section.title && <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line", maxWidth: "30%" }}>{section.title}</h2>}
-          {section.body && <p style={{ ...T.body, margin: 0, maxWidth: "50%" }}>{section.body}</p>}
+          {section.title && (
+            <TextReveal style={{ maxWidth: "40%" }}>
+              <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line" }}>{section.title}</h2>
+            </TextReveal>
+          )}
+          {section.body && (
+            <TextReveal delay={80} style={{ maxWidth: "50%" }}>
+              <p style={{ ...T.body, margin: 0 }}>{section.body}</p>
+            </TextReveal>
+          )}
         </div>
       )}
 
@@ -191,7 +285,7 @@ function Section({ section }: { section: CSSection }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: "0 auto" }}>
           {section.stats.map((s, i) => (
             <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none" }}>
-              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(52px, 7vw, 96px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK }}>{s.value}</span>
+              <StatNumber value={s.value} delay={i * 120} />
               <span style={{ ...T.label, margin: 0 }}>{s.label}</span>
             </div>
           ))}
@@ -210,12 +304,7 @@ function Section({ section }: { section: CSSection }) {
           <footer style={{ display: "flex", alignItems: "center", gap: 14 }}>
             {q.avatar && (
               <div style={{ position: "relative", width: "clamp(48px, 5vw, 64px)", aspectRatio: "1", borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: BEIGE }}>
-                {typeof q.avatar === "string" ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={q.avatar} alt={q.author ?? ""} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                ) : (
-                  <CoverImage src={q.avatar} alt={q.author ?? ""} sizes="64px" />
-                )}
+                <CoverImage src={q.avatar} alt={q.author ?? ""} sizes="64px" />
               </div>
             )}
             <div style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left" }}>
@@ -226,15 +315,19 @@ function Section({ section }: { section: CSSection }) {
         );
         return left ? (
           <blockquote style={{ margin: 0, paddingBottom: "clamp(32px, 4vw, 56px)", borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 44px)" }}>
-            <p style={{ fontFamily: FONT, fontWeight: 400, fontSize: "clamp(24px, 2.7vw, 36px)", lineHeight: 1.15, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 628 }}>{q.text}</p>
-            {attribution}
+            <TextReveal>
+              <p style={{ fontFamily: FONT, fontWeight: 400, fontSize: "clamp(24px, 2.7vw, 36px)", lineHeight: 1.15, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 628 }}>{q.text}</p>
+            </TextReveal>
+            <TextReveal delay={80}>{attribution}</TextReveal>
           </blockquote>
         ) : (
           // Figma: 140px above (section gap), author→divider 140px below.
-          <blockquote style={{ margin: 0, padding: `0 0 ${SECTION_GAP}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 32, textAlign: "center" }}>
+          <blockquote style={{ margin: 0, padding: `0 0 ${SECTION_GAP}`, borderBottom: `1px solid ${HAIRLINE}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 56, textAlign: "center" }}>
             {/* Figma: 708px-wide centered quote, ~32px, sentence case (no capitalize). */}
-            <p style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(24px, 2.6vw, 34px)", lineHeight: 1.2, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 708 }}>{q.text}</p>
-            {attribution}
+            <TextReveal>
+              <p style={{ fontFamily: FONT, fontWeight: 500, fontSize: "clamp(30px, 3.5vw, 44px)", lineHeight: 0.94, letterSpacing: "-0.02em", color: INK, margin: 0, maxWidth: 708 }}>{q.text}</p>
+            </TextReveal>
+            <TextReveal delay={80}>{attribution}</TextReveal>
           </blockquote>
         );
       })()}
@@ -262,39 +355,69 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
   const shown = (() => {
     const idx = projects.findIndex((p) => p.href === pathname);
     const ordered = idx === -1 ? projects : [...projects.slice(idx + 1), ...projects.slice(0, idx)];
-    return ordered.slice(0, 4);
+    return ordered.slice(0, 3);
   })();
 
   const [hovered, setHovered] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const previewRef   = useRef<HTMLDivElement>(null);
-  const posRef       = useRef({ x: 0, y: 0 });   // smoothed (current) position
-  const targetRef    = useRef({ x: 0, y: 0 });   // raw pointer (relative to list)
+  // Y: lerps to hovered row centre. X: subtle parallax offset from mouse.
+  const posY         = useRef(0);
+  const posX         = useRef(0);
+  const targetY      = useRef(0);
+  const targetX      = useRef(0);
   const rafRef       = useRef<number | null>(null);
-  const lastIndex    = useRef(0);                // keep last image during fade-out
+  const lastIndex    = useRef(0);
+  const rowRefs      = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Lerp the preview toward the pointer every frame → it trails the cursor.
   useEffect(() => {
     const el = previewRef.current;
     if (!el) return;
     const LERP = 0.1;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     function tick() {
-      posRef.current.x = lerp(posRef.current.x, targetRef.current.x, LERP);
-      posRef.current.y = lerp(posRef.current.y, targetRef.current.y, LERP);
-      el!.style.transform = `translate3d(${posRef.current.x - el!.offsetWidth / 2}px, ${posRef.current.y - el!.offsetHeight / 2}px, 0)`;
+      posY.current = lerp(posY.current, targetY.current, LERP);
+      posX.current = lerp(posX.current, targetX.current, LERP);
+      el!.style.transform = `translate(${posX.current}px, ${posY.current}px)`;
       rafRef.current = requestAnimationFrame(tick);
     }
     rafRef.current = requestAnimationFrame(tick);
     return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
   }, []);
 
+  function onRowEnter(i: number) {
+    lastIndex.current = i;
+    setHovered(i);
+    const container = containerRef.current;
+    const row = rowRefs.current[i];
+    if (container && row) {
+      const cRect = container.getBoundingClientRect();
+      const rRect = row.getBoundingClientRect();
+      const el = previewRef.current;
+      const halfH = el ? el.offsetHeight / 2 : 0;
+      targetY.current = rRect.top - cRect.top + rRect.height / 2 - halfH;
+    }
+  }
+
   function onMove(e: React.MouseEvent) {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    targetRef.current.x = e.clientX - rect.left;
-    targetRef.current.y = e.clientY - rect.top;
+    // Normalise mouse to [-1, 1] within the container, apply ±20px nudge
+    const nx = (e.clientX - rect.left) / rect.width * 2 - 1;
+    const ny = (e.clientY - rect.top)  / rect.height * 2 - 1;
+    targetX.current = nx * 40;
+    // Y nudge is additive on top of the row-snap target — update targetY directly
+    const container = containerRef.current;
+    const row = rowRefs.current[lastIndex.current];
+    if (container && row) {
+      const cRect = container.getBoundingClientRect();
+      const rRect = row.getBoundingClientRect();
+      const el = previewRef.current;
+      const halfH = el ? el.offsetHeight / 2 : 0;
+      const baseY = rRect.top - cRect.top + rRect.height / 2 - halfH;
+      targetY.current = baseY + ny * 40;
+    }
   }
 
   const active = hovered !== null && !!shown[hovered]?.preview;
@@ -303,23 +426,23 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
 
   return (
     <section style={{ marginTop: SECTION_GAP, position: "relative" }}>
-      <h2 style={{ ...T.h1, margin: 0 }}>All projects</h2>
+      {/* Figma: All projects title 64px / lh 1.1 */}
+      <h2 style={{ ...T.h1, fontSize: "clamp(40px, 5.15vw, 64px)", lineHeight: 1.1, margin: 0 }}>All projects</h2>
 
-      {/* Figma: ~80px from title to first row; rows divided by a hairline below each (no top line). */}
-      <div ref={containerRef} onMouseMove={onMove} style={{ marginTop: "clamp(32px, 4vw, 48px)", position: "relative" }}>
-        {/* Cursor-following preview — eases toward the pointer, scales in on hover */}
+      <div ref={containerRef} onMouseMove={onMove} style={{ marginTop: "clamp(56px, 6.5vw, 100px)", position: "relative" }}>
+        {/* Fixed right-zone preview — sits at ~55% from left, Y lerps to hovered row centre */}
         <div
           ref={previewRef}
           aria-hidden
           style={{
             position: "absolute",
-            left: 0,
+            left: "55%",
             top: 0,
-            width: "clamp(280px, 30vw, 460px)",
+            width: "clamp(280px, 28vw, 420px)",
             pointerEvents: "none",
             opacity: active ? 1 : 0,
-            scale: active ? "1" : "0.85",
-            transition: "opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), scale 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)",
+            scale: active ? "1" : "0.9",
+            transition: "opacity 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), scale 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)",
             zIndex: 3,
             willChange: "transform",
           }}
@@ -327,43 +450,47 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
           {/* Photos already include the correct shape — show them whole, no crop/clip. */}
           {preview && (
             typeof preview === "string" ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview} alt="" style={{ width: "100%", height: "auto", display: "block" }} />
+              <Image src={preview} alt="" width={0} height={0} sizes="460px" unoptimized style={{ width: "100%", height: "auto", display: "block" }} />
             ) : (
-              <CoverImage src={preview as StaticImageData} alt="" sizes="460px" />
+              <Image src={preview as StaticImageData} alt="" sizes="460px" style={{ width: "100%", height: "auto", display: "block" }} />
             )
           )}
         </div>
 
         {shown.map((p, i) => {
-          // Figma: all dark by default; on hover the hovered row stays dark, the
-          // rest fade to muted (#989190). Lines: base #EFEAE5; the hovered row is
-          // bracketed by INK lines (its own bottom + the one above it).
+          // Figma: idle all dark; on hover the hovered row stays dark and its
+          // bottom line becomes 2px solid black, the rest fade to muted (#989190)
+          // with faint 1px rgba(0,0,0,0.1) lines. Dividers sit between rows only.
           const dimmed = hovered !== null && hovered !== i;
+          const isLast = i === shown.length - 1;
+          // Bottom line of row i turns dark when row i OR row i+1 is hovered
           const lineActive = hovered === i || hovered === i + 1;
-          const lineColor = hovered === null ? PROJECT_LINE : (lineActive ? INK : PROJECT_LINE);
+          const border = `1px solid ${lineActive ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.1)"}`;
           const row = (
             <div
-              onMouseEnter={() => { lastIndex.current = i; setHovered(i); }}
+              ref={el => { rowRefs.current[i] = el; }}
+              onMouseEnter={() => onRowEnter(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 position: "relative",
                 zIndex: 2,
                 display: "flex",
                 alignItems: "center",
-                padding: "clamp(24px, 2.2vw, 32px) 0",
-                borderBottom: `1px solid ${lineColor}`,
+                gap: "clamp(16px, 1.8vw, 24px)",
+                padding: "clamp(20px, 2.5vw, 40px) 0",
+                borderBottom: border,
                 fontFamily: FONT,
-                fontWeight: 400,
-                fontSize: "clamp(16px, 1.5vw, 20px)",
-                lineHeight: 1.4,
-                letterSpacing: "-0.02em",
+                fontWeight: 500,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                lineHeight: 1.1,
+                letterSpacing: "-0.03em",
                 color: dimmed ? MUTED : INK,
                 transition: "color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)",
               }}
             >
-              {/* Figma: number prefix (01–04) at left, name offset to ~56px */}
-              <span style={{ width: 56, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+              <span style={{ fontFamily: "var(--font-geist-mono), monospace", fontWeight: 600, letterSpacing: 0, minWidth: "2.2ch", color: dimmed ? MUTED : INK, flexShrink: 0 }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <span>{p.name}</span>
             </div>
           );
@@ -384,8 +511,15 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
 // Page template
 // ─────────────────────────────────────────────────────────────────────────────
 export default function CaseStudy({ data }: { data: CaseStudyData }) {
+  const [entered, setEntered] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* Nav is outside the entrance animation — stays fixed/visible immediately */}
       <NavMenu
         breadcrumb={[
           { label: "Work", href: "/" },
@@ -393,49 +527,59 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
           { label: data.breadcrumb },
         ]}
       />
+      {/* Animated content wrapper — nav stays above this */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          opacity: entered ? 1 : 0,
+          filter: entered ? "blur(0px)" : "blur(10px)",
+          transition: "opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)",
+        }}
+      >
+        <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 
-      <main className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-0 w-full" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {/* ── Hero: title, then intro copy + meta stacked beneath (Figma layout) ─ */}
+          <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>
+            <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
+            {(data.description || (data.meta && data.meta.length > 0)) && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
+                {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
+                {data.meta && data.meta.length > 0 && (
+                  <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
+                    {data.meta.map((m) => (
+                      <div key={m.label}>
+                        <dt style={{ ...T.label, margin: 0 }}>{m.label}</dt>
+                        <dd style={{ ...T.value, margin: 0 }}>{m.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </div>
+            )}
+          </div>
 
-        {/* ── Hero: title, then intro copy + meta stacked beneath (Figma layout) ─ */}
-        {/* Figma: ~80px below the nav; title→description gap = 24px. */}
-        <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>
-          <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
-          {(data.description || (data.meta && data.meta.length > 0)) && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
-              {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
-              {data.meta && data.meta.length > 0 && (
-                <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
-                  {data.meta.map((m) => (
-                    <div key={m.label}>
-                      <dt style={{ ...T.label, margin: 0 }}>{m.label}</dt>
-                      <dd style={{ ...T.value, margin: 0 }}>{m.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-            </div>
-          )}
-        </div>
+          {/* ── Hero image ─────────────────────────────────────────────────────── */}
+          <div style={{ marginTop: HERO_GAP }}>
+            <Cell image={{ ...data.hero, priority: true }} aspect="1241 / 760" sizes="(max-width: 1280px) 100vw, 1240px" />
+          </div>
 
-        {/* ── Hero image ─────────────────────────────────────────────────────── */}
-        <div style={{ marginTop: HERO_GAP }}>
-          <Cell image={{ ...data.hero, priority: true }} aspect="1241 / 760" sizes="(max-width: 1280px) 100vw, 1240px" />
-        </div>
+          {/* ── Content sections ───────────────────────────────────────────────── */}
+          {data.sections.map((s, i) => (
+            <Section key={i} section={s} />
+          ))}
 
-        {/* ── Content sections ───────────────────────────────────────────────── */}
-        {data.sections.map((s, i) => (
-          <Section key={i} section={s} />
-        ))}
+          {/* ── All projects ───────────────────────────────────────────────────── */}
+          <AllProjects projects={data.projects} />
 
-        {/* ── All projects ───────────────────────────────────────────────────── */}
-        <AllProjects projects={data.projects} />
+          {/* ── Footer ─────────────────────────────────────────────────────────── */}
+          <div style={{ marginTop: SECTION_GAP, paddingBottom: 20 }}>
+            <FooterBanner />
+          </div>
 
-        {/* ── Footer ─────────────────────────────────────────────────────────── */}
-        <div style={{ marginTop: SECTION_GAP, paddingBottom: 32 }}>
-          <FooterBanner />
-        </div>
-
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

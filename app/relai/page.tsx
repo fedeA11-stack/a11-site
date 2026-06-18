@@ -28,7 +28,7 @@ const data: CaseStudyData = {
   hero: { src: heroImg, alt: "Relai app — Bitcoin savings", bg: "#F0EBE5" },
   sections: [
     {
-      title: "Bitcoin without the noise",
+      title: "Bitcoin without\nthe noise",
       body: "Most crypto products overwhelm users with coins, charts, exchanges, and trading language. Relai took a different path, one asset, one clear purpose, and a wallet experience focused on helping people build Bitcoin savings over time.",
       media: [
         { kind: "full", aspect: "1076 / 900", image: { src: s1a, alt: "Relai wallet overview", bg: "#F0EBE5" } },
@@ -37,15 +37,13 @@ const data: CaseStudyData = {
       ],
     },
     {
-      title: "Unlock Lightning Speed",
-      body: "Lightning lets you send Bitcoin instantly with low fees. Perfect for quick transactions. Let’s get started!",
       media: [
         { kind: "full", aspect: "1076 / 900", image: { src: s2a, alt: "Relai Lightning setup", bg: "#F0EBE5" } },
       ],
     },
     {
-      title: "From first buy to long-term saving",
-      body: "The experience needed to make buying Bitcoin feel understandable from the first interaction, while supporting repeat behavior through clear balances, simple purchase flows, and recurring savings plans.",
+      title: "From first buy\nto long-term saving",
+      body: "The experience needed to make buying Bitcoin feel understandable from the first interaction, while supporting repeat behavior through clear balances, simple purchase flows, and recurring savings plans",
       media: [
         { kind: "duo", aspect: "533 / 900", images: [
           { src: s3a, alt: "Relai buy amount", bg: "#F0EBE5" },
@@ -60,7 +58,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Self-custody\nwithout the fear",
-      body: "Self-custody is powerful, but it can also feel intimidating. The product had to help users understand ownership, recovery, and responsibility without making the wallet feel technical or risky.",
+      body: "Self-custody is powerful, but it can also feel intimidating. The product had to help users understand ownership, recovery, and responsibility without making the wallet feel technical or risky",
       media: [
         { kind: "full", aspect: "1078 / 720", image: { src: s4a, alt: "Relai hardware wallets", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "533 / 900", images: [
