@@ -18,6 +18,17 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Pinned hero — the section is fixed full-screen and centers its headline.
+   On portrait/tall viewports (tablets), full-height centering leaves a large
+   void above the text. Padding-bottom shrinks the flex content box from the
+   bottom, nudging the centered headline up into the upper-middle. Landscape
+   laptops/desktops (aspect-ratio > 1) are untouched and stay centered. */
+@media (min-width: 768px) and (orientation: portrait) {
+  .hero-pinned {
+    padding-bottom: 16vh;
+  }
+}
+
 
 body {
   background: var(--background);

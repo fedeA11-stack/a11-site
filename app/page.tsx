@@ -35,6 +35,16 @@ import districtLogo from "../public/assets/district logo.png";
 import freeholdLogo from "../public/assets/freehold logo.png";
 import atlansLogo from "../public/assets/atlans logo.png";
 
+// Mobile-only card tiles — portrait (373×490) compositions exported from the
+// Figma mobile frame (panel + device mockup, with text/logo layers hidden so we
+// can overlay real DOM text + the shared logo PNGs for crispness + SEO).
+import worldTile from "../public/assets/mobile/world.jpg";
+import freeholdTile from "../public/assets/mobile/freehold.jpg";
+import districtsTile from "../public/assets/mobile/districts.jpg";
+import tokenStudioTile from "../public/assets/mobile/tokenstudio.jpg";
+import atlansTile from "../public/assets/mobile/atlans.jpg";
+import relaiTile from "../public/assets/mobile/relai.jpg";
+
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
   num: string;
@@ -350,6 +360,7 @@ function HeroReveal() {
   return (
     <>
       <motion.section
+        className="hero-pinned"
         style={{
           position: "fixed",
           inset: 0,
@@ -395,46 +406,232 @@ function HeroReveal() {
   );
 }
 
+// ════════════════════════════════════════════════════════════════════════════
+// MOBILE (< md) — a distinct, static layout from the Figma mobile frame (393px).
+// No pinned-hero reveal; portrait tiles stack full-width with real DOM overlays.
+// Desktop is left entirely untouched. Specs mirror the Figma frame 3:201:
+//   • 10px side margins (cards), 20/30px insets for hero + footer rows
+//   • cards: 373/490 portrait, 4.444px radius, logo+desc overlaid at (32, 32)
+//   • desc 28px / 0.95 lh / -3% tracking; quotes 28px centered; hero 44px
+// ════════════════════════════════════════════════════════════════════════════
+const MFONT = "var(--font-system), sans-serif";
+
+type MobileCardData = {
+  tile: StaticImageData;
+  name: string;
+  description: string;
+  color: string;
+  href: string;
+  logo?: StaticImageData;
+  logoHeight: number;
+};
+
+const MOBILE_CARDS: MobileCardData[] = [
+  { tile: worldTile,       name: "World",        description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#282828", href: "/world",       logo: worldLogo,        logoHeight: 20 },
+  { tile: freeholdTile,    name: "Freehold",     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",        color: "#282828", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18 },
+  { tile: districtsTile,   name: "Districts",    description: "RWA tokenization,\nstart to finish",                   color: "#45474a", href: "/districts",   logo: districtLogo,     logoHeight: 20 },
+  { tile: tokenStudioTile, name: "Token Studio", description: "Tokenize, launch,\nmanage. On-chain\nRWAs",            color: "#4d2820", href: "/tokenstudio", logo: freeholdLogo,     logoHeight: 18 },
+  { tile: atlansTile,      name: "Atlans",       description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16 },
+  { tile: relaiTile,       name: "Relai",        description: "Bitcoin-only savings\napp focused on\nsimple self-custody.", color: "#282828", href: "/relai",   logoHeight: 19 },
+];
+
+function MobileCard({ card, priority }: { card: MobileCardData; priority?: boolean }) {
+  return (
+    <Reveal className="w-full">
+      <Link href={card.href} className="block" data-cursor="View project" style={{ cursor: "none" }}>
+        <motion.div
+          variants={surfaceVariants}
+          className="relative w-full overflow-hidden rounded-[4.444px]"
+          style={{ aspectRatio: "373 / 490", willChange: "transform, opacity, clip-path" }}
+        >
+          <Image
+            src={card.tile}
+            alt={card.name}
+            fill
+            sizes="100vw"
+            priority={priority}
+            style={{ objectFit: "cover" }}
+          />
+
+          {/* Brand mark + description, overlaid at (32, 32) — matches Figma. */}
+          <div style={{ position: "absolute", top: 32, left: 32, right: 24, display: "flex", flexDirection: "column", gap: 24 }}>
+            <motion.div variants={itemVariants} style={{ height: card.logoHeight }}>
+              {card.logo ? (
+                <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block" }} />
+              ) : (
+                <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
+                  {card.name}
+                </span>
+              )}
+            </motion.div>
+
+            <motion.p
+              variants={itemVariants}
+              className="m-0 whitespace-pre-wrap"
+              style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 28, lineHeight: 0.95, letterSpacing: "-0.03em", color: card.color }}
+            >
+              {card.description}
+            </motion.p>
+          </div>
+        </motion.div>
+      </Link>
+    </Reveal>
+  );
+}
+
+function MobileQuote({ text, buttonLabel, href, maxWidth }: { text: string; buttonLabel: string; href?: string; maxWidth: number }) {
+  return (
+    <Reveal className="w-full" amount={0.4}>
+      <div className="flex flex-col items-center" style={{ gap: 36 }}>
+        <motion.p
+          variants={itemVariants}
+          className="m-0 text-center"
+          style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 28, lineHeight: 0.96, letterSpacing: "-0.02em", color: "#282328", maxWidth }}
+        >
+          {text}
+        </motion.p>
+        <motion.div variants={itemVariants}>
+          <CtaButton label={buttonLabel} href={href} />
+        </motion.div>
+      </div>
+    </Reveal>
+  );
+}
+
+function MobileFooter() {
+  return (
+    <Reveal className="w-full" amount={0.3}>
+      <motion.div
+        variants={itemVariants}
+        style={{
+          position: "relative", width: "100%", borderRadius: 5, overflow: "hidden",
+          background: "#282328", padding: "50px 40px", minHeight: 220,
+        }}
+      >
+        <p
+          className="m-0 whitespace-pre-wrap"
+          style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#fff" }}
+        >
+          {"If you're ambitious\nenough to work with us."}
+        </p>
+        <a
+          href="mailto:hello@a11studio.com"
+          style={{
+            display: "inline-block", marginTop: 24, fontFamily: MFONT, fontWeight: 500,
+            fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.03em", color: "#fff",
+            textDecoration: "underline", textUnderlineOffset: 4,
+          }}
+        >
+          We should talk.
+        </a>
+      </motion.div>
+
+      <motion.div
+        variants={itemVariants}
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          marginTop: 20, padding: "0 20px", whiteSpace: "nowrap",
+        }}
+      >
+        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>A11 © 2026</span>
+        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>Privacy Policy</span>
+      </motion.div>
+    </Reveal>
+  );
+}
+
+function MobileHome() {
+  return (
+    <div className="md:hidden" style={{ position: "relative", zIndex: 1, background: "#fff" }}>
+      {/* Static hero — lets the title wrap naturally to ~4 lines like the mockup */}
+      <section style={{ paddingTop: 96, paddingBottom: 112, paddingLeft: 20, paddingRight: 20 }}>
+        <p
+          className="m-0 text-center"
+          style={{
+            fontFamily: MFONT, fontWeight: 500, fontSize: 44, lineHeight: 0.9,
+            letterSpacing: "-0.05em", color: "#282328", opacity: 0.95,
+            maxWidth: 353, marginInline: "auto",
+          }}
+        >
+          We are A11. Product Studio Built on Passion and Craft.
+        </p>
+      </section>
+
+      {/* Stacked tiles + interstitials. Pairs sit 10px apart; quotes get ~80px air. */}
+      <div style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 10, display: "flex", flexDirection: "column" }}>
+        <MobileCard card={MOBILE_CARDS[0]} priority />
+        <div style={{ height: 10 }} />
+        <MobileCard card={MOBILE_CARDS[1]} />
+
+        <div style={{ height: 80 }} />
+        <MobileQuote text={"Built with craft. Driven by passion. Shipped without excuses."} buttonLabel="Discover Studio" href="/studio" maxWidth={360} />
+        <div style={{ height: 80 }} />
+
+        <MobileCard card={MOBILE_CARDS[2]} />
+        <div style={{ height: 10 }} />
+        <MobileCard card={MOBILE_CARDS[3]} />
+
+        <div style={{ height: 80 }} />
+        <MobileQuote text={"Looking designed is easy now. Caring enough to craft it isn't."} buttonLabel="Read Manifesto" href="/manifesto" maxWidth={323} />
+        <div style={{ height: 80 }} />
+
+        <MobileCard card={MOBILE_CARDS[4]} />
+        <div style={{ height: 10 }} />
+        <MobileCard card={MOBILE_CARDS[5]} />
+
+        <div style={{ height: 10 }} />
+        <MobileFooter />
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function WorkPage() {
   return (
     <div style={{ position: "relative", background: "#fff" }} className="min-h-screen">
       <NavMenu />
 
-      {/* Pinned hero — the work grid below slides up over it on first scroll */}
-      <HeroReveal />
+      {/* ── Desktop / tablet (≥ md): pinned-hero reveal + work grid ── */}
+      <div className="hidden md:block">
+        {/* Pinned hero — the work grid below slides up over it on first scroll */}
+        <HeroReveal />
 
-      {/* Work grid — opaque layer that reveals over the hero (z-1) */}
-      <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
-        <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
-          {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
-          <ProjectCard project={PROJECTS[0]} priority zoom />
-          <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
+        {/* Work grid — opaque layer that reveals over the hero (z-1) */}
+        <div style={{ position: "relative", zIndex: 1, background: "#fff" }}>
+          <main className="max-w-[1240px] mx-auto flex flex-col gap-[10px] pt-[10px]">
+            {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
+            <ProjectCard project={PROJECTS[0]} priority zoom />
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
 
-          <CTASection
-            text={"Built with craft. Driven by passion.\nShipped without excuses."}
-            buttonLabel="Discover Studio"
-            textGap={36}
-            href="/studio"
-          />
+            <CTASection
+              text={"Built with craft. Driven by passion.\nShipped without excuses."}
+              buttonLabel="Discover Studio"
+              textGap={36}
+              href="/studio"
+            />
 
-          <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
-          <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
+            <Reveal><ProjectCard project={PROJECTS[2]} /></Reveal>
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[3]} /></Reveal>
 
-          <CTASection
-            text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
-            buttonLabel="Read Manifesto"
-            textGap={45}
-          />
+            <CTASection
+              text={"Looking designed is easy now.\nCaring enough to craft it isn't."}
+              buttonLabel="Read Manifesto"
+              textGap={45}
+            />
 
-          <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
-          <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
-        </main>
+            <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
+            <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
+          </main>
 
-        <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
-          <FooterBanner />
+          <div className="max-w-[1240px] mx-auto mt-[10px] pb-[10px]">
+            <FooterBanner />
+          </div>
         </div>
       </div>
+
+      {/* ── Mobile (< md): static stacked layout from the Figma mobile frame ── */}
+      <MobileHome />
     </div>
   );
 }
