@@ -20,6 +20,7 @@ export default function FooterBanner() {
        */}
       <motion.section
         data-footer=""
+        className="fb-banner"
         variants={itemVariants}
         style={{
           position:           "relative",
@@ -34,12 +35,14 @@ export default function FooterBanner() {
           src="/assets/footer.svg"
           alt=""
           aria-hidden
+          className="fb-bg"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
         />
 
         {/* "If you're ambitious enough to work with us." */}
         <motion.p
           variants={itemVariants}
+          className="fb-headline"
           style={{
             position:      "absolute",
             top:           "80px",
@@ -62,6 +65,7 @@ export default function FooterBanner() {
         <motion.a
           variants={itemVariants}
           href="mailto:hello@a11studio.com"
+          className="fb-cta"
           style={{
             position:      "absolute",
             top:           "276px",
@@ -94,6 +98,7 @@ export default function FooterBanner() {
        */}
       <motion.div
         variants={itemVariants}
+        className="fb-bottom"
         style={{
           marginTop:      "20px",
           position:       "relative",
@@ -120,6 +125,7 @@ export default function FooterBanner() {
 
         {/* Center: Social links — absolutely centered */}
         <div
+          className="fb-social"
           style={{
             position:      "absolute",
             left:          "50%",

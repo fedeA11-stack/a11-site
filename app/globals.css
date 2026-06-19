@@ -39,3 +39,72 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ── Case-study template — collapse to one column on phones ───────────────────
+   The template (app/CaseStudy.tsx) is inline-styled with fixed percentage
+   columns and 1fr/1fr media grids tuned for the 1240px desktop grid. Below the
+   md breakpoint (768px, where the layout still tests clean) those columns get
+   crushed: the stats row overflows the viewport, the section header's h2 is
+   squeezed into ~40% width, and the hero copy is capped at 50%. These overrides
+   stack everything to a single column on phones. !important is required to beat
+   the component's inline styles; tablet/desktop are untouched. */
+@media (max-width: 767px) {
+  /* Hero description + meta: drop the 50% cap, use the full width. */
+  .cs-hero-aside { max-width: 100% !important; }
+
+  /* Section header: stack title above body instead of two cramped columns. */
+  .cs-section-header { flex-direction: column !important; gap: 16px !important; }
+  .cs-section-header > * { max-width: 100% !important; }
+
+  /* Stats: one per row (fixes the horizontal overflow) and drop the dividers. */
+  .cs-stats {
+    grid-template-columns: 1fr !important;
+    max-width: 100% !important;
+    row-gap: clamp(28px, 8vw, 40px);
+  }
+  .cs-stats > * { border-left: 0 !important; }
+
+  /* Media duos / tall-duos: stack the tiles so they keep a usable size. */
+  .cs-media-grid { grid-template-columns: 1fr !important; }
+
+  /* "All projects" cursor-following hover preview: useless on touch and, being
+     an absolutely-positioned 280px tile at left:55%, it spills past the right
+     edge and forces horizontal scroll. Hide it on phones. */
+  .cs-allprojects-preview { display: none !important; }
+
+  /* Footer banner (app/FooterBanner.tsx). Desktop absolutely-positions 44px
+     text inside a fixed 406px panel; on phones the headline overflows the box
+     (the CTA disappears) and the bottom bar's three nowrap items collide. The
+     notched-feet SVG can't scale to a phone-width box, so swap it for a plain
+     rounded dark panel and lay the text out in normal flow. */
+  .fb-banner {
+    height: auto !important;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(20px, 6vw, 32px);
+    padding: clamp(36px, 10vw, 56px) 24px;
+    background: #282328;
+    border-radius: 12px;
+  }
+  .fb-bg { display: none !important; }
+  .fb-headline, .fb-cta {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    font-size: clamp(28px, 8vw, 38px) !important;
+  }
+  .fb-bottom {
+    flex-direction: column;
+    gap: 10px;
+    white-space: normal !important;
+  }
+  .fb-social {
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
+    flex-wrap: wrap;
+  }
+}

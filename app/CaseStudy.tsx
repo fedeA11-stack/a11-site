@@ -177,7 +177,7 @@ function MediaBlock({ media }: { media: CSMedia }) {
 
   if (media.kind === "duo") {
     return (
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
+      <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
         {media.images.map((img, i) => (
           <Cell key={i} image={img} aspect={media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
         ))}
@@ -188,7 +188,7 @@ function MediaBlock({ media }: { media: CSMedia }) {
   // tallDuo — left tall tile, right two stacked tiles. Equal column widths make
   // the two right tiles + gap sum to the left tile's height automatically.
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
+    <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
       <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />
       <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
         {media.stack.map((img, i) => (
@@ -266,7 +266,7 @@ function Section({ section }: { section: CSSection }) {
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 24, alignItems: "start" }}>
+        <div className="cs-section-header" style={{ display: "flex", justifyContent: "space-between", gap: 24, alignItems: "start" }}>
           {section.title && (
             <TextReveal style={{ maxWidth: "40%" }}>
               <h2 style={{ ...T.h2, margin: 0, whiteSpace: "pre-line" }}>{section.title}</h2>
@@ -282,7 +282,7 @@ function Section({ section }: { section: CSSection }) {
 
       {section.stats && section.stats.length > 0 && (
         // Figma: stats row centered at ~1025px (not full-bleed); number→label gap 16px.
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: "0 auto" }}>
+        <div className="cs-stats" style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: "0 auto" }}>
           {section.stats.map((s, i) => (
             <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none" }}>
               <StatNumber value={s.value} delay={i * 120} />
@@ -434,6 +434,7 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
         <div
           ref={previewRef}
           aria-hidden
+          className="cs-allprojects-preview"
           style={{
             position: "absolute",
             left: "55%",
@@ -544,7 +545,7 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
           <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>
             <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
             {(data.description || (data.meta && data.meta.length > 0)) && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
+              <div className="cs-hero-aside" style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
                 {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
                 {data.meta && data.meta.length > 0 && (
                   <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
