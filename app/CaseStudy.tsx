@@ -39,8 +39,8 @@ export type CSImage = {
 
 export type CSMedia =
   | { kind: "full"; image: CSImage; aspect?: string }
-  | { kind: "duo"; images: [CSImage, CSImage]; aspect?: string }
-  | { kind: "tallDuo"; tall: CSImage; stack: [CSImage, CSImage]; tallAspect?: string; stackAspect?: string };
+  | { kind: "duo"; images: [CSImage, CSImage]; aspect?: string; aspects?: [string, string]; columns?: string }
+  | { kind: "tallDuo"; tall: CSImage; stack: [CSImage, CSImage]; tallAspect?: string; stackAspect?: string; stackAspects?: [string, string]; stackFirst?: boolean; columns?: string };
 
 export type CSSection = {
   /** Section heading (left column). Supports "\n". Omit for a media-/stats-only block. */
@@ -176,25 +176,30 @@ function MediaBlock({ media }: { media: CSMedia }) {
   }
 
   if (media.kind === "duo") {
+    const cols = media.columns ?? "1fr 1fr";
     return (
-      <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
+      <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: cols, gap: CELL_GAP, alignItems: "start" }}>
         {media.images.map((img, i) => (
-          <Cell key={i} image={img} aspect={media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
+          <Cell key={i} image={img} aspect={media.aspects?.[i] ?? media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
         ))}
       </div>
     );
   }
 
-  // tallDuo — left tall tile, right two stacked tiles. Equal column widths make
-  // the two right tiles + gap sum to the left tile's height automatically.
+  // tallDuo — tall tile + two stacked tiles. stackFirst swaps column order.
+  const cols = media.columns ?? "1fr 1fr";
+  const tallCol = <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />;
+  const stackCol = (
+    <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
+      {media.stack.map((img, i) => (
+        <Cell key={i} image={img} aspect={media.stackAspects?.[i] ?? media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, 50vw" />
+      ))}
+    </div>
+  );
   return (
-    <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: CELL_GAP, alignItems: "start" }}>
-      <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />
-      <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
-        {media.stack.map((img, i) => (
-          <Cell key={i} image={img} aspect={media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, 50vw" />
-        ))}
-      </div>
+    <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: cols, gap: CELL_GAP, alignItems: "start" }}>
+      {media.stackFirst ? stackCol : tallCol}
+      {media.stackFirst ? tallCol : stackCol}
     </div>
   );
 }

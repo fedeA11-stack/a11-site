@@ -16,11 +16,11 @@ import s3d from "../../public/assets/districts/dis-3-4.jpg";
 import s4a from "../../public/assets/districts/dis-4-1.jpg";
 import s4b from "../../public/assets/districts/dis-4-2.jpg";
 import s4c from "../../public/assets/districts/dis-4-3.jpg";
-import s5a from "../../public/assets/districts/dis-5-1.jpg";
-import s5b from "../../public/assets/districts/dis-5-2.jpg";
-import s5c from "../../public/assets/districts/dis-5-3.jpg";
-import s5d from "../../public/assets/districts/dis-5-4.jpg";
-import s5e from "../../public/assets/districts/dis-5-5.jpg";
+import s5a from "../../public/assets/districts/dis-5-1.png";
+import s5b from "../../public/assets/districts/dis-5-2.png";
+import s5c from "../../public/assets/districts/dis-5-3.png";
+import s5d from "../../public/assets/districts/dis-5-4.png";
+import s5e from "../../public/assets/districts/dis-5-5.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Districts — case study rendered through the canonical case-study template.
@@ -94,7 +94,7 @@ const data: CaseStudyData = {
     // Run by its community (y7631)
     {
       title: "Run by\nits community",
-      body: "What opens next is decided by the people who own Districts, not a company. Every $DSTRX vote pushes a city closer to opening, and the economy stays open to anyone — nothing you have to take on trust.",
+      body: "What opens next is decided by the people who own Districts, not a company. Every $DSTRX vote pushes a city closer to opening, and the economy stays open to anyone, nothing you have to take on trust.",
       media: [
         { kind: "full", aspect: "1076 / 690", image: { src: s4a, alt: "Community voting to open cities", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "533 / 530", images: [
@@ -106,20 +106,29 @@ const data: CaseStudyData = {
     // A world worth entering (y9228)
     {
       title: "A world\nworth entering",
-      body: "The work didn't stop at the product. We shaped the front door too — the landing page, the brand, and the voice it carries online. So the very first thing people meet already feels like a place with a future worth owning.",
+      body: "The work didn't stop at the product. We shaped the front door too. The landing page, the brand, and the voice it carries online. So the very first thing people meet already feels like a place with a future worth owning.",
       media: [
-        // Figma's irregular gallery (y9395–9927): a small left column of two
-        // stacked tiles beside a wide tile, then a wide/narrow pair below.
-        // Approximated with two duos that preserve reading order and proportions.
-        { kind: "duo", aspect: "297 / 256", images: [
-          { src: s5a, alt: "Districts brand mark", bg: "#F0EBE5" },
-          { src: s5c, alt: "Districts identity detail", bg: "#F0EBE5" },
-        ] },
-        { kind: "full", aspect: "769 / 522", image: { src: s5b, alt: "Districts landing page", bg: "#F0EBE5" } },
-        { kind: "duo", aspect: "534 / 487", images: [
-          { src: s5d, alt: "Districts brand application", bg: "#F0EBE5" },
-          { src: s5e, alt: "Districts voice and tone", bg: "#F0EBE5" },
-        ] },
+        // Row 1: left stack 344px (icon 344×225 + brand 344×366), right landing page 889×603
+        { kind: "tallDuo",
+          stackFirst: true,
+          columns: "344fr 889fr",
+          tall: { src: s5b, alt: "Districts landing page", bg: "#F0EBE5" },
+          tallAspect: "889 / 603",
+          stack: [
+            { src: s5a, alt: "Districts app icon", bg: "#F0EBE5" },
+            { src: s5c, alt: "Districts brand identity", bg: "#F0EBE5" },
+          ],
+          stackAspects: ["344 / 225", "344 / 366"],
+        },
+        // Row 2: wide gradient 754×563, narrow social card 479×563
+        { kind: "duo",
+          columns: "754fr 479fr",
+          aspects: ["754 / 563", "479 / 563"],
+          images: [
+            { src: s5d, alt: "Districts brand application", bg: "#F0EBE5" },
+            { src: s5e, alt: "Districts social profile", bg: "#F0EBE5" },
+          ],
+        },
       ],
     },
   ],
