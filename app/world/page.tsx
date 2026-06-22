@@ -157,6 +157,7 @@ export default function WorldPage() {
             lineHeight: 0.95,
             letterSpacing: "-0.03em",
             color: INK,
+            textWrap: "balance",
           }}
         >
           Five years, nine people,

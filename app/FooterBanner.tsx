@@ -70,6 +70,7 @@ export default function FooterBanner() {
             letterSpacing: "-0.03em",
             color:         "#ffffff",
             whiteSpace:    "pre-wrap",
+            textWrap:      "balance",
           }}
         >
           {`If you're ambitious\nenough to work with us.`}

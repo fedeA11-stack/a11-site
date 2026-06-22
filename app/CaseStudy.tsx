@@ -93,9 +93,9 @@ const CELL_GAP = "clamp(8px, 0.73vw, 11px)";
 const T = {
   // Figma design system (Studio of the Ambitious — Case Study World, 1243px content):
   //   hero title 72 / 0.95 · section h2 56 / 0.96 · body 22 / 1.3 · all -0.0Xem.
-  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(44px, 5.8vw, 72px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK },
-  h2: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(32px, 3.6vw, 44px)", lineHeight: 0.96, letterSpacing: "-0.02em", color: INK },
-  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(17px, 1.77vw, 22px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK },
+  h1: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(44px, 5.8vw, 72px)", lineHeight: 0.95, letterSpacing: "-0.03em", color: INK, textWrap: "balance" as const },
+  h2: { fontFamily: FONT, fontWeight: 500, fontSize: "clamp(32px, 3.6vw, 44px)", lineHeight: 0.96, letterSpacing: "-0.02em", color: INK, textWrap: "balance" as const },
+  body: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(17px, 1.77vw, 22px)", lineHeight: 1.3, letterSpacing: "-0.02em", color: INK, textWrap: "pretty" as const },
   label: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(14px, 1.25vw, 16px)", lineHeight: 1.4, color: MUTED },
   value: { fontFamily: FONT, fontWeight: 400, fontSize: "clamp(17px, 1.77vw, 22px)", lineHeight: 1.4, color: VALUE },
 };

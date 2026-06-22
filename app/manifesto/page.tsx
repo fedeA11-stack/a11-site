@@ -234,6 +234,7 @@ export default function ManifestoPage() {
                 fontSize: "16px",
                 lineHeight: 1.4,
                 color: "#282828",
+                textWrap: "pretty",
               }}
             >
               <p style={{ margin: "0 0 40px" }}>

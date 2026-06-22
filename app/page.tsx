@@ -360,6 +360,7 @@ function CTASection({
             color: "#282328",
             width: "714.315px",
             maxWidth: "100%",
+            textWrap: "balance",
           }}
         >
           {text}
@@ -428,6 +429,7 @@ function HeroReveal() {
             letterSpacing: "-0.02em",
             color: "#282328",
             maxWidth: "90vw",
+            textWrap: "balance",
           }}
         >
           {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
@@ -595,7 +597,7 @@ function MobileHome() {
           style={{
             fontFamily: MFONT, fontWeight: 500, fontSize: 44, lineHeight: 0.9,
             letterSpacing: "-0.05em", color: "#282328", opacity: 0.95,
-            maxWidth: 353, marginInline: "auto",
+            maxWidth: 353, marginInline: "auto", textWrap: "balance",
           }}
         >
           We are A11. Product Studio Built on Passion and Craft.
