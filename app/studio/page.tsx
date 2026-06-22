@@ -1,5 +1,4 @@
-"use client";
-
+import type { Metadata } from "next";
 import Image from "next/image";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
@@ -43,6 +42,25 @@ const T = {
     color: "#ffffff",
     textTransform: "capitalize" as const,
     whiteSpace: "nowrap" as const,
+  },
+};
+
+export const metadata: Metadata = {
+  title: "Studio",
+  description:
+    "A11 is a product design studio — nine people designing digital products together since 2019, from World App to Bitcoin wallets and tokenized real-world assets.",
+  alternates: { canonical: "/studio" },
+  openGraph: {
+    type: "profile",
+    title: "Studio — A11 Product Studio",
+    description:
+      "A11 is a product design studio — nine people designing digital products together since 2019.",
+    url: "/studio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Studio — A11 Product Studio",
+    description: "Nine people designing digital products together since 2019.",
   },
 };
 

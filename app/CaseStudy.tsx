@@ -11,6 +11,7 @@ import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import PhoneVideo from "./world/chat/PhoneVideo";
 import WordReveal from "./WordReveal";
+import { caseStudyJsonLd } from "./seo";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Reusable, data-driven case-study template.
@@ -518,6 +519,7 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function CaseStudy({ data }: { data: CaseStudyData }) {
   const [entered, setEntered] = useState(false);
+  const pathname = usePathname();
   useEffect(() => {
     const t = setTimeout(() => setEntered(true), 80);
     return () => clearTimeout(t);
@@ -525,6 +527,13 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
 
   return (
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* Structured data: breadcrumb trail + the case study as a CreativeWork. */}
+      {pathname && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudyJsonLd(data, pathname)) }}
+        />
+      )}
       {/* Nav is outside the entrance animation — stays fixed/visible immediately */}
       <NavMenu
         breadcrumb={[

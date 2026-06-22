@@ -1,4 +1,5 @@
 import CaseStudy, { type CaseStudyData } from "../CaseStudy";
+import { buildCaseMetadata } from "../seo";
 import { ALL_PROJECTS } from "../caseProjects";
 
 import heroImg from "../../public/assets/districts/dis-hero.jpg";
@@ -134,6 +135,8 @@ const data: CaseStudyData = {
   ],
   projects: ALL_PROJECTS,
 };
+
+export const metadata = buildCaseMetadata(data, "/districts");
 
 export default function DistrictsPage() {
   return <CaseStudy data={data} />;

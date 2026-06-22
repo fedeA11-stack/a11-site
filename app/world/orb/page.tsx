@@ -1,4 +1,5 @@
 import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
+import { buildCaseMetadata } from "../../seo";
 import { ALL_PROJECTS } from "../../caseProjects";
 
 import heroImg from "../../../public/assets/orb/orb-hero.jpg";
@@ -111,6 +112,8 @@ const data: CaseStudyData = {
   ],
   projects: ALL_PROJECTS,
 };
+
+export const metadata = buildCaseMetadata(data, "/world/orb");
 
 export default function OrbPage() {
   return <CaseStudy data={data} />;

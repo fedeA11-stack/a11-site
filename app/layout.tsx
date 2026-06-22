@@ -4,6 +4,7 @@ import "./globals.css";
 import Cursor from "./Cursor";
 import Preloader from "./Preloader";
 import SmoothScroll from "./SmoothScroll";
+import { SITE_URL, CONTACT_EMAIL } from "./seo";
 
 // ── System Unlicensed Trial — self-hosted via next/font/local ────────────────
 // Replaces the 8 hand-rolled @font-face blocks in globals.css. next/font adds a
@@ -32,14 +33,16 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  // TODO: set metadataBase to the production origin (e.g. new URL("https://a11.studio"))
-  // so OpenGraph/Twitter image and canonical URLs resolve absolutely.
+  // Production origin — makes OpenGraph/Twitter image and canonical URLs resolve absolutely.
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "A11 Product Studio — Work",
     template: "%s — A11 Product Studio",
   },
   description: "A11 Product Studio of the Ambitious.",
   applicationName: "A11 Product Studio",
+  // Home canonical. Case studies and section pages override this with their own.
+  alternates: { canonical: "/" },
   authors: [{ name: "A11 Product Studio" }],
   keywords: ["A11", "product studio", "product design", "design studio"],
   openGraph: {
@@ -56,6 +59,25 @@ export const metadata: Metadata = {
   },
 };
 
+// Organization schema — lets search engines and AI agents identify the studio,
+// its canonical URL, logo, and contact channel. Only verified facts are included
+// (no invented social profiles).
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "A11 Product Studio",
+  url: SITE_URL,
+  logo: `${SITE_URL}/icon.svg`,
+  description: "A11 Product Studio of the Ambitious.",
+  email: CONTACT_EMAIL,
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    email: CONTACT_EMAIL,
+    url: "https://calendly.com/a11studio",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -64,6 +86,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${systemFont.variable} ${geistMono.variable}`}>
       <body style={{ margin: 0, padding: 0 }}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <Cursor />
         <Preloader />
         <SmoothScroll>{children}</SmoothScroll>

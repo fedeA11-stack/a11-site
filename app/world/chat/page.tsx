@@ -1,4 +1,5 @@
 import CaseStudy, { type CaseStudyData } from "../../CaseStudy";
+import { buildCaseMetadata } from "../../seo";
 import { ALL_PROJECTS } from "../../caseProjects";
 
 // Assets (optimized via next/image).
@@ -85,6 +86,8 @@ const data: CaseStudyData = {
   ],
   projects: ALL_PROJECTS,
 };
+
+export const metadata = buildCaseMetadata(data, "/world/chat");
 
 export default function WorldChatV2Page() {
   return <CaseStudy data={data} />;

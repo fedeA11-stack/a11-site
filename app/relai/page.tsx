@@ -1,4 +1,5 @@
 import CaseStudy, { type CaseStudyData } from "../CaseStudy";
+import { buildCaseMetadata } from "../seo";
 import { ALL_PROJECTS } from "../caseProjects";
 
 import heroImg from "../../public/assets/relai/relai-hero.jpg";
@@ -70,6 +71,8 @@ const data: CaseStudyData = {
   ],
   projects: ALL_PROJECTS,
 };
+
+export const metadata = buildCaseMetadata(data, "/relai");
 
 export default function RelaiPage() {
   return <CaseStudy data={data} />;
