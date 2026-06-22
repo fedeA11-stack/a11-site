@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
@@ -638,13 +638,15 @@ export default function WorkPage() {
       <NavMenu />
 
       {/* ── Desktop / tablet (≥ md): pinned-hero reveal + work grid ── */}
-      <div className="hidden md:block">
+      {/* Homepage runs a slightly wider bleed (5vw) than the shared --bleed; the
+          work grid + footer below both inherit this override via var(--bleed). */}
+      <div className="hidden md:block" style={{ "--bleed": "6vw" } as CSSProperties}>
         {/* Pinned hero — the work grid below slides up over it on first scroll */}
         <HeroReveal />
 
         {/* Work grid — opaque layer that reveals over the hero (z-1) */}
         <PageEnter style={{ position: "relative", zIndex: 1, background: "#fff" }}>
-          <main className="w-full md:px-8 lg:px-5 flex flex-col gap-[10px] pt-[10px]">
+          <main className="w-full md:px-8 lg:px-[var(--bleed)] flex flex-col gap-[10px] pt-[10px]">
             {/* Featured: ZoomScale IS the entrance — no Reveal wrapper (would compete) */}
             <ProjectCard project={PROJECTS[0]} priority zoom />
             <Reveal delay={0.1}><ProjectCard project={PROJECTS[1]} /></Reveal>
@@ -669,7 +671,7 @@ export default function WorkPage() {
             <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
           </main>
 
-          <div className="max-w-[1240px] mx-auto md:px-8 mt-[10px] pb-[10px] lg:max-w-none lg:px-5">
+          <div className="max-w-[1240px] mx-auto md:px-8 mt-[10px] pb-[10px] lg:max-w-none lg:px-[var(--bleed)]">
             <FooterBanner />
           </div>
         </PageEnter>

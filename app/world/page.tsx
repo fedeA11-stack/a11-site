@@ -145,7 +145,7 @@ export default function WorldPage() {
       <NavMenu breadcrumb={[{ label: "Work", href: "/" }, { label: "World" }]} />
 
       <PageEnter>
-      <div className="w-full px-4 md:px-8 lg:px-5">
+      <div className="w-full px-4 md:px-8 lg:px-[var(--bleed)]">
         {/* Headline */}
         <h1
           style={{

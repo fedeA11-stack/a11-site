@@ -17,7 +17,8 @@ const CONTACT_HREF = "/contact";
 const NAV_LINKS = [
   { label: "Work",       href: "/"       },
   { label: "Studio",     href: "/studio" },
-  { label: "Manifesto",  href: "/manifesto" },
+  // Manifesto hidden for now — re-add to restore the nav link.
+  // { label: "Manifesto",  href: "/manifesto" },
 ];
 
 const SOCIAL_LINKS = [

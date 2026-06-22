@@ -5,7 +5,7 @@ import FooterBanner from "../FooterBanner";
 import PageEnter from "../PageEnter";
 import WordReveal from "../WordReveal";
 import CoverImage from "../CoverImage";
-import CtaButton from "../CtaButton";
+// import CtaButton from "../CtaButton"; // hidden with the Manifesto CTA below
 
 import studio1 from "../../public/assets/Image 1.png";
 import studio2 from "../../public/assets/Image 2.png";
@@ -72,7 +72,7 @@ export default function StudioPage() {
       <PageEnter style={{ flex: 1 }}>
       <main style={{ flex: 1 }}>
         {/* Responsive container: 16px mobile, 32px tablet, 0 desktop (max-width handles margins) */}
-        <div className="w-full px-4 md:px-8 lg:px-5">
+        <div className="w-full px-4 md:px-8 lg:px-[var(--bleed)]">
 
           {/* ── Hero section ──────────────────────────────────────────────── */}
           {/* Mobile: stacked, Tablet+: 2-col side by side */}
@@ -102,8 +102,8 @@ export default function StudioPage() {
                   We embed with the founding team, work at their pace, and stay until the product is right. Our clients are founders. Usually at the stage where the product is real but not yet what it needs to be. Usually building something they genuinely believe in.
                 </p>
 
-                {/* CTA button */}
-                <CtaButton label="Read our Manifesto" href="/manifesto" />
+                {/* CTA button — Manifesto hidden for now; restore to re-enable. */}
+                {/* <CtaButton label="Read our Manifesto" href="/manifesto" /> */}
               </div>
             </div>
           </div>
