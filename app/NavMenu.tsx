@@ -169,7 +169,7 @@ function BreadcrumbNav({ breadcrumb }: { breadcrumb: Crumb[] }) {
 // ════════════════════════════════════════════════════════════════════════════
 // Main navigation — the redesign.
 // ════════════════════════════════════════════════════════════════════════════
-export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
+export default function NavMenu({ breadcrumb, theme }: { breadcrumb?: Crumb[]; theme?: "dark" } = {}) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -210,7 +210,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
             <img
               src="/assets/logo.svg"
               alt="A11"
-              style={{ width: 32, height: 36, filter: "brightness(0)", display: "block" }}
+              style={{ width: 32, height: 36, filter: theme === "dark" ? "brightness(0) invert(1)" : "brightness(0)", display: "block" }}
             />
           </Link>
 
@@ -229,7 +229,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
                   aria-current={active ? "page" : undefined}
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 8,
-                    textDecoration: "none", color: DARK, fontFamily: FONT,
+                    textDecoration: "none", color: theme === "dark" ? "#ffffff" : DARK, fontFamily: FONT,
                     fontWeight: 500, fontSize: 18, lineHeight: 1,
                     letterSpacing: "-0.36px", whiteSpace: "nowrap",
                     // Vertical padding grows the hit area to ~40px (>WCAG 2.2 24px
@@ -246,7 +246,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
 
           {/* ── Right (desktop): Let's Talk + animated dot-grid ── */}
           <div className="hidden md:flex" style={{ flex: "1 1 0", minWidth: 0, justifyContent: "flex-end" }}>
-            <ContactCta />
+            <ContactCta color={theme === "dark" ? "#ffffff" : DARK} />
           </div>
 
           {/* ── Right (mobile): Menu trigger ── */}
@@ -258,7 +258,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
               aria-expanded={menuOpen}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 12,
-                border: "none", background: "transparent", color: DARK,
+                border: "none", background: "transparent", color: theme === "dark" ? "#ffffff" : DARK,
                 fontFamily: FONT, fontWeight: 500, fontSize: 18, lineHeight: 1,
                 letterSpacing: "-0.36px", cursor: "none", pointerEvents: "auto",
                 // ~48px tall tap target; flex-centering keeps it visually unchanged.
@@ -266,7 +266,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
               }}
             >
               Menu
-              <DotGrid reduce={!!reduce} />
+              <DotGrid color={theme === "dark" ? "#ffffff" : DARK} reduce={!!reduce} />
             </button>
           </div>
         </div>
