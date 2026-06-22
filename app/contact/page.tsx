@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import NavMenu from "../NavMenu";
 import PageEnter from "../PageEnter";
+import rectangleImg from "../../public/assets/contact-page/rectangle.png";
 
 export const metadata: Metadata = {
   title: "Let's Talk",
@@ -142,20 +144,29 @@ export default function ContactPage() {
     >
       <NavMenu theme="dark" />
 
-      {/* Decorative bg shape — Figma node 249:6587, 5% opacity white, right edge */}
+      {/* Decorative shape — Figma group 263:11868, x=788 y=254 w=652 h=618 on 1512×1080 */}
       <div
         aria-hidden
         style={{
           position: "absolute",
-          right: 0,
-          top: "23.5vh",
-          width: "43vw",
-          height: "57.4vh",
-          background: "rgba(255,255,255,0.05)",
+          left: "52.12vw",   /* 788/1512 */
+          top: "23.52vh",    /* 254/1080 */
+          width: "43.12vw",  /* 652/1512 */
+          height: "57.22vh", /* 618/1080 */
           pointerEvents: "none",
           zIndex: 0,
+          overflow: "hidden",
         }}
-      />
+      >
+        <Image
+          src={rectangleImg}
+          alt=""
+          fill
+          style={{ objectFit: "cover" }}
+          sizes="43vw"
+          priority
+        />
+      </div>
 
       <PageEnter style={{ flex: 1, minHeight: 0, position: "relative", zIndex: 1 }}>
         {/*
