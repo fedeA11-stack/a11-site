@@ -287,10 +287,10 @@ function Section({ section }: { section: CSSection }) {
       )}
 
       {section.stats && section.stats.length > 0 && (
-        // Figma: stats row centered at ~1025px (not full-bleed); number→label gap 16px.
-        <div className="cs-stats" style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: "0 auto" }}>
+        // Left-aligned stats row, capped at ~1025px; number→label gap 16px.
+        <div className="cs-stats" style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: 0 }}>
           {section.stats.map((s, i) => (
-            <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none" }}>
+            <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, textAlign: "left", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none", paddingLeft: i > 0 ? 32 : 0 }}>
               <StatNumber value={s.value} delay={i * 120} />
               <span style={{ ...T.label, margin: 0 }}>{s.label}</span>
             </div>
@@ -526,7 +526,8 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
   }, []);
 
   return (
-    <div className="bleed-root" style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    // Case studies run the same wider 6vw bleed as the homepage; the <main> below inherits it via var(--bleed).
+    <div className="bleed-root" style={{ "--bleed": "6vw", backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" } as React.CSSProperties}>
       {/* Structured data: breadcrumb trail + the case study as a CreativeWork. */}
       {pathname && (
         <script
@@ -553,7 +554,7 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
           transition: "opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)",
         }}
       >
-        <main className="w-full px-4 md:px-8 lg:px-5" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <main className="w-full px-4 md:px-8 lg:px-[var(--bleed)]" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 
           {/* ── Hero: title, then intro copy + meta stacked beneath (Figma layout) ─ */}
           <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>

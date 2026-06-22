@@ -7,6 +7,14 @@
 :root {
   --background: #ffffff;
   --foreground: #282328;
+
+  /* Page side-gutter ("bleed") for full-bleed desktop pages (lg+). Matches
+     outloud.co's case-study gutter: their `.padding-global` is 3.75rem on a
+     fluid root font (≈10px + 0.4167vw), which resolves to 37.5px + 1.5625vw.
+     Reproduces their bleed exactly from 1440px up — 60px @1440, 61px @1512,
+     67.5px @1920. Applied via lg:px-[var(--bleed)]; mobile and tablet keep
+     their fixed px-4 / px-8 gutters. */
+  --bleed: calc(37.5px + 1.5625vw); /* ≈ 61px @ 1512px (matches outloud.co) */
 }
 
 @theme inline {
