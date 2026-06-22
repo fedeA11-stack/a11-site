@@ -29,11 +29,15 @@ import districtCase from "../public/assets/District-case.png";
 import tokenStudioCase from "../public/assets/Token studio-case.png";
 import atlansCase from "../public/assets/Atlans-case.png";
 import relaiCase from "../public/assets/Relai-case.png";
-import worldLogo from "../public/assets/world logo.png";
-import freeholdLogoGrey from "../public/assets/freehold logo grey.png";
-import districtLogo from "../public/assets/district logo.png";
-import freeholdLogo from "../public/assets/freehold logo.png";
-import atlansLogo from "../public/assets/atlans logo.png";
+import nousCase from "../public/assets/Nous-case.png";
+// Card wordmarks — vector (SVG) exports traced from the Figma work frame (1:89),
+// one per case-study section. freeholdLogo here is the Token Studio section's
+// mark (1:151), which in the design is the Freehold wordmark in brown.
+import worldLogo from "../public/assets/world-logo.svg";
+import freeholdLogoGrey from "../public/assets/freehold-logo.svg";
+import districtLogo from "../public/assets/districts-logo.svg";
+import freeholdLogo from "../public/assets/tokenstudio-logo.svg";
+import atlansLogo from "../public/assets/atlans-logo.svg";
 import PageEnter from "./PageEnter";
 import WordReveal from "./WordReveal";
 
@@ -54,6 +58,9 @@ type Project = {
   name: string;
   description: string;
   textColor: string;
+  /** Cove silhouette — `url(#clip-<name>)` into CARD_CLIPS, applied to the image
+   *  fill via CoverImage's clipPath. See CardClipDefs. */
+  clip: string;
   href?: string;
   labelPx: number;
   labelTracking: string;
@@ -70,7 +77,9 @@ const PROJECTS: Project[] = [
     image: worldCase,
     name: "World",
     description: "Five years,\nnine people.\nFour Apps for\nreal humans",
-    textColor: "#282328",
+    // White reads against the new dark-green-couch fill (near-black failed: ~1.0:1 → 7:1).
+    textColor: "#ffffff",
+    clip: "url(#clip-world)",
     href: "/world",
     labelPx: 16,
     labelTracking: "-0.32px",
@@ -86,6 +95,7 @@ const PROJECTS: Project[] = [
     name: "Freehold",
     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",
     textColor: "#282328",
+    clip: "url(#clip-freehold)",
     href: "/freehold",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -100,7 +110,9 @@ const PROJECTS: Project[] = [
     image: districtCase,
     name: "Districts",
     description: "RWA tokenization,\nstart to finish",
-    textColor: "#45474a",
+    // Near-black over the light lavander blur reads stronger than the mid-gray (4.3→7.1:1).
+    textColor: "#282328",
+    clip: "url(#clip-districts)",
     href: "/districts",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -115,7 +127,9 @@ const PROJECTS: Project[] = [
     image: tokenStudioCase,
     name: "Token Studio",
     description: "Tokenize, launch,\nmanage. On-chain\nRWAs",
-    textColor: "#4d2820",
+    // White over the dark wood paneling — brown was unreadable (1.9→10:1 on the copy).
+    textColor: "#ffffff",
+    clip: "url(#clip-tokenstudio)",
     href: "/tokenstudio",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -131,6 +145,7 @@ const PROJECTS: Project[] = [
     name: "Atlans",
     description: "Athletic platform\nof Discovery and\nconnection",
     textColor: "#ffffff",
+    clip: "url(#clip-atlans)",
     href: "/atlans",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -146,11 +161,29 @@ const PROJECTS: Project[] = [
     name: "Relai",
     description: "Bitcoin-only savings\napp focused on\nsimple self-custody.",
     textColor: "#282328",
+    clip: "url(#clip-relai)",
     href: "/relai",
     labelPx: 18,
     labelTracking: "-0.36px",
     labelTop: 80,
     descTop: 142,
+    logoHeight: 31,
+    logoLeft: 80,
+  },
+  {
+    num: "07",
+    image: nousCase,
+    name: "Nous",
+    description: "One Personal AI\nfor your whole life",
+    // White over the warm red/orange gradient (5.5:1; near-black was 2.9).
+    textColor: "#ffffff",
+    clip: "url(#clip-nous)",
+    href: "/nous",
+    // No Nous wordmark in the design → no overlay logo (like Relai).
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 62,
+    descTop: 124,
     logoHeight: 31,
     logoLeft: 80,
   },
@@ -207,9 +240,17 @@ function cqMid(px: number): string {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Chevron({ color }: { color: string }) {
+  // Inline so the slash stroke inherits the card's label color (the static
+  // slash.svg was fixed dark — invisible on the white-text cards).
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src="/assets/slash.svg" alt="" aria-hidden style={{ height: cqMid(18), width: "auto", flexShrink: 0 }} />
+    <svg
+      viewBox="0 0 12 19"
+      fill="none"
+      aria-hidden
+      style={{ height: cqMid(18), width: "auto", flexShrink: 0 }}
+    >
+      <path d="M0.72168 18.1915L10.984 0.416992" stroke={color} strokeWidth="1.66636" />
+    </svg>
   );
 }
 
@@ -225,7 +266,10 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
       className="relative w-full overflow-hidden rounded-[4.444px]"
       variants={surfaceVariants}
       style={{
-        aspectRatio: "1240 / 769",
+        // Shape matches the source frame exactly (intrinsic dims of the Figma
+        // export) so the full composition shows uncropped. Overlay values below
+        // are %-of-width (cqw), so they stay put as the per-card height varies.
+        aspectRatio: `${project.image.width} / ${project.image.height}`,
         // Container for the cqw-based overlays below — the label / description /
         // logo scale with the card so they stay locked to the image shape.
         containerType: "inline-size",
@@ -241,6 +285,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           alt={project.name}
           sizes="100vw"
           priority={priority}
+          clipPath={project.clip}
         />
       ) : (
         <ImageReveal>
@@ -249,6 +294,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
             alt={project.name}
             sizes="100vw"
             priority={priority}
+            clipPath={project.clip}
           />
         </ImageReveal>
       )}
@@ -634,9 +680,38 @@ function MobileHome() {
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
+// Cove silhouettes — normalized (objectBoundingBox) clip paths traced from each
+// Figma frame's vector mask, including its per-vertex corner rounding + squircle
+// smoothing. Referenced by the cards via clip-path: url(#clip-<name>). Rendered
+// once; the hidden <svg> just carries the <defs>.
+const CARD_CLIPS: Record<string, string> = {
+  world: "M0.99032 0.90654L0.93778 0.98208C0.93325 0.98858 0.93099 0.99184 0.92842 0.99415C0.92613 0.99622 0.92368 0.99772 0.92112 0.99863C0.91825 0.99967 0.91522 0.99967 0.90916 0.99967L0.01434 0.99967C0.00932 0.99967 0.00681 0.99967 0.00489 0.99809C0.00321 0.9967 0.00184 0.99449 0.00098 0.99178C0 0.98869 0 0.98464 0 0.97655L0 0.18355L0 0.02395C0 0.01586 0 0.01181 0.00098 0.00872C0.00184 0.006 0.00321 0.00379 0.00489 0.00241C0.00681 0.00083 0.00932 0.00083 0.01434 0.00083L0.18278 0.00083L0.40163 0.00083L0.50798 0.00083L0.61729 0.00083L0.77041 0.00001C0.77657 0 0.77965 0 0.78256 0.001C0.78542 0.00202 0.78816 0.00379 0.79066 0.00623C0.79322 0.00872 0.79544 0.01216 0.79988 0.01904C0.81463 0.04187 0.822 0.05329 0.83047 0.06157C0.83878 0.06969 0.84785 0.07558 0.85734 0.079C0.867 0.08249 0.87723 0.08249 0.89767 0.08249L0.98557 0.08249C0.99059 0.08249 0.9931 0.08249 0.99502 0.08406C0.99671 0.08545 0.99808 0.08766 0.99894 0.09038C0.99991 0.09347 0.99991 0.09751 0.99991 0.1056L0.99991 0.13761L0.99991 0.17683L0.99991 0.87204C0.99991 0.87966 0.99991 0.88348 0.99934 0.88703C0.99883 0.89018 0.998 0.89317 0.99688 0.89588C0.99562 0.89893 0.99385 0.90147 0.99032 0.90654Z",
+  freehold: "M0.0002 0.02288V0.15356L0.00006 0.55151L0 0.75811C0 0.76362 0 0.76638 0.00055 0.76877C0.00103 0.77088 0.00183 0.77278 0.00286 0.77431C0.00403 0.77605 0.00562 0.77711 0.0088 0.77923L0.0088 0.77923L0.03295 0.79535L0.03295 0.79535C0.04758 0.80511 0.05489 0.80999 0.06079 0.81754C0.06602 0.82423 0.07041 0.83243 0.07376 0.8417C0.07753 0.85217 0.07943 0.86447 0.08324 0.88906L0.09808 0.98496L0.09808 0.98496C0.0989 0.99025 0.09931 0.9929 0.10023 0.99487C0.10105 0.99661 0.10213 0.99797 0.10339 0.99882C0.1048 0.99977 0.10651 0.99977 0.10992 0.99977H0.91615H0.98568C0.99069 0.99977 0.99319 0.99977 0.99511 0.99821C0.99679 0.99684 0.99816 0.99465 0.99902 0.99196C1 0.9889 1 0.9849 1 0.97689V0.96497V0.62176V0.54003V0.41192V0.09687C1 0.09048 1 0.08729 0.99958 0.08425C0.99921 0.08156 0.99859 0.07897 0.99776 0.07656C0.99682 0.07384 0.9955 0.07144 0.99286 0.06665L0.96472 0.01553C0.96157 0.00982 0.96 0.00696 0.9581 0.00491C0.95642 0.00309 0.95455 0.00174 0.95259 0.00092C0.95037 0 0.94799 0 0.94322 0H0.10038H0.01452C0.00951 0 0.007 0 0.00509 0.00156C0.0034 0.00293 0.00203 0.00512 0.00117 0.00781C0.0002 0.01087 0.0002 0.01487 0.0002 0.02288Z",
+  districts: "M0.00485 0.90124L0.06828 0.99156C0.07053 0.99477 0.07166 0.99638 0.07294 0.99752C0.07408 0.99854 0.0753 0.99928 0.07656 0.99973C0.07799 1 0.0795 1 0.08251 1L0.99283 1C0.99534 1 0.9966 1 0.99755 0.99945C0.9984 0.99876 0.99908 0.99766 0.99951 0.9963C1 0.99475 1 0.99273 1 0.98869L1 0.1815L1 0.01205C1 0.00801 1 0.00599 0.99951 0.00444C0.99908 0.00308 0.9984 0.00198 0.99755 0.00128C0.9966 0.0005 0.99534 0.0005 0.99283 0.0005L0.81721 0.0005L0.59833 0.0005L0.49198 0.0005L0.38265 0.0005L0.22103 0L0.22103 0C0.21784 0 0.21625 0 0.21474 0.00017C0.2134 0.00067 0.21212 0.00149 0.21094 0.00261C0.20961 0.00387 0.20845 0.00564 0.20614 0.00919L0.20614 0.00919L0.17982 0.04956C0.17215 0.06132 0.16832 0.0672 0.1639 0.07139C0.15998 0.07512 0.15573 0.07786 0.1513 0.07952C0.1463 0.08139 0.14101 0.08139 0.13043 0.08139L0.00717 0.08139C0.00466 0.08139 0.0034 0.08139 0.00245 0.08217C0.0016 0.08287 0.00092 0.08397 0.00049 0.08533C0 0.08688 0 0.0889 0 0.09294L0 0.13599L0 0.17484L0 0.88391C0 0.88775 0 0.88967 0.00029 0.89146C0.00054 0.89304 0.00096 0.89454 0.00153 0.8959C0.00217 0.89743 0.00306 0.8987 0.00484 0.90124L0.00485 0.90124Z",
+  tokenstudio: "M0.99579 0.10088L0.93164 0.00865L0.93164 0.00865C0.92942 0.00545 0.92831 0.00386 0.92703 0.00272C0.92589 0.0017 0.92465 0.00096 0.92335 0.00051C0.9219 0 0.92035 0 0.91726 0L0.0069 0C0.00448 0 0.00328 0 0.00235 0.0007C0.00154 0.00132 0.00088 0.0023 0.00047 0.00351C0 0.00488 0 0.00668 0 0.01027L0 0.81632L0 0.98882C0 0.99241 0 0.99421 0.00047 0.99558C0.00088 0.99679 0.00154 0.99777 0.00235 0.99839C0.00328 0.99909 0.00448 0.99909 0.0069 0.99909L0.1828 0.99909L0.40167 0.99909L0.50802 0.99909L0.61734 0.99909L0.77875 0.99995C0.78201 0.99997 0.78364 0.99998 0.78517 0.99942C0.78653 0.99893 0.78783 0.99812 0.78901 0.99701C0.79035 0.99575 0.79148 0.994 0.79374 0.99049L0.79374 0.99049L0.82057 0.94894L0.82057 0.94894C0.82808 0.93731 0.83184 0.9315 0.83626 0.92734C0.84018 0.92365 0.84448 0.92092 0.84898 0.91927C0.85406 0.91741 0.85948 0.91741 0.87031 0.91741L0.9931 0.91741C0.99552 0.91741 0.99672 0.91741 0.99764 0.91671C0.99845 0.91609 0.99911 0.91511 0.99953 0.9139C1 0.91253 1 0.91073 1 0.90713L1 0.86228L1 0.82305L1 0.11566C1 0.11244 1 0.11084 0.99975 0.10933C0.99953 0.10799 0.99917 0.10671 0.99867 0.10555C0.99812 0.10423 0.99734 0.10311 0.99579 0.10088L0.99579 0.10088Z",
+  atlans: "M0.00421 0.89908L0.06836 0.99131L0.06836 0.99131C0.07058 0.9945 0.07169 0.9961 0.07298 0.99724C0.07412 0.99826 0.07535 0.99899 0.07665 0.99945C0.0781 0.99996 0.07965 0.99996 0.08274 0.99996L0.9931 0.99996C0.99552 0.99996 0.99672 0.99996 0.99764 0.99926C0.99845 0.99864 0.99911 0.99766 0.99953 0.99645C1 0.99508 1 0.99328 1 0.98969L1 0.18363L1 0.01114C1 0.00754 1 0.00575 0.99953 0.00437C0.99911 0.00317 0.99845 0.00218 0.99764 0.00157C0.99672 0.00087 0.99552 0.00087 0.9931 0.00087L0.8172 0.00087L0.59833 0.00087L0.49198 0.00087L0.38265 0.00087L0.22126 0.00001C0.21799 0 0.21636 0 0.21483 0.00054C0.21347 0.00103 0.21217 0.00185 0.21099 0.00296C0.20965 0.00421 0.20852 0.00596 0.20626 0.00947L0.17943 0.05101C0.17192 0.06264 0.16817 0.06846 0.16374 0.07262C0.15982 0.07631 0.15552 0.07903 0.15102 0.08068C0.14593 0.08255 0.14051 0.08255 0.12968 0.08255L0.0069 0.08255C0.00448 0.08255 0.00328 0.08255 0.00235 0.08325C0.00154 0.08386 0.00088 0.08485 0.00047 0.08605C0 0.08743 0 0.08922 0 0.09282L0 0.13768L0 0.17691L0 0.8843C0 0.88752 0 0.88913 0.00025 0.89064C0.00047 0.89197 0.00083 0.89325 0.00133 0.89441C0.00188 0.89573 0.00266 0.89684 0.00421 0.89908Z",
+  relai: "M0.99588 0.10101L0.93167 0.00869C0.92944 0.00548 0.92832 0.00388 0.92703 0.00273C0.92588 0.00171 0.92463 0.00097 0.92332 0.00051C0.92184 0 0.92028 0 0.91715 0L0.0069 0C0.00448 0 0.00328 0 0.00235 0.00069C0.00154 0.00129 0.00088 0.00225 0.00047 0.00344C0 0.00479 0 0.00655 0 0.01008L0 0.81632L0 0.98901C0 0.99254 0 0.9943 0.00047 0.99565C0.00088 0.99683 0.00154 0.9978 0.00235 0.9984C0.00328 0.99909 0.00448 0.99909 0.0069 0.99909L0.1828 0.99909L0.40167 0.99909L0.50802 0.99909L0.61734 0.99909L0.77863 0.99995C0.78194 0.99997 0.78359 0.99998 0.78514 0.99942C0.78651 0.99893 0.78782 0.99811 0.78901 0.99699C0.79036 0.99573 0.79149 0.99398 0.79376 0.99047L0.82051 0.94904C0.82804 0.93738 0.8318 0.93155 0.83626 0.92737C0.84021 0.92368 0.84455 0.92094 0.8491 0.91928C0.85424 0.91741 0.85972 0.91741 0.87069 0.91741L0.9931 0.91741C0.99552 0.91741 0.99672 0.91741 0.99764 0.91672C0.99845 0.91612 0.99911 0.91516 0.99953 0.91397C1 0.91262 1 0.91086 1 0.90733L1 0.86227L1 0.82305L1 0.11539C1 0.11227 1 0.11071 0.99976 0.10925C0.99954 0.10795 0.99918 0.10671 0.9987 0.10557C0.99816 0.10429 0.9974 0.1032 0.99588 0.10101Z",
+  nous: "M0.0002 0.02288V0.1536V0.1536L0.00006 0.55164L0 0.75829C0 0.7638 0 0.76655 0.00055 0.76895C0.00103 0.77106 0.00183 0.77296 0.00286 0.77449C0.00403 0.77623 0.00562 0.77729 0.0088 0.77942L0.03295 0.79554C0.04758 0.80529 0.05489 0.81018 0.06079 0.81773C0.06602 0.82443 0.07042 0.83262 0.07376 0.8419C0.07753 0.85237 0.07943 0.86467 0.08324 0.88926L0.09808 0.98519C0.0989 0.99048 0.09931 0.99313 0.10023 0.99511C0.10105 0.99685 0.10213 0.99821 0.10339 0.99905C0.1048 1 0.10651 1 0.10992 1H0.91616H0.98568C0.99069 1 0.9932 1 0.99511 0.99844C0.9968 0.99708 0.99817 0.99489 0.99902 0.9922C1 0.98914 1 0.98513 1 0.97712V0.9652V0.62191V0.54015V0.41201V0.09689C1 0.0905 1 0.08731 0.99958 0.08427C0.99921 0.08158 0.9986 0.07899 0.99776 0.07658C0.99682 0.07386 0.9955 0.07146 0.99286 0.06666L0.96472 0.01554C0.96158 0.00982 0.96 0.00696 0.9581 0.00491C0.95642 0.00309 0.95456 0.00174 0.95259 0.00092C0.95037 0 0.94799 0 0.94322 0H0.10038H0.01452C0.00951 0 0.007 0 0.00509 0.00156C0.0034 0.00293 0.00203 0.00512 0.00117 0.00781C0.0002 0.01087 0.0002 0.01487 0.0002 0.02288Z",
+};
+
+function CardClipDefs() {
+  return (
+    <svg width="0" height="0" aria-hidden style={{ position: "absolute" }}>
+      <defs>
+        {Object.entries(CARD_CLIPS).map(([name, d]) => (
+          <clipPath key={name} id={`clip-${name}`} clipPathUnits="objectBoundingBox">
+            <path d={d} />
+          </clipPath>
+        ))}
+      </defs>
+    </svg>
+  );
+}
+
 export default function WorkPage() {
   return (
     <div style={{ position: "relative", background: "#fff" }} className="min-h-screen">
+      <CardClipDefs />
       <NavMenu />
 
       {/* ── Desktop / tablet (≥ md): pinned-hero reveal + work grid ── */}
@@ -670,6 +745,7 @@ export default function WorkPage() {
 
             <Reveal><ProjectCard project={PROJECTS[4]} /></Reveal>
             <Reveal delay={0.1}><ProjectCard project={PROJECTS[5]} /></Reveal>
+            <Reveal><ProjectCard project={PROJECTS[6]} /></Reveal>
           </main>
 
           <div className="max-w-[1240px] mx-auto md:px-8 mt-[10px] pb-[10px] lg:max-w-none lg:px-[var(--bleed)]">

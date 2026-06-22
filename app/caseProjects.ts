@@ -14,4 +14,5 @@ export const ALL_PROJECTS: CSProject[] = [
   { name: "Relai",       href: "/relai",       preview: "/assets/All%20Projects/Relai.png" },
   { name: "TokenStudio", href: "/tokenstudio", preview: "/assets/All%20Projects/Tokenization.png" },
   { name: "Districts",   href: "/districts",   preview: "/assets/All%20Projects/District.png" },
+  { name: "Nous",        href: "/nous",        preview: "/assets/All%20Projects/Nous.png" },
 ];

@@ -279,7 +279,9 @@ function Section({ section }: { section: CSSection }) {
             </TextReveal>
           )}
           {section.body && (
-            <TextReveal delay={80} style={{ maxWidth: "50%" }}>
+            // Cap the measure on big screens — 50% of a wide viewport runs to
+            // ~90ch, well past a comfortable read. ~46rem ≈ 60–66ch.
+            <TextReveal delay={80} style={{ maxWidth: "min(50%, 46rem)" }}>
               <p style={{ ...T.body, margin: 0 }}>{section.body}</p>
             </TextReveal>
           )}
@@ -560,7 +562,7 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
           <div style={{ paddingTop: "clamp(48px, 6vw, 80px)", display: "flex", flexDirection: "column", gap: "clamp(20px, 2vw, 24px)" }}>
             <h1 style={{ ...T.h1, margin: 0, whiteSpace: "pre-line", maxWidth: 930 }}>{data.title}</h1>
             {(data.description || (data.meta && data.meta.length > 0)) && (
-              <div className="cs-hero-aside" style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "50%" }}>
+              <div className="cs-hero-aside" style={{ display: "flex", flexDirection: "column", gap: "clamp(28px, 3vw, 40px)", maxWidth: "min(50%, 46rem)" }}>
                 {data.description && <p style={{ ...T.body, margin: 0 }}>{data.description}</p>}
                 {data.meta && data.meta.length > 0 && (
                   <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "clamp(12px, 1.3vw, 16px)" }}>
