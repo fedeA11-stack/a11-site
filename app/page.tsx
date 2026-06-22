@@ -70,7 +70,7 @@ const PROJECTS: Project[] = [
     image: worldCase,
     name: "World",
     description: "Five years,\nnine people.\nFour Apps for\nreal humans",
-    textColor: "#282828",
+    textColor: "#282328",
     href: "/world",
     labelPx: 16,
     labelTracking: "-0.32px",
@@ -85,7 +85,7 @@ const PROJECTS: Project[] = [
     image: freeholdCase,
     name: "Freehold",
     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",
-    textColor: "#303030",
+    textColor: "#282328",
     href: "/freehold",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -145,7 +145,7 @@ const PROJECTS: Project[] = [
     image: relaiCase,
     name: "Relai",
     description: "Bitcoin-only savings\napp focused on\nsimple self-custody.",
-    textColor: "#282828",
+    textColor: "#282328",
     href: "/relai",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -474,12 +474,12 @@ type MobileCardData = {
 };
 
 const MOBILE_CARDS: MobileCardData[] = [
-  { tile: worldTile,       name: "World",        description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#282828", href: "/world",       logo: worldLogo,        logoHeight: 20 },
-  { tile: freeholdTile,    name: "Freehold",     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",        color: "#282828", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18 },
+  { tile: worldTile,       name: "World",        description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#282328", href: "/world",       logo: worldLogo,        logoHeight: 20 },
+  { tile: freeholdTile,    name: "Freehold",     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18 },
   { tile: districtsTile,   name: "Districts",    description: "RWA tokenization,\nstart to finish",                   color: "#45474a", href: "/districts",   logo: districtLogo,     logoHeight: 20 },
   { tile: tokenStudioTile, name: "Token Studio", description: "Tokenize, launch,\nmanage. On-chain\nRWAs",            color: "#4d2820", href: "/tokenstudio", logo: freeholdLogo,     logoHeight: 18 },
   { tile: atlansTile,      name: "Atlans",       description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16 },
-  { tile: relaiTile,       name: "Relai",        description: "Bitcoin-only savings\napp focused on\nsimple self-custody.", color: "#282828", href: "/relai",   logoHeight: 19 },
+  { tile: relaiTile,       name: "Relai",        description: "Bitcoin-only savings\napp focused on\nsimple self-custody.", color: "#282328", href: "/relai",   logoHeight: 19 },
 ];
 
 function MobileCard({ card, priority }: { card: MobileCardData; priority?: boolean }) {

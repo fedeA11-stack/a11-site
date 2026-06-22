@@ -8,8 +8,8 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 // ── Design tokens (from Figma "Navigation" frame 221:24055) ──────────────────────
 const FONT = "var(--font-system), sans-serif";
 
-const DARK = "#181818"; // logo, labels, active dot, CTA text
-const DARKBG = "#181818"; // mobile overlay background
+const DARK = "#282328"; // logo, labels, active dot, CTA text
+const DARKBG = "#282328"; // mobile overlay background
 
 // The "Let's Talk" (desktop) and "Contact" (mobile) CTAs route to the contact page.
 const CONTACT_HREF = "/contact";
@@ -369,7 +369,7 @@ export default function NavMenu({ breadcrumb }: { breadcrumb?: Crumb[] } = {}) {
               <div style={{ height: 1, background: "rgba(255,255,255,0.1)", marginBottom: 32 }} aria-hidden />
               <span
                 style={{
-                  display: "block", marginBottom: 16, color: "rgba(255,255,255,0.5)",
+                  display: "block", marginBottom: 16, color: "#989190",
                   fontWeight: 500, fontSize: 10, lineHeight: 1, letterSpacing: "0.5px",
                   textTransform: "uppercase",
                 }}

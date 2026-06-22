@@ -49,7 +49,7 @@ function FloatingLabel({
           width: 6,
           height: 6,
           borderRadius: "1px",
-          backgroundColor: "#282828",
+          backgroundColor: "#282328",
           flexShrink: 0,
         }}
       />
@@ -198,7 +198,7 @@ export default function ManifestoPage() {
                 fontSize: "clamp(36px, 4.667vw, 56px)",
                 lineHeight: 0.95,
                 letterSpacing: "-1.68px",
-                color: "#282828",
+                color: "#282328",
                 textAlign: "center",
                 width: "662px",
                 maxWidth: "calc(100% - 32px)",
@@ -233,7 +233,7 @@ export default function ManifestoPage() {
                 fontWeight: 400,
                 fontSize: "16px",
                 lineHeight: 1.4,
-                color: "#282828",
+                color: "#282328",
                 textWrap: "pretty",
               }}
             >

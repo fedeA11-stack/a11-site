@@ -24,7 +24,7 @@ const data: CaseStudyData = {
   hero: {
     src: chatMain,
     alt: "World Chat app — hand holding phone showing chat list",
-    bg: "#2A1F17",
+    bg: "#282328",
   },
   sections: [
     {
@@ -48,7 +48,7 @@ const data: CaseStudyData = {
         {
           kind: "full",
           aspect: "1242 / 835",
-          image: { src: chatPrivate, alt: "Disappearing messages chat", bg: "#1A1A1A" },
+          image: { src: chatPrivate, alt: "Disappearing messages chat", bg: "#282328" },
         },
         {
           kind: "duo",

@@ -83,8 +83,8 @@ export type CaseStudyData = {
 // ─────────────────────────────────────────────────────────────────────────────
 const FONT = "var(--font-system), sans-serif";
 const INK = "#282328";
-const MUTED = "#989291";
-const VALUE = "#2C2C2C";
+const MUTED = "#989190";
+const VALUE = "#282328";
 const BEIGE = "#F0EBE5";
 const HAIRLINE = "rgba(40,35,40,0.12)";
 const RADIUS = "clamp(8px, 0.94vw, 13.5px)";
