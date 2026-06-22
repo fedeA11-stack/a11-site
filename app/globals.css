@@ -9,11 +9,15 @@
   --foreground: #282328;
 
   /* Page side-gutter ("bleed") for full-bleed desktop pages (lg+). Inspired by
-     mouthwash.studio's fixed page gutter (--pwx): a wide 12rem (192px) on big
-     devices (≥1180px), narrowing to 2.5rem (40px) below that. Applied via
-     lg:px-[var(--bleed)] (≥1024px); mobile and tablet (<lg) keep their fixed
-     px-4 / px-8 gutters. */
-  --bleed: 12rem; /* 192px — wide desktop gutter */
+     mouthwash.studio's fixed page gutter (--pwx): 14.5rem (232px) on big
+     devices (≥1180px), narrowing to 2.5rem (40px) below that. The 14.5rem value
+     keeps the homepage work-grid cards (fixed 1240:769 aspect, full-bleed width)
+     short enough to leave a peek of the next case study on a large display
+     (e.g. a 2560×1440 Studio Display). Note this peek ratio is viewport-height
+     dependent: shorter/taller screens show a bit more/less.
+     Applied via lg:px-[var(--bleed)] (≥1024px); mobile and tablet (<lg) keep
+     their fixed px-4 / px-8 gutters. */
+  --bleed: 14.5rem; /* 232px — ~1.10 work cards visible on a 2560×1440 display */
 }
 
 /* Below 1180px, narrow the page gutter to 2.5rem. This range overlaps the lg
