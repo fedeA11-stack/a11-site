@@ -526,8 +526,8 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
   }, []);
 
   return (
-    // Case studies run the same wider 6vw bleed as the homepage; the <main> below inherits it via var(--bleed).
-    <div className="bleed-root" style={{ "--bleed": "6vw", backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" } as React.CSSProperties}>
+    // Case studies inherit the shared --bleed (mouthwash gutter) via the <main> below.
+    <div className="bleed-root" style={{ backgroundColor: "#ffffff", minHeight: "100vh", display: "flex", flexDirection: "column" } as React.CSSProperties}>
       {/* Structured data: breadcrumb trail + the case study as a CreativeWork. */}
       {pathname && (
         <script

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
@@ -640,9 +640,8 @@ export default function WorkPage() {
       <NavMenu />
 
       {/* ── Desktop / tablet (≥ md): pinned-hero reveal + work grid ── */}
-      {/* Homepage runs a slightly wider bleed (5vw) than the shared --bleed; the
-          work grid + footer below both inherit this override via var(--bleed). */}
-      <div className="hidden md:block" style={{ "--bleed": "6vw" } as CSSProperties}>
+      {/* Work grid + footer below inherit the shared --bleed (mouthwash gutter). */}
+      <div className="hidden md:block">
         {/* Pinned hero — the work grid below slides up over it on first scroll */}
         <HeroReveal />
 
