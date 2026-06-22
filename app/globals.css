@@ -46,6 +46,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom-cursor regime (app/Cursor.tsx): on fine-pointer devices the OS cursor
+   is hidden and a custom dot is drawn. Anchors/buttons default to the native
+   hand on hover, which overrides that and breaks the effect — keep them
+   cursorless so the custom cursor shows through. Touch/coarse devices keep
+   their normal cursors. */
+@media (hover: hover) and (pointer: fine) {
+  a, button, [role="button"] { cursor: none; }
+}
+
 /* ── Case-study template — collapse to one column on phones ───────────────────
    The template (app/CaseStudy.tsx) is inline-styled with fixed percentage
    columns and 1fr/1fr media grids tuned for the 1240px desktop grid. Below the

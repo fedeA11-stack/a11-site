@@ -24,6 +24,12 @@ const SEQUENCE = [1, 2, 3, 4, 0];
 const STEP_MS = 160; // hold per fill — the swap between them is instant
 const HOLD_MS = 380; // pause on the final mark before the blur exit
 
+// Hard ceiling on how long the overlay may stay up. If the step timers are
+// starved (slow device, backgrounded/throttled tab), this guarantees the
+// overlay dismisses instead of sitting at z-9999 over the page and trapping
+// every click. Comfortably past the normal ~1s sequence.
+const MAX_VISIBLE_MS = 2500;
+
 export default function Preloader() {
   const reduceMotion = useReducedMotion();
   const [step, setStep] = useState(0);
@@ -39,6 +45,13 @@ export default function Preloader() {
     const t = setTimeout(() => setDone(true), HOLD_MS);
     return () => clearTimeout(t);
   }, [step, reduceMotion]);
+
+  // Safety net: dismiss no matter what once the hard ceiling passes, so a
+  // stalled sequence can never leave the overlay trapping clicks.
+  useEffect(() => {
+    const t = setTimeout(() => setDone(true), MAX_VISIBLE_MS);
+    return () => clearTimeout(t);
+  }, []);
 
   // Lock scroll while the overlay is up.
   useEffect(() => {
@@ -60,10 +73,13 @@ export default function Preloader() {
           aria-hidden
           initial={{ opacity: 1, filter: "blur(0px)" }}
           // Reduced motion: plain, quick opacity fade — no blur.
+          // pointerEvents:none is applied the instant exit begins (it's not
+          // animatable, so it snaps) — even if the exit animation stalls, the
+          // overlay stops intercepting clicks immediately.
           exit={
             reduceMotion
-              ? { opacity: 0 }
-              : { opacity: 0, filter: "blur(20px)" }
+              ? { opacity: 0, pointerEvents: "none" }
+              : { opacity: 0, filter: "blur(20px)", pointerEvents: "none" }
           }
           transition={{
             duration: reduceMotion ? 0.3 : 0.7,

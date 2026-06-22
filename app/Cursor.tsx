@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation";
  * Disabled entirely on /world/* case study pages.
  */
 const DOT_SIZE = 12; // px
+const DOT_HOVER_SCALE = 1.6; // dot grows slightly over interactive elements
 
 function CursorLayer() {
   const pathname  = usePathname();
@@ -27,6 +28,8 @@ function CursorLayer() {
   const rafRef    = useRef<number | null>(null);
   const pillActive = useRef(false); // is the pill currently active
   const shownRef   = useRef(false); // has the cursor been revealed (first move)
+  const hoverRef   = useRef(false); // pointer is over an interactive element
+  const scaleRef   = useRef(1);     // smoothed dot scale (lerped toward target)
 
   // On route change, reset the pill and RESTORE the dot. Clicking a [data-cursor]
   // tile navigates client-side, so the element unmounts without firing
@@ -49,8 +52,13 @@ function CursorLayer() {
       posRef.current.x = lerp(posRef.current.x, targetRef.current.x, LERP);
       posRef.current.y = lerp(posRef.current.y, targetRef.current.y, LERP);
       const { x, y } = posRef.current;
+      // Grow the dot slightly while over interactive elements — a hover
+      // affordance now that the native hand cursor is hidden. Scaling around the
+      // dot's centre keeps it locked on the pointer.
+      const targetScale = hoverRef.current && !pillActive.current ? DOT_HOVER_SCALE : 1;
+      scaleRef.current = lerp(scaleRef.current, targetScale, 0.2);
       // Dot follows the smoothed position; pill snaps to the raw position.
-      dot!.style.transform  = `translate3d(${x - DOT_SIZE / 2}px, ${y - DOT_SIZE / 2}px, 0)`;
+      dot!.style.transform  = `translate3d(${x - DOT_SIZE / 2}px, ${y - DOT_SIZE / 2}px, 0) scale(${scaleRef.current})`;
       pill!.style.transform = `translate3d(${targetRef.current.x - pill!.offsetWidth / 2}px, ${targetRef.current.y - pill!.offsetHeight / 2}px, 0)`;
       rafRef.current = requestAnimationFrame(tick);
     }
@@ -73,6 +81,9 @@ function CursorLayer() {
       // Self-heal: any move re-shows the dot unless a pill is genuinely active.
       // Guards against the dot getting stuck hidden after navigation / odd events.
       if (!pillActive.current && dot!.style.opacity !== "1") dot!.style.opacity = "1";
+      // Grow the dot when the pointer is over a link / button.
+      hoverRef.current =
+        e.target instanceof Element && !!e.target.closest('a, button, [role="button"]');
     }
 
     function onEnter(e: MouseEvent) {
