@@ -7,7 +7,7 @@
 export type SocialLink = { label: string; href: string };
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { label: "X (Twitter)", href: "#" },
-  { label: "LinkedIn",    href: "#" },
+  { label: "X (Twitter)", href: "https://x.com/a11studiox" },
+  { label: "LinkedIn",    href: "https://www.linkedin.com/company/a11studio/" },
   { label: "Cosmos",      href: "#" },
 ];
