@@ -117,7 +117,14 @@ body {
     max-width: 100% !important;
     row-gap: clamp(28px, 8vw, 40px);
   }
-  .cs-stats > * { border-left: 0 !important; padding-left: 0 !important; }
+  .cs-stats > * {
+    border-left: 0 !important;
+    padding-left: 0 !important;
+    /* Center each stacked stat (number + label) on phones; the inline styles
+       left-align them for the desktop divided row. */
+    align-items: center !important;
+    text-align: center !important;
+  }
 
   /* Media duos / tall-duos: stack the tiles so they keep a usable size. */
   .cs-media-grid { grid-template-columns: 1fr !important; }
