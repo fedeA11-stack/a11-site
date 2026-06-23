@@ -58,10 +58,26 @@ ships in both `.webm` and `.mp4`.
   />
   ```
 
-- Video files are referenced by **string path** (not import) in the page data,
-  e.g. `app/world/id/page.tsx:65` → `src: "/assets/world-id/Passport.mp4"`.
-  Re-encoding in place (same filename) means **no code path changes** are needed
-  for the re-encode itself.
+- Video files are referenced by **string path** (not import) in the page data.
+  All 6 large videos (>4 MB) are referenced from `app/world/id/page.tsx` and
+  `app/world/money/page.tsx`:
+
+  | File | Referenced at |
+  |------|---------------|
+  | `world-id/Passport.mp4` | `app/world/id/page.tsx:65` |
+  | `world-id/Post_verification.mp4` | `app/world/id/page.tsx:54` |
+  | `world-id/preflights.mp4` | `app/world/id/page.tsx:52` |
+  | `world-id/Intro-reveal.mp4` | **no reference found** — check before re-encoding (see Step 0) |
+  | `world-money/REF4.mp4` | `app/world/money/page.tsx:81` |
+  | `world-money/REF5.mp4` | `app/world/money/page.tsx:105` |
+
+- **CACHE-BUST REQUIRED (decided 2026-06-23).** Plan 006's 1-year `immutable`
+  cache on `/assets/*` is already live (`next.config.ts:24`). Re-encoding **in
+  place** would leave returning visitors pinned to the old large files for up to
+  a year. Decision: re-encode to a **new, content-versioned filename** and update
+  the string `src` references. This guarantees every visitor fetches the smaller
+  file immediately. (This supersedes the original "re-encode in place, no code
+  changes" approach.)
 
 - **Duplicate clip**: `public/assets/world-chat/chat-unverified-verified.webm`
   (2.9 MB) and `public/assets/world-chat/Verified-Unverified.mp4` (2.9 MB) appear
@@ -91,7 +107,8 @@ and 4, then report that re-encoding (Steps 1–2) is blocked on ffmpeg.
 ## Scope
 
 **In scope**:
-- `public/assets/**/*.mp4` (re-encode in place — same filenames)
+- `public/assets/**/*.mp4` (re-encode to **new content-versioned filenames**; see Step 1)
+- `app/world/id/page.tsx` + `app/world/money/page.tsx` (update the 6 video `src` strings to the new filenames — cache-bust)
 - `app/CaseStudy.tsx` (`<video>` tag hardening only)
 - `app/world/chat/PhoneVideo.tsx` (`<video>` tag hardening only)
 - `app/world/chat/page.tsx` (only if removing the duplicate `.mp4` requires it — it should not, since the `.mp4` is unreferenced)
@@ -111,31 +128,69 @@ and 4, then report that re-encoding (Steps 1–2) is blocked on ffmpeg.
 
 ## Steps
 
-### Step 1: Back up originals, then re-encode large MP4s in place
+### Step 0: Confirm which large videos are actually referenced
 
-Back up first (reversibility):
+`Intro-reveal.mp4` (4.7 MB) had **no** `src` reference at planning time. Do not
+waste an encode on a dead asset — and if it is truly unused, flag it for deletion
+rather than re-encoding.
+
+```bash
+for v in Passport Post_verification preflights Intro-reveal; do
+  echo -n "$v: "; grep -rl "$v" app/ || echo "UNREFERENCED"
+done
+grep -rl "REF4\|REF5" app/
+```
+If `Intro-reveal.mp4` is unreferenced, **skip re-encoding it** and note it as a
+delete candidate in your report (do not delete in this plan — out of scope).
+
+### Step 1: Back up originals, then re-encode to content-versioned filenames
+
+Back up first (reversibility — macOS `cp` lacks `--parents`):
 ```bash
 mkdir -p /tmp/a11-video-backup
-find public/assets -name '*.mp4' -size +4M -exec cp --parents {} /tmp/a11-video-backup/ \;
+rsync -R $(find public/assets -name '*.mp4' -size +4M) /tmp/a11-video-backup/
 ```
-(On macOS `cp` lacks `--parents`; use `rsync -R $(find public/assets -name '*.mp4' -size +4M) /tmp/a11-video-backup/` instead.)
 
-Re-encode every MP4 larger than 4 MB to H.264 at a web-appropriate quality
-(CRF 26, faststart for streaming, strip audio since all are `muted`). Encode to
-a temp file then replace, so a failed encode never corrupts the source:
+Re-encode every **referenced** MP4 larger than 4 MB to H.264 at a web bitrate
+(CRF 26, faststart, audio stripped since all are `muted`), writing to a **new
+filename that includes a short content hash** of the re-encoded output. The hash
+makes the new URL cache-safe under the live 1-year `immutable` policy — a future
+re-encode produces a different hash, so clients never serve a stale video.
 
 ```bash
 for f in $(find public/assets -name '*.mp4' -size +4M); do
-  echo "Encoding $f"
+  # skip Intro-reveal if Step 0 found it unreferenced
+  base="${f%.mp4}"
   ffmpeg -y -i "$f" -an -vcodec libx264 -crf 26 -preset slow \
-    -pix_fmt yuv420p -movflags +faststart "${f%.mp4}.opt.mp4" \
-    && mv "${f%.mp4}.opt.mp4" "$f"
+    -pix_fmt yuv420p -movflags +faststart "${base}.tmp.mp4" || { echo "ENCODE FAILED: $f"; continue; }
+  hash=$(shasum -a 256 "${base}.tmp.mp4" | cut -c1-8)
+  new="${base}.${hash}.mp4"
+  mv "${base}.tmp.mp4" "$new"
+  echo "RENAMED: $f  ->  $new"
 done
 ```
 
+Record the old→new filename map (the `RENAMED:` lines) — Step 1b needs it.
 **Verify**: `find public/assets -name '*.mp4' -size +8M -exec du -h {} +` →
-substantially fewer/smaller files than before (the 12–19 MB files should now be
-well under 8 MB). If any single file did **not** shrink, note it but continue.
+the 12–19 MB originals still exist (not yet deleted) but each has a new
+`*.<hash>.mp4` sibling well under 8 MB.
+
+### Step 1b: Update the `src` references, then delete the originals
+
+For each `RENAMED:` entry, update the matching string `src` in
+`app/world/id/page.tsx` / `app/world/money/page.tsx` to the new
+`/assets/.../<name>.<hash>.mp4` path. Then delete the old originals:
+
+```bash
+# after every reference is updated and verified:
+grep -rn -E '/assets/[^"]+\.mp4' app/world/id/page.tsx app/world/money/page.tsx   # sanity: all point to *.<hash>.mp4
+# remove the now-unreferenced originals (the pre-hash filenames):
+for old in <list the original paths from the RENAMED map>; do rm "$old"; done
+```
+
+**Verify**: `grep -rn '\.mp4"' app/ | grep -vE '\.[0-9a-f]{8}\.mp4'` returns
+nothing for the 6 large videos (every large-video ref now carries a hash), and
+no orphaned pre-hash large file remains in `public/assets`.
 
 ### Step 2: Spot-check visual quality
 
@@ -203,9 +258,11 @@ still autoplay when scrolled into view.
 ALL must hold:
 
 - [ ] `find public/assets -name '*.mp4' -size +8M` returns nothing (or only files documented as un-shrinkable in your report)
+- [ ] Every re-encoded large video is referenced by a **content-hashed** filename; no pre-hash original remains in `public/assets` (cache-bust complete)
+- [ ] All 6 `src` strings in `app/world/{id,money}/page.tsx` updated to the new filenames (`npm run build` would 404 a stale path at request time, so also smoke-test in Step "Test plan")
 - [ ] `npm run build` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run lint` exits 0
+- [ ] `npm run lint` exits 0 (depends on plan 013 having landed)
 - [ ] `grep -rn 'preload="none"' app/CaseStudy.tsx app/world/chat/PhoneVideo.tsx` returns both files
 - [ ] `grep -rn "Verified-Unverified" app` returns no matches (file removed) OR report explains why it was kept
 - [ ] No files outside the in-scope list are modified (`git status`)

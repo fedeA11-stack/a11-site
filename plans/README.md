@@ -152,3 +152,65 @@ filename) — otherwise clients could pin a stale large video.
 - **"Pre-compress case PNGs for user bandwidth"**: re-scoped (plan 009), not
   rejected — users get `next/image` WebP/AVIF, so source compression is a
   build/deploy win (P3), not a Core Web Vitals win.
+
+---
+
+# Batch 3 — Lint hygiene + execute deferred media work (2026-06-23, branch `dev-opt`, base `221f66a`=main)
+
+Scoped via `/plan-eng-review` against the *current* `main` (Batch 1 + 2 are now
+merged via PR #46). The user selected two themes: **(A) CI/correctness hygiene**
+and **(B) media weight**. Batch B reuses the existing, still-valid plans 005 and
+009 — both are now **unblocked** (`ffmpeg 8.0.1` is installed). DRY/token cleanup
+(Batch C) and the reliability/UX backlog (Batch D) were considered and deferred
+by the user this round.
+
+## Execution order & status
+
+| Plan | Title | Priority | Effort | Risk | Depends on | Status |
+|------|-------|----------|--------|------|------------|--------|
+| 013  | Make `npm run lint` exit 0 (4 react-hooks errors + dead code) | P1 | S–M | LOW | — | TODO |
+| 005  | Shrink + harden self-hosted videos | P1 | M | MED | see cache note | TODO (unblocked: ffmpeg present) |
+| 009  | Compress oversized source images | P3 | S | LOW | — | TODO (unblocked: ffmpeg present; **ImageMagick absent → PNG step skips, JPGs only**) |
+
+Recommended order: **013 → 005 → 009**. 013 first so the lint gate is green
+before the media changes land (each media plan lists "lint exits 0" criteria that
+only become real after 013). 005 before 009 is arbitrary (independent), but do
+009 last since it is the lowest-value (P3, build/deploy weight only).
+
+## Tooling status (verified 2026-06-23 on `dev-opt`)
+
+- `ffmpeg` **8.0.1** present → unblocks 005 (video re-encode) and 009 (JPG re-encode).
+- `cwebp` present; `avifenc` and ImageMagick (`magick`/`convert`) **absent**.
+  → 009 Step 3 (PNG lossless re-encode) **skips** without ImageMagick. The biggest
+  rasters are JPGs (`atlans-3-1.jpg` 7.8 MB, `atlans-3-4.jpg` 7.0 MB,
+  `orb-4-1.jpg` 4.2 MB), so JPG-only still captures most of 009's win. To also
+  shrink the multi-MB PNGs, install ImageMagick first (`brew install imagemagick`).
+
+## ⚠ Cache-immutability ordering risk (affects 005) — DECISION NEEDED
+
+Plan 005's README note said "land 005 before 006." That ordering is now **moot**:
+plan 006 is already merged, so the 1-year `public, max-age=31536000, immutable`
+header on `/assets/*` (`next.config.ts:24`) is **live**. Plan 005 re-encodes
+videos **in place** (same filename). Consequence: a returning visitor whose
+browser already cached the old 16–19 MB file under the immutable policy **will not
+refetch** the smaller version for up to a year. New visitors and cache-evicted
+clients get the small files immediately.
+
+**DECISION (2026-06-23): cache-bust.** Plan 005 has been updated to re-encode the
+6 large videos to **content-hashed filenames** and update their `src` references
+in `app/world/{id,money}/page.tsx`, then delete the originals. This guarantees
+every visitor — including returning ones — fetches the smaller file immediately,
+per the "rollout safety / no stale pinned asset" reliability rule. The original
+"re-encode in place, no code changes" approach is superseded.
+
+## Findings deferred this round (Batch C / D — not selected)
+
+- **Batch C — DRY/tokens** (tech-debt, M): `FONT` const in 7 files; `#282328`
+  hardcoded 42× / `#F0EBE5` 108× with no shared tokens; `SOCIALS` array duplicated
+  in `contact/ContactForm.tsx` + `contact/page.tsx`; typography object drift
+  (studio body 24px vs CaseStudy 22px); needless `"use client"` on `FooterBanner`,
+  `Reveal`, `WorldCards`. Real, low-risk maintainability; no user impact.
+- **Batch D — reliability/UX** (mixed): contact Server Action has no rate limiting
+  (see `TODOS.md`, blocked on a KV/Redis store + observed abuse); dead social
+  links `href="#"` (blocked on real URLs); `console.error`-only logging in
+  `actions.ts` (structured-telemetry backlog).
