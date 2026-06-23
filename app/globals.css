@@ -108,13 +108,16 @@ body {
   .cs-section-header { flex-direction: column !important; gap: 16px !important; }
   .cs-section-header > * { max-width: 100% !important; }
 
-  /* Stats: one per row (fixes the horizontal overflow) and drop the dividers. */
+  /* Stats: one per row (fixes the horizontal overflow) and drop the dividers.
+     Also zero the inline padding-left (32px on items after the first, for the
+     desktop divider gap) — left in, it indented every stacked stat but the
+     first, so the numbers no longer lined up. */
   .cs-stats {
     grid-template-columns: 1fr !important;
     max-width: 100% !important;
     row-gap: clamp(28px, 8vw, 40px);
   }
-  .cs-stats > * { border-left: 0 !important; }
+  .cs-stats > * { border-left: 0 !important; padding-left: 0 !important; }
 
   /* Media duos / tall-duos: stack the tiles so they keep a usable size. */
   .cs-media-grid { grid-template-columns: 1fr !important; }
