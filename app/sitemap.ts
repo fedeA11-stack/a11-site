@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/world", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/studio", priority: 0.7, changeFrequency: "yearly" as const },
     { path: "/manifesto", priority: 0.6, changeFrequency: "yearly" as const },
+    { path: "/contact", priority: 0.7, changeFrequency: "yearly" as const },
   ];
 
   const caseStudies = ALL_PROJECTS.map((project) => ({
