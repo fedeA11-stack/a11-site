@@ -84,6 +84,8 @@ function FormField({
           name={name}
           placeholder={placeholder}
           value={value}
+          required={required}
+          aria-required={required}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setTouched(true)}
           style={{ ...baseStyle, resize: "none", height: 89, overflowY: "auto" }}
@@ -94,6 +96,8 @@ function FormField({
           name={name}
           placeholder={placeholder}
           value={value}
+          required={required}
+          aria-required={required}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setTouched(true)}
           style={baseStyle}
