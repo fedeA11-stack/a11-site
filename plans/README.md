@@ -168,7 +168,7 @@ by the user this round.
 
 | Plan | Title | Priority | Effort | Risk | Depends on | Status |
 |------|-------|----------|--------|------|------------|--------|
-| 013  | Make `npm run lint` exit 0 (4 react-hooks errors + dead code) | P1 | S–M | LOW | — | TODO |
+| 013  | Make `npm run lint` exit 0 (4 react-hooks errors + dead code) | P1 | S–M | LOW | — | DONE (commit `9f9b0fd`, branch `dev-opt`) — lint/typecheck/build/test green, 4 fixes browser-verified |
 | 005  | Shrink + harden self-hosted videos | P1 | M | MED | see cache note | TODO (unblocked: ffmpeg present) |
 | 009  | Compress oversized source images | P3 | S | LOW | — | TODO (unblocked: ffmpeg present; **ImageMagick absent → PNG step skips, JPGs only**) |
 
