@@ -169,8 +169,8 @@ by the user this round.
 | Plan | Title | Priority | Effort | Risk | Depends on | Status |
 |------|-------|----------|--------|------|------------|--------|
 | 013  | Make `npm run lint` exit 0 (4 react-hooks errors + dead code) | P1 | S–M | LOW | — | DONE (commit `9f9b0fd`, branch `dev-opt`) — lint/typecheck/build/test green, 4 fixes browser-verified |
-| 005  | Shrink + harden self-hosted videos | P1 | M | MED | see cache note | TODO (unblocked: ffmpeg present) |
-| 009  | Compress oversized source images | P3 | S | LOW | — | TODO (unblocked: ffmpeg present; **ImageMagick absent → PNG step skips, JPGs only**) |
+| 005  | Shrink + harden self-hosted videos | P1 | M | MED | see cache note | DONE (commit `5f56c41`, branch `dev-opt`) — 5 videos re-encoded + cache-busted (62.8M→8.8M), tags hardened, dup removed; browser-verified |
+| 009  | Compress oversized source images | P3 | S | LOW | — | DONE (commit `4d742fa`, branch `dev-opt`) — 9 JPGs 34M→6.7M, dims preserved; PNGs skipped (no ImageMagick) |
 
 Recommended order: **013 → 005 → 009**. 013 first so the lint gate is green
 before the media changes land (each media plan lists "lint exits 0" criteria that
