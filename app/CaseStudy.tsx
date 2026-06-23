@@ -273,8 +273,19 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
 // Section — optional 2-col header (title left, body right), optional stats row,
 // optional pull quote, and a stack of media blocks
 // ─────────────────────────────────────────────────────────────────────────────
+// Testimonials (the case-study pull quotes + the divider beneath them) are
+// currently hidden site-wide. Flip to `true` to bring them back — the quote
+// data still lives in each page's `sections`, so nothing is lost.
+const SHOW_TESTIMONIALS = false;
+
 function Section({ section }: { section: CSSection }) {
   const hasHeader = section.title || section.body;
+  const hasStats = section.stats && section.stats.length > 0;
+  const hasMedia = section.media && section.media.length > 0;
+  const showQuote = SHOW_TESTIMONIALS && section.quote;
+  // With testimonials hidden, a quote-only section renders nothing — skip it
+  // entirely so its top margin doesn't double the gap between real sections.
+  if (!hasHeader && !hasStats && !showQuote && !hasMedia) return null;
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
@@ -311,8 +322,8 @@ function Section({ section }: { section: CSSection }) {
         <div style={{ height: 1, background: HAIRLINE, width: "100%" }} />
       )}
 
-      {section.quote && (() => {
-        const q = section.quote;
+      {showQuote && (() => {
+        const q = section.quote!;
         const left = q.align === "left";
         const attribution = (q.author || q.role) && (
           <footer style={{ display: "flex", alignItems: "center", gap: 14 }}>
