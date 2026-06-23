@@ -57,18 +57,18 @@ const T = {
 export const metadata: Metadata = {
   title: "Studio",
   description:
-    "A11 is a product design studio — nine people designing digital products together since 2019, from World App to Bitcoin wallets and tokenized real-world assets.",
+    "A11 is a product design studio of nine people, designing digital products together since 2019, from World App to Bitcoin wallets and tokenized real-world assets.",
   alternates: { canonical: "/studio" },
   openGraph: {
     type: "profile",
-    title: "Studio — A11 Product Studio",
+    title: "Studio · A11 Product Studio",
     description:
-      "A11 is a product design studio — nine people designing digital products together since 2019.",
+      "A11 is a product design studio of nine people, designing digital products together since 2019.",
     url: "/studio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Studio — A11 Product Studio",
+    title: "Studio · A11 Product Studio",
     description: "Nine people designing digital products together since 2019.",
   },
 };
@@ -106,7 +106,7 @@ export default function StudioPage() {
             <div className="md:flex-1 min-w-0">
               <div style={{ maxWidth: "595px" }}>
                 <p style={{ ...T.body, marginBottom: "32px" }}>
-                  We have been designing digital products together since 2019. Our longest engagement was five years with Tools for Humanity, where we designed World App from scratch – now one of the most widely used mobile wallets in the world.
+                  We have been designing digital products together since 2019. Our longest engagement was five years with Tools for Humanity, where we designed World App from scratch, now one of the most widely used mobile wallets in the world.
                 </p>
                 <p style={{ ...T.body, marginBottom: "32px" }}>
                   We are not a vendor. We are not a production house. We are the team you bring in when the product has to be good and you need people who will fight for that. We work on a small number of projects at a time.

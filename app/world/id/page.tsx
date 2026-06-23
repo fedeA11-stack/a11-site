@@ -22,7 +22,7 @@ const data: CaseStudyData = {
   section: { label: "World", href: "/world" },
   title: "Are you a real human?",
   description:
-    "World ID is the identity layer for humans in the age of AI. The app needed to make a complex, unfamiliar concept feel simple, trustworthy, and immediately useful.",
+    "World ID is the identity layer for humans in the age of AI. The app needed to make a complex, unfamiliar concept feel simple and immediately useful.",
   hero: { src: "/assets/world-id/Intro-reveal.2f62bf12.mp4", alt: "World ID", video: true, bg: "#F0EBE5" },
   sections: [
     {
@@ -43,7 +43,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Meet the Orb.\nAnd its experience.",
-      body: "You know captchas. Pick the cars. Slide the puzzle piece. Find the crosswalk. Bots can do all of that now. So Tools For Humanity Design Lab built something they can't fake a camera that just looks at you. No voice. No instructions. No display. That's where the fun started.",
+      body: "You know captchas. Pick the cars. Slide the puzzle piece. Find the crosswalk. Bots can do all of that now. So Tools for Humanity Design Lab built something they can't fake: a camera that just looks at you. No voice. No instructions. No display. That's where the fun started.",
       media: [
         { kind: "full", aspect: "1243 / 832", image: { src: "/assets/world-id/preflights.e0b82ac7.mp4", alt: "The Orb preflights", video: true, bg: "#F0EBE5" } },
         { kind: "duo", aspect: "615 / 612", images: [

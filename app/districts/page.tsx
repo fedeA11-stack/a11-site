@@ -33,13 +33,13 @@ const data: CaseStudyData = {
   title: "Designing a world\nyou can own",
   description:
     "Districts turns real cities into a grid of claimable land. We designed the experience that lets anyone own a piece of the map, trade it, and help decide what opens next.",
-  hero: { src: heroImg, alt: "Districts — own a piece of the map", bg: "#F0EBE5" },
+  hero: { src: heroImg, alt: "Districts, own a piece of the map", bg: "#F0EBE5" },
   sections: [
     // Stats row (Figma y1469)
     {
       stats: [
-        { value: "5,6K+", label: "Districts Minted" },
-        { value: "12,3K+", label: "Token holders" },
+        { value: "5.6K+", label: "Districts Minted" },
+        { value: "12.3K+", label: "Token holders" },
         { value: "36M+", label: "Tokens staked" },
       ],
     },

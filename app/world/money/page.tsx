@@ -46,7 +46,7 @@ const data: CaseStudyData = {
     // wallet designed for everyone (y1962)
     {
       title: "Wallet designed\nfor everyone",
-      body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks, or blockchain infrastructure, they simply needed to understand what they owned, how to receive it, and how to use it safely.",
+      body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks or blockchain infrastructure; they simply needed to understand what they owned, how to receive it, and how to use it safely.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
           { src: "/assets/world-money/WorldMoney_Tabs.mp4", alt: "World Money wallet home", video: true, bg: BG },
@@ -71,8 +71,8 @@ const data: CaseStudyData = {
     },
     // New financial rails / Familiar actions (y5279)
     {
-      title: "New financial rails\nfamiliar actions",
-      body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control.",
+      title: "New financial rails,\nfamiliar actions",
+      body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity and control.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
           { src: s2b, alt: "World Money transaction detail", bg: BG },

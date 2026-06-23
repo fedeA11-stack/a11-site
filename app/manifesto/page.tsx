@@ -59,18 +59,18 @@ function FloatingLabel({
 export const metadata: Metadata = {
   title: "Manifesto",
   description:
-    "The A11 manifesto — the beliefs and principles behind how we design products for the ambitious.",
+    "The A11 manifesto: the beliefs and principles behind how we design products for the ambitious.",
   alternates: { canonical: "/manifesto" },
   openGraph: {
     type: "article",
-    title: "Manifesto — A11 Product Studio",
+    title: "Manifesto · A11 Product Studio",
     description:
       "The beliefs and principles behind how A11 designs products for the ambitious.",
     url: "/manifesto",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Manifesto — A11 Product Studio",
+    title: "Manifesto · A11 Product Studio",
     description: "The beliefs and principles behind how A11 designs products for the ambitious.",
   },
 };
@@ -250,7 +250,7 @@ export default function ManifestoPage() {
               </p>
 
               <p style={{ margin: "0 0 40px" }}>
-                We are not for everyone. Ten people cannot be. We take limited
+                We are not for everyone. Ten people cannot be. We take a limited
                 number of projects at a time and give each one the full attention
                 of a team that has nowhere else to be. We move fast. Not because
                 we skip the thinking, but because clarity is what makes us fast.

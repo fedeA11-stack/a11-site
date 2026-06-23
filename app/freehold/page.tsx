@@ -27,7 +27,7 @@ const data: CaseStudyData = {
   title: "Invest and manage\non the move",
   description:
     "Freehold brings portfolio tracking, staking rewards, and tokenized real-world assets into a single mobile experience. Built for modern investors, it simplifies onchain wealth management without sacrificing transparency or control.",
-  hero: { src: heroImg, alt: "Freehold app — invest and manage on the move", bg: "#F0EBE5" },
+  hero: { src: heroImg, alt: "Freehold app, invest and manage on the move", bg: "#F0EBE5" },
   sections: [
     {
       title: "Designed for\neveryday investors",
@@ -65,7 +65,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Building more\nthan a product",
-      body: "The work extended beyond product design to include the website, visual identity, and supporting digital experiences. Every touchpoint was crafted to feel consistent, familiar, and aligned with the broader vision of the platform.",
+      body: "The work extended beyond product design to include the website, visual identity, and supporting digital experiences. Every touchpoint was crafted to feel consistent with the rest of the platform.",
       media: [
         { kind: "full", aspect: "1078 / 723", image: { src: s4a, alt: "Freehold website and brand", bg: "#F0EBE5" } },
         { kind: "full", aspect: "1078 / 530", image: { src: s4b, alt: "Freehold visual identity", bg: "#F0EBE5" } },
