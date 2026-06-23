@@ -94,7 +94,7 @@ function WorldCard({ card, index, priority }: { card: CaseCard; index: number; p
       <Link
         ref={tileRef}
         href={card.href}
-        aria-label={`${card.title} — ${card.sub}`}
+        aria-label={`${card.title}, ${card.sub}`}
         className="wcs-tile"
         onMouseEnter={onEnter}
         onMouseMove={onMove}

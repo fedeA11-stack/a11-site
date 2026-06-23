@@ -8,19 +8,19 @@ const INK = "#282328";
 export const metadata: Metadata = {
   title: "World",
   description:
-    "Five years, nine people, four apps — and the number one crypto wallet. A11's work with Tools for Humanity across World App, World ID, World Chat, and the Orb App.",
+    "Five years, nine people, four apps, and the number one crypto wallet. A11's work with Tools for Humanity across World App, World ID, World Chat, and the Orb App.",
   alternates: { canonical: "/world" },
   openGraph: {
     type: "article",
-    title: "World — A11 Product Studio",
+    title: "World · A11 Product Studio",
     description:
-      "Five years, nine people, four apps — and the number one crypto wallet. A11's work with Tools for Humanity.",
+      "Five years, nine people, four apps, and the number one crypto wallet. A11's work with Tools for Humanity.",
     url: "/world",
   },
   twitter: {
     card: "summary_large_image",
-    title: "World — A11 Product Studio",
-    description: "Five years, nine people, four apps — and the number one crypto wallet.",
+    title: "World · A11 Product Studio",
+    description: "Five years, nine people, four apps, and the number one crypto wallet.",
   },
 };
 

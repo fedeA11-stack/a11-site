@@ -34,7 +34,7 @@ const data: CaseStudyData = {
   title: "Designing a shared\nintelligence layer",
   description:
     "Nous was designed as an AI workspace where people, memory, and specialized agents work together, helping individuals and teams turn context into action without losing control over knowledge access.",
-  hero: { src: heroImg, alt: "Nous — a shared intelligence workspace", bg: HERO },
+  hero: { src: heroImg, alt: "Nous, a shared intelligence workspace", bg: HERO },
   sections: [
     {
       title: "Keeping context\nwithout losing control",
@@ -78,7 +78,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Connecting\nthe knowledge",
-      body: "Nous brings files, connected tools, and shared resources into one context layer — making knowledge easy to organize, reuse, and selectively share with the agents and people who need it.",
+      body: "Nous brings files, connected tools, and shared resources into one context layer, making knowledge easy to organize, reuse, and selectively share with the agents and people who need it.",
       media: [
         { kind: "full", aspect: "1077 / 723", image: { src: s4a, alt: "Nous file storage", bg: CHAT } },
         { kind: "duo", aspect: "533 / 530", images: [

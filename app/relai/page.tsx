@@ -25,8 +25,8 @@ const data: CaseStudyData = {
   breadcrumb: "Relai",
   title: "Making Bitcoin\nsaving feel simple",
   description:
-    "Relai is a Bitcoin-only wallet designed to help people buy, save, and self-custody Bitcoin through a simple mobile experience built around trust, ownership, and long-term confidence.",
-  hero: { src: heroImg, alt: "Relai app — Bitcoin savings", bg: "#F0EBE5" },
+    "Relai is a Bitcoin-only wallet designed to help people buy, save, and self-custody Bitcoin through a simple mobile experience built around ownership and long-term confidence.",
+  hero: { src: heroImg, alt: "Relai app, Bitcoin savings", bg: "#F0EBE5" },
   sections: [
     {
       title: "Bitcoin without\nthe noise",
@@ -44,7 +44,7 @@ const data: CaseStudyData = {
     },
     {
       title: "From first buy\nto long-term saving",
-      body: "The experience needed to make buying Bitcoin feel understandable from the first interaction, while supporting repeat behavior through clear balances, simple purchase flows, and recurring savings plans",
+      body: "The experience needed to make buying Bitcoin feel understandable from the first interaction, while supporting repeat behavior through clear balances, simple purchase flows, and recurring savings plans.",
       media: [
         { kind: "duo", aspect: "533 / 900", images: [
           { src: s3a, alt: "Relai buy amount", bg: "#F0EBE5" },
@@ -59,7 +59,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Self-custody\nwithout the fear",
-      body: "Self-custody is powerful, but it can also feel intimidating. The product had to help users understand ownership, recovery, and responsibility without making the wallet feel technical or risky",
+      body: "Self-custody is powerful, but it can also feel intimidating. The product had to help users understand ownership, recovery, and responsibility without making the wallet feel technical or risky.",
       media: [
         { kind: "full", aspect: "1078 / 720", image: { src: s4a, alt: "Relai hardware wallets", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "533 / 900", images: [

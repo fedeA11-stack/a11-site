@@ -28,7 +28,7 @@ const data: CaseStudyData = {
   title: "Invest across\nreal-world assets",
   description:
     "Tokenization turns illiquid real-world assets into tradeable digital ownership. We designed the experience that lets anyone invest in property, art, or infrastructure and move value the way the internet moves data.",
-  hero: { src: heroImg, alt: "Freehold Invest — invest across real-world assets", bg: "#F0EBE5" },
+  hero: { src: heroImg, alt: "Freehold Invest, invest across real-world assets", bg: "#F0EBE5" },
   sections: [
     {
       stats: [
@@ -39,11 +39,11 @@ const data: CaseStudyData = {
     },
     {
       title: "Real-world assets\nreimagined",
-      body: "As investing continues to evolve, the platform bridges traditional opportunities with digital ownership, creating a more accessible and connected investment experience.",
+      body: "The platform connects traditional investments with digital ownership, so more people can own assets that used to be out of reach.",
       media: [
         { kind: "full", aspect: "1076 / 723", image: { src: s1a, alt: "Freehold Invest investment dashboard", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "533 / 530", images: [
-          { src: s1b, alt: "Freehold Invest asset card — Ferrari 488 Spider", bg: "#F0EBE5" },
+          { src: s1b, alt: "Freehold Invest asset card, Ferrari 488 Spider", bg: "#F0EBE5" },
           { src: s1c, alt: "Freehold Invest asset card", bg: "#F0EBE5" },
         ] },
       ],

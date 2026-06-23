@@ -19,10 +19,10 @@ export const flattenTitle = (s: string) => s.replace(/\s*\n\s*/g, " ").trim();
 // The per-segment opengraph-image.tsx supplies the share image automatically.
 export function buildCaseMetadata(data: CaseStudyData, path: string): Metadata {
   const name = data.breadcrumb;
-  const fullTitle = `${name} — A11 Product Studio`;
+  const fullTitle = `${name} · A11 Product Studio`;
   const description =
     data.description ??
-    `${flattenTitle(data.title)} — a case study by A11 Product Studio.`;
+    `${flattenTitle(data.title)}. A case study by A11 Product Studio.`;
 
   return {
     title: name,
@@ -58,7 +58,7 @@ export function caseStudyJsonLd(data: CaseStudyData, path: string) {
   const name = data.breadcrumb;
   const description =
     data.description ??
-    `${flattenTitle(data.title)} — a case study by A11 Product Studio.`;
+    `${flattenTitle(data.title)}. A case study by A11 Product Studio.`;
 
   const crumbs = [
     { name: "Work", item: `${SITE_URL}/` },

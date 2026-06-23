@@ -34,7 +34,7 @@ const data: CaseStudyData = {
   title: "Designing clarity\nat global scale",
   description:
     "Orb App evolved alongside the World network, supporting thousands of operators, devices, and verification workflows across rapidly expanding global operations.",
-  hero: { src: heroImg, alt: "Orb App — designing clarity at global scale", bg: "#F0EBE5" },
+  hero: { src: heroImg, alt: "Orb App, designing clarity at global scale", bg: "#F0EBE5" },
   sections: [
     // Stats row (Figma y1462)
     {

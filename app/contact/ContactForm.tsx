@@ -312,7 +312,7 @@ export default function ContactForm() {
             }}
           >
             {state.status === "ok"
-              ? "Message sent — we'll be in touch."
+              ? "Message sent. We'll be in touch."
               : state.status === "error" && state.message
                 ? state.message
                 : ""}

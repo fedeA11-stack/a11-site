@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   // Production origin — makes OpenGraph/Twitter image and canonical URLs resolve absolutely.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "A11 Product Studio — Work",
-    template: "%s — A11 Product Studio",
+    default: "A11 Product Studio · Work",
+    template: "%s · A11 Product Studio",
   },
   description: "A11 Product Studio of the Ambitious.",
   applicationName: "A11 Product Studio",
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "A11 Product Studio",
-    title: "A11 Product Studio — Work",
+    title: "A11 Product Studio · Work",
     description: "A11 Product Studio of the Ambitious.",
     // Image is supplied automatically by app/opengraph-image.tsx.
   },
   twitter: {
     card: "summary_large_image",
-    title: "A11 Product Studio — Work",
+    title: "A11 Product Studio · Work",
     description: "A11 Product Studio of the Ambitious.",
   },
 };
