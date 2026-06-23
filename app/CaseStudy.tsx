@@ -59,8 +59,12 @@ export type CSSection = {
 export type CSProject = {
   name: string;
   href?: string;
-  /** Preview image revealed on hover. */
+  /** Preview image revealed on hover (All Projects section). */
   preview?: StaticImageData | string;
+  /** Case mockup image for the Next project band (PNG with transparency). */
+  nextImage?: string;
+  /** Brand/product logo for the Next project band. */
+  logo?: string;
 };
 
 export type CaseStudyData = {
@@ -352,166 +356,171 @@ function Section({ section }: { section: CSSection }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// All projects — editorial list with a hover preview that follows the cursor
-// (flabbergast.agency style): the image eases toward the pointer and scales in.
+// Next project — white full-bleed band. Three-column layout:
+//   left: "Next project" label  |  center: case mockup PNG  |  right: brand logo
+// The last project wraps back to the first.
 // ─────────────────────────────────────────────────────────────────────────────
-function AllProjects({ projects }: { projects: CSProject[] }) {
+function NextProject({ projects }: { projects: CSProject[] }) {
   const pathname = usePathname();
 
-  // Exclude the current page, then show the 4 that follow it (wrapping around).
-  // Deterministic rotation → each page shows a different set, no hydration drift.
-  const shown = (() => {
+  const next = (() => {
     const idx = projects.findIndex((p) => p.href === pathname);
-    const ordered = idx === -1 ? projects : [...projects.slice(idx + 1), ...projects.slice(0, idx)];
-    return ordered.slice(0, 3);
+    if (idx === -1 || projects.length === 0) return projects[0] ?? null;
+    return projects[(idx + 1) % projects.length];
   })();
 
-  const [hovered, setHovered] = useState<number | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const previewRef   = useRef<HTMLDivElement>(null);
-  // Y: lerps to hovered row centre. X: subtle parallax offset from mouse.
-  const posY         = useRef(0);
-  const posX         = useRef(0);
-  const targetY      = useRef(0);
-  const targetX      = useRef(0);
-  const rafRef       = useRef<number | null>(null);
-  const lastIndex    = useRef(0);
-  const rowRefs      = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const el = previewRef.current;
-    if (!el) return;
-    const LERP = 0.1;
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    function tick() {
-      posY.current = lerp(posY.current, targetY.current, LERP);
-      posX.current = lerp(posX.current, targetX.current, LERP);
-      el!.style.transform = `translate(${posX.current}px, ${posY.current}px)`;
-      rafRef.current = requestAnimationFrame(tick);
-    }
-    rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
-  }, []);
-
-  function onRowEnter(i: number) {
-    lastIndex.current = i;
-    setHovered(i);
-    const container = containerRef.current;
-    const row = rowRefs.current[i];
-    if (container && row) {
-      const cRect = container.getBoundingClientRect();
-      const rRect = row.getBoundingClientRect();
-      const el = previewRef.current;
-      const halfH = el ? el.offsetHeight / 2 : 0;
-      targetY.current = rRect.top - cRect.top + rRect.height / 2 - halfH;
-    }
-  }
-
-  function onMove(e: React.MouseEvent) {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    // Normalise mouse to [-1, 1] within the container, apply ±20px nudge
-    const nx = (e.clientX - rect.left) / rect.width * 2 - 1;
-    const ny = (e.clientY - rect.top)  / rect.height * 2 - 1;
-    targetX.current = nx * 40;
-    // Y nudge is additive on top of the row-snap target — update targetY directly
-    const container = containerRef.current;
-    const row = rowRefs.current[lastIndex.current];
-    if (container && row) {
-      const cRect = container.getBoundingClientRect();
-      const rRect = row.getBoundingClientRect();
-      const el = previewRef.current;
-      const halfH = el ? el.offsetHeight / 2 : 0;
-      const baseY = rRect.top - cRect.top + rRect.height / 2 - halfH;
-      targetY.current = baseY + ny * 40;
-    }
-  }
-
-  const active = hovered !== null && !!shown[hovered]?.preview;
-  const displayIndex = hovered ?? lastIndex.current;
-  const preview = shown[displayIndex]?.preview;
+  if (!next) return null;
 
   return (
-    <section style={{ marginTop: SECTION_GAP, position: "relative" }}>
-      {/* Figma: All projects title 64px / lh 1.1 */}
-      <h2 style={{ ...T.h1, fontSize: "clamp(40px, 5.15vw, 64px)", lineHeight: 1.1, margin: 0 }}>All projects</h2>
+    <section style={{ marginTop: SECTION_GAP }}>
+      <Link href={next.href ?? "#"} style={{ textDecoration: "none", display: "block" }}>
 
-      <div ref={containerRef} onMouseMove={onMove} style={{ marginTop: "clamp(56px, 6.5vw, 100px)", position: "relative" }}>
-        {/* Fixed right-zone preview — sits at ~55% from left, Y lerps to hovered row centre */}
+        {/* ── Mobile / Tablet (<1024px): centered single-column, full viewport height ── */}
         <div
-          ref={previewRef}
-          aria-hidden
-          className="cs-allprojects-preview"
+          className="flex lg:hidden"
           style={{
-            position: "absolute",
-            left: "55%",
-            top: 0,
-            width: "clamp(280px, 28vw, 420px)",
-            pointerEvents: "none",
-            opacity: active ? 1 : 0,
-            scale: active ? "1" : "0.9",
-            transition: "opacity 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), scale 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)",
-            zIndex: 3,
-            willChange: "transform",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "96px 24px",
+            gap: "clamp(28px, 7.6vw, 40px)",
           }}
         >
-          {/* Photos already include the correct shape — show them whole, no crop/clip. */}
-          {preview && (
-            typeof preview === "string" ? (
-              <Image src={preview} alt="" width={0} height={0} sizes="460px" unoptimized style={{ width: "100%", height: "auto", display: "block" }} />
-            ) : (
-              <Image src={preview as StaticImageData} alt="" sizes="460px" style={{ width: "100%", height: "auto", display: "block" }} />
-            )
+          <span
+            style={{
+              fontFamily: FONT,
+              fontWeight: 500,
+              fontSize: "clamp(32px, 10.2vw, 56px)",
+              lineHeight: 0.9,
+              letterSpacing: "-0.05em",
+              color: "#322324",
+              opacity: 0.95,
+              textAlign: "center",
+            }}
+          >
+            Next project
+          </span>
+
+          {next.nextImage && (
+            <div style={{ width: "min(74%, 360px)", flexShrink: 0 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={next.nextImage}
+                alt={next.name}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
+          )}
+
+          {next.logo ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={next.logo}
+              alt={next.name}
+              style={{
+                maxHeight: "clamp(28px, 7.6vw, 42px)",
+                maxWidth: "clamp(140px, 53.7vw, 260px)",
+                width: "auto",
+                height: "auto",
+                display: "block",
+              }}
+            />
+          ) : (
+            <span
+              style={{
+                fontFamily: FONT,
+                fontWeight: 500,
+                fontSize: "clamp(22px, 5.6vw, 32px)",
+                lineHeight: 0.9,
+                letterSpacing: "-0.04em",
+                color: "#322324",
+                opacity: 0.95,
+                textAlign: "center",
+              }}
+            >
+              {next.name}
+            </span>
           )}
         </div>
 
-        {shown.map((p, i) => {
-          // Figma: idle all dark; on hover the hovered row stays dark and its
-          // bottom line becomes 2px solid black, the rest fade to muted (#989190)
-          // with faint 1px rgba(0,0,0,0.1) lines. Dividers sit between rows only.
-          const dimmed = hovered !== null && hovered !== i;
-          const isLast = i === shown.length - 1;
-          // Bottom line of row i turns dark when row i OR row i+1 is hovered
-          const lineActive = hovered === i || hovered === i + 1;
-          const border = `1px solid ${lineActive ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.1)"}`;
-          const row = (
-            <div
-              ref={el => { rowRefs.current[i] = el; }}
-              onMouseEnter={() => onRowEnter(i)}
-              onMouseLeave={() => setHovered(null)}
+        {/* ── Desktop (≥1024px): 3-column row — text | image | logo ── */}
+        <div
+          className="hidden lg:flex lg:px-[var(--bleed)]"
+          data-cursor="View project"
+          data-cursor-dark=""
+          style={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "clamp(20px, 2.8vw, 40px)",
+            cursor: "none",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: FONT,
+              fontWeight: 500,
+              fontSize: "clamp(32px, 4.44vw, 64px)",
+              lineHeight: 0.9,
+              letterSpacing: "-0.05em",
+              color: INK,
+              opacity: 0.95,
+              flexShrink: 0,
+              whiteSpace: "nowrap",
+            }}
+          >
+            Next project
+          </span>
+
+          {next.nextImage && (
+            <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", minWidth: 0 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={next.nextImage}
+                alt={next.name}
+                style={{
+                  maxHeight: "clamp(280px, 48.4vw, 697px)",
+                  maxWidth: "100%",
+                  width: "auto",
+                  height: "auto",
+                  display: "block",
+                }}
+              />
+            </div>
+          )}
+
+          {next.logo ? (
+            <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={next.logo}
+                alt={next.name}
+                style={{
+                  maxHeight: "clamp(28px, 3.75vw, 54px)",
+                  maxWidth: "clamp(100px, 20vw, 280px)",
+                  width: "auto",
+                  height: "auto",
+                  display: "block",
+                }}
+              />
+            </div>
+          ) : (
+            <span
               style={{
-                position: "relative",
-                zIndex: 2,
-                display: "flex",
-                alignItems: "center",
-                gap: "clamp(16px, 1.8vw, 24px)",
-                padding: "clamp(20px, 2.5vw, 40px) 0",
-                borderBottom: border,
                 fontFamily: FONT,
                 fontWeight: 500,
-                fontSize: "clamp(28px, 3.5vw, 44px)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.03em",
-                color: dimmed ? MUTED : INK,
-                transition: "color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)",
+                fontSize: "clamp(24px, 3vw, 44px)",
+                lineHeight: 0.9,
+                letterSpacing: "-0.05em",
+                color: INK,
+                opacity: 0.95,
+                flexShrink: 0,
               }}
             >
-              <span style={{ fontFamily: "var(--font-geist-mono), monospace", fontWeight: 600, letterSpacing: 0, minWidth: "2.2ch", color: dimmed ? MUTED : INK, flexShrink: 0 }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span>{p.name}</span>
-            </div>
-          );
-          return p.href ? (
-            <Link key={p.name} href={p.href} style={{ textDecoration: "none", display: "block" }}>
-              {row}
-            </Link>
-          ) : (
-            <div key={p.name}>{row}</div>
-          );
-        })}
-      </div>
+              {next.name}
+            </span>
+          )}
+        </div>
+      </Link>
     </section>
   );
 }
@@ -588,15 +597,16 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
             <Section key={i} section={s} />
           ))}
 
-          {/* ── All projects ───────────────────────────────────────────────────── */}
-          <AllProjects projects={data.projects} />
-
-          {/* ── Footer ─────────────────────────────────────────────────────────── */}
-          <div style={{ marginTop: SECTION_GAP, paddingBottom: 20 }}>
-            <FooterBanner />
-          </div>
-
         </main>
+
+        {/* ── Next project — full-bleed, outside padded main ─────────────────── */}
+        <NextProject projects={data.projects} />
+
+        {/* ── Footer ─────────────────────────────────────────────────────────── */}
+        <div className="px-4 md:px-8 lg:px-[var(--bleed)]" style={{ marginTop: SECTION_GAP, paddingBottom: 20 }}>
+          <FooterBanner />
+        </div>
+
       </div>
     </div>
   );

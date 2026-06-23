@@ -91,7 +91,10 @@ function CursorLayer() {
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
       const label = (target as HTMLElement).dataset.cursor ?? "";
+      const dark  = (target as HTMLElement).hasAttribute("data-cursor-dark");
       if (labelRef.current) labelRef.current.textContent = label;
+      pill!.style.background = dark ? "#282328" : "#ffffff";
+      pill!.style.color      = dark ? "#ffffff" : "#282328";
       pill!.style.opacity = "1";
       dot!.style.opacity  = "0"; // hide dot while pill is up
       pillActive.current = true;
@@ -101,7 +104,9 @@ function CursorLayer() {
       if (!(e.target instanceof Element)) return;
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
-      pill!.style.opacity = "0";
+      pill!.style.opacity    = "0";
+      pill!.style.background = "#ffffff";
+      pill!.style.color      = "#282328";
       if (shownRef.current) dot!.style.opacity = "1";
       pillActive.current = false;
     }
@@ -192,7 +197,7 @@ function CursorLayer() {
       >
         <span ref={labelRef} />
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden style={{ display: "block", flexShrink: 0 }}>
-          <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke="#282328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M5 11L11 5M11 5H5.5M11 5V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     </>
