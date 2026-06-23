@@ -154,7 +154,7 @@ export default function StudioPage() {
           </div>
 
           {/* ── Footer ────────────────────────────────────────────────────── */}
-          <div style={{ paddingBottom: "32px" }}>
+          <div>
             <FooterBanner />
           </div>
 

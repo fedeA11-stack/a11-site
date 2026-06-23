@@ -271,7 +271,7 @@ export default function ManifestoPage() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-[1240px] mx-auto pb-[10px] lg:max-w-none lg:px-5">
+      <div className="max-w-[1240px] mx-auto lg:max-w-none lg:px-5">
         <FooterBanner />
       </div>
       </PageEnter>

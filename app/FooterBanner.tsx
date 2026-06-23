@@ -2,183 +2,158 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-
-const MotionLink = motion.create(Link);
 import { Reveal, itemVariants } from "./Reveal";
 
-// ── Design tokens ─────────────────────────────────────────────────────────────
+// ── Design tokens (Figma "Footer" — node 364:77140) ───────────────────────────
 const FONT = "var(--font-system), sans-serif";
+const PANEL = "#322324"; // dark band   (rgb 50,35,36)
+const MUTED = "#8B7E7B"; // "Let's talk." underline (rgb 139,126,123)
+
+// ── Link data ─────────────────────────────────────────────────────────────────
+// Routes that don't exist yet (socials / Privacy) point at "#", matching the
+// existing nav placeholders (NavMenu SOCIAL_LINKS).
+type FooterLink = { label: string; href: string };
+const NAV: FooterLink[] = [
+  { label: "Works",   href: "/"        },
+  { label: "Studio",  href: "/studio"  },
+  { label: "Contact", href: "/contact" },
+];
+const SOCIAL: FooterLink[] = [
+  { label: "Twitter",  href: "#" },
+  { label: "Cosmos",   href: "#" },
+  { label: "Linkedin", href: "#" },
+];
 
 // ── Component ─────────────────────────────────────────────────────────────────
-// Renders the footer banner + bottom bar.
-// Parent is responsible for horizontal container (max-w-[1240px] mx-auto).
+// Full-bleed dark footer band. Breaks out of whatever padded/centred container
+// it's dropped into (all four pages wrap it differently) via the standard
+// 100vw + left:50% technique — works for any horizontally-centred container.
+//
+// Two Figma frames drive the responsive split at 768px:
+//   mobile  (393w): 48px headline, nav + social columns, legal stacked below
+//   desktop (1512w): 92px headline, nav + social + legal as three columns
+// Sizes are anchored to the design widths with vw-based clamps so the band
+// scales smoothly between and past the reference widths.
 export default function FooterBanner() {
   return (
     <Reveal amount={0.3}>
-      {/* Full-width footer (desktop ≥1024): the panel spans the 20px-gutter
-          width, so give it the SVG's own aspect ratio (1243/406) — the artwork
-          then scales UNIFORMLY (no stretch/distortion) instead of being squashed
-          to a fixed 406px height. The headline / CTA position + size scale with
-          the panel width (cqw), capped at 1.5× (44→66px), so they fill the
-          bigger panel proportionally. !important beats the component's inline
-          styles; mobile/tablet keep the fixed 406px panel. */}
       <style>{`
+        .fbn {
+          position: relative;
+          left: 50%;
+          width: 100vw;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          background: ${PANEL};
+        }
+        /* Horizontal padding mirrors the work-grid gutters so the footer copy
+           lines up with the cards above it: 10px (mobile) → 2rem (md, px-8) →
+           --bleed (lg). Vertical padding follows the Figma footer proportions. */
+        .fbn-inner {
+          padding-inline: 10px;
+          padding-top: clamp(80px, 11.9vw, 180px);
+          padding-bottom: clamp(80px, 11.9vw, 180px);
+        }
+        .fbn-head {
+          margin: 0;
+          max-width: 12.2em;
+          font-family: ${FONT};
+          font-weight: 500;
+          font-size: clamp(36px, 12.2vw, 48px);
+          line-height: 1.1;
+          letter-spacing: -0.03em;
+          color: #fff;
+          text-wrap: balance;
+        }
+        .fbn-cta { color: ${MUTED}; text-decoration: underline; text-underline-offset: 4px; }
+        .fbn a { transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fbn a:hover { opacity: 0.6; }
+
+        .fbn-cols {
+          display: grid;
+          grid-template-columns: clamp(120px, 45.3vw, 178px) max-content;
+          margin-top: clamp(68px, 7.94vw, 120px);
+        }
+        .fbn-col {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        .fbn-col li { line-height: 1; }
+        .fbn-col a, .fbn-legal span, .fbn-legal a {
+          font-family: ${FONT};
+          font-weight: 500;
+          font-size: 18px;
+          line-height: 1;
+          letter-spacing: -0.36px;
+          color: #fff;
+          text-decoration: none;
+        }
+        .fbn-legal {
+          grid-column: 1 / -1;
+          margin-top: clamp(56px, 17vw, 68px);
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+
         @media (min-width: 768px) {
-          .fb-banner { aspect-ratio: 1243 / 406; height: auto !important; container-type: inline-size; }
-          .fb-headline { top: 6.4361cqw !important; font-size: clamp(44px, 3.5398cqw, 66px) !important; }
-          .fb-cta { top: 22.2043cqw !important; font-size: clamp(44px, 3.5398cqw, 66px) !important; }
+          .fbn-inner {
+            padding-inline: 2rem;
+            padding-top: clamp(120px, 11.9vw, 180px);
+            padding-bottom: clamp(120px, 11.9vw, 180px);
+          }
+          .fbn-head { font-size: clamp(48px, 6.085vw, 92px); }
+          .fbn-cols {
+            grid-template-columns: clamp(160px, 24.8vw, 375px) clamp(160px, 24.87vw, 376px) max-content;
+          }
+          .fbn-legal { grid-column: auto; margin-top: 0; }
+        }
+
+        /* lg: match the work-grid's --bleed gutter exactly. */
+        @media (min-width: 1024px) {
+          .fbn-inner { padding-inline: var(--bleed); }
         }
       `}</style>
-      {/*
-       * Dark banner — 406px tall, bg #282328, rounded 8.887px (Figma).
-       * Text positions are absolute within this container, exact from Figma:
-       *   body copy  → top: 80px,  left: 6.45%
-       *   CTA link   → top: 276px, left: 6.45%, underlined
-       */}
-      <motion.section
-        data-footer=""
-        className="fb-banner"
-        variants={itemVariants}
-        style={{
-          position:           "relative",
-          width:              "100%",
-          height:             "406px",
-          willChange:         "transform, opacity",
-        }}
-      >
-        {/* Banner shape — vector dark panel with notched feet (Figma footer.svg) */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/footer.svg"
-          alt=""
-          aria-hidden
-          className="fb-bg"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
-        />
 
-        {/* "If you're ambitious enough to work with us." */}
-        <motion.p
-          variants={itemVariants}
-          className="fb-headline"
-          style={{
-            position:      "absolute",
-            top:           "80px",
-            left:          "6.45%",
-            right:         "27.15%",
-            margin:        0,
-            fontFamily:    FONT,
-            fontWeight:    500,
-            fontSize:      "44px",
-            lineHeight:    0.9,
-            letterSpacing: "-0.03em",
-            color:         "#ffffff",
-            whiteSpace:    "pre-wrap",
-            textWrap:      "balance",
-          }}
-        >
-          {`If you're ambitious\nenough to work with us.`}
-        </motion.p>
+      <motion.section data-footer="" className="fbn" variants={itemVariants} style={{ willChange: "transform, opacity" }}>
+        <div className="fbn-inner">
+          {/* Headline — "Let's talk." is the muted, underlined CTA to /contact */}
+          <p className="fbn-head">
+            It&rsquo;s time to fight for craft.{" "}
+            <Link href="/contact" className="fbn-cta">Let&rsquo;s talk.</Link>
+          </p>
 
-        {/* "We should talk." — underlined CTA */}
-        <MotionLink
-          variants={itemVariants}
-          href="/contact"
-          className="fb-cta"
-          style={{
-            position:      "absolute",
-            top:           "276px",
-            left:          "6.45%",
-            right:         "27.15%",
-            fontFamily:    FONT,
-            fontWeight:    500,
-            fontSize:      "44px",
-            lineHeight:    0.9,
-            letterSpacing: "-0.03em",
-            color:         "#ffffff",
-            textDecoration: "underline",
-            textUnderlineOffset: "4px",
-            display:       "block",
-            transition:    "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = "0.6")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-        >
-          We should talk.
-        </MotionLink>
-      </motion.section>
+          <div className="fbn-cols">
+            {/* Column 1 — navigation */}
+            <ul className="fbn-col">
+              {NAV.map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href}>{label}</Link>
+                </li>
+              ))}
+            </ul>
 
-      {/*
-       * Bottom bar — gap 20px below banner (Figma: banner 406 → bottom bar 426).
-       * Layout: justify-between
-       *   Left group (w-459px, justify-between): A11 © 2026 | Social links
-       *   Right: Privacy Policy
-       * Font: 16px, leading 1.4, tracking -0.32px
-       */}
-      <motion.div
-        variants={itemVariants}
-        className="fb-bottom"
-        style={{
-          marginTop:      "20px",
-          position:       "relative",
-          display:        "flex",
-          alignItems:     "center",
-          justifyContent: "space-between",
-          whiteSpace:     "nowrap",
-        }}
-      >
-        {/* Left: A11 © 2026 */}
-        <p
-          style={{
-            margin:        0,
-            fontFamily:    FONT,
-            fontWeight:    500,
-            fontSize:      "16px",
-            lineHeight:    1.4,
-            letterSpacing: "-0.32px",
-            color:         "#282328",
-          }}
-        >
-          A11 © 2026
-        </p>
+            {/* Column 2 — social */}
+            <ul className="fbn-col">
+              {SOCIAL.map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href}>{label}</a>
+                </li>
+              ))}
+            </ul>
 
-        {/* Center: Social links — absolutely centered */}
-        <div
-          className="fb-social"
-          style={{
-            position:      "absolute",
-            left:          "50%",
-            transform:     "translateX(-50%)",
-            display:       "flex",
-            alignItems:    "center",
-            gap:           "4px",
-            fontFamily:    FONT,
-            fontSize:      "16px",
-            lineHeight:    1.4,
-            letterSpacing: "-0.32px",
-            color:         "#282328",
-          }}
-        >
-          <span style={{ fontWeight: 500 }}>Social</span>
-          <span style={{ fontWeight: 400 }}>Twitter,</span>
-          <span style={{ fontWeight: 400 }}>Cosmos,</span>
-          <span style={{ fontWeight: 400 }}>Linkedin</span>
+            {/* Column 3 (desktop) / stacked below (mobile) — legal */}
+            <div className="fbn-legal">
+              <a href="#">Privacy Policy</a>
+              <span>A11 © 2026</span>
+            </div>
+          </div>
         </div>
-
-        {/* Right: Privacy Policy */}
-        <p
-          style={{
-            margin:        0,
-            fontFamily:    FONT,
-            fontWeight:    500,
-            fontSize:      "16px",
-            lineHeight:    1.4,
-            letterSpacing: "-0.32px",
-            color:         "#282328",
-          }}
-        >
-          Privacy Policy
-        </p>
-      </motion.div>
+      </motion.section>
     </Reveal>
   );
 }

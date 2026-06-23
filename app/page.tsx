@@ -620,47 +620,6 @@ function MobileQuote({ text, buttonLabel, href, maxWidth }: { text: string; butt
   );
 }
 
-function MobileFooter() {
-  return (
-    <Reveal className="w-full" amount={0.3}>
-      <motion.div
-        variants={itemVariants}
-        style={{
-          position: "relative", width: "100%", borderRadius: 5, overflow: "hidden",
-          background: "#282328", padding: "50px 40px", minHeight: 220,
-        }}
-      >
-        <p
-          className="m-0 whitespace-pre-wrap"
-          style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#fff" }}
-        >
-          {"If you're ambitious\nenough to work with us."}
-        </p>
-        <a
-          href="mailto:hello@a11studio.com"
-          style={{
-            display: "inline-block", marginTop: 24, fontFamily: MFONT, fontWeight: 500,
-            fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.03em", color: "#fff",
-            textDecoration: "underline", textUnderlineOffset: 4,
-          }}
-        >
-          We should talk.
-        </a>
-      </motion.div>
-
-      <motion.div
-        variants={itemVariants}
-        style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginTop: 20, padding: "0 20px", whiteSpace: "nowrap",
-        }}
-      >
-        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>A11 © 2026</span>
-        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>Privacy Policy</span>
-      </motion.div>
-    </Reveal>
-  );
-}
 
 function MobileHome() {
   return (
@@ -680,7 +639,7 @@ function MobileHome() {
       </section>
 
       {/* Stacked tiles + interstitials. Pairs sit 10px apart; quotes get ~80px air. */}
-      <div style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 10, display: "flex", flexDirection: "column" }}>
+      <div style={{ paddingLeft: 10, paddingRight: 10, display: "flex", flexDirection: "column" }}>
         <MobileCard card={MOBILE_CARDS[0]} priority />
         <div style={{ height: 10 }} />
         <MobileCard card={MOBILE_CARDS[1]} />
@@ -703,8 +662,8 @@ function MobileHome() {
         <div style={{ height: 10 }} />
         <MobileCard card={MOBILE_CARDS[6]} />
 
-        <div style={{ height: 10 }} />
-        <MobileFooter />
+        <div style={{ height: 20 }} />
+        <FooterBanner />
       </div>
     </div>
   );
@@ -754,7 +713,7 @@ export default function WorkPage() {
             <Reveal><ProjectCard project={PROJECTS[6]} /></Reveal>
           </main>
 
-          <div className="max-w-[1240px] mx-auto md:px-8 mt-[10px] pb-[10px] lg:max-w-none lg:px-[var(--bleed)]">
+          <div className="max-w-[1240px] mx-auto md:px-8 mt-[20px] lg:max-w-none lg:px-[var(--bleed)]">
             <FooterBanner />
           </div>
         </PageEnter>

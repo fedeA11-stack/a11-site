@@ -592,7 +592,7 @@ export default function CaseStudy({ data }: { data: CaseStudyData }) {
           <AllProjects projects={data.projects} />
 
           {/* ── Footer ─────────────────────────────────────────────────────────── */}
-          <div style={{ marginTop: SECTION_GAP, paddingBottom: 20 }}>
+          <div style={{ marginTop: SECTION_GAP }}>
             <FooterBanner />
           </div>
 
