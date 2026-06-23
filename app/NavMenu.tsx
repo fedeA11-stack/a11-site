@@ -96,81 +96,44 @@ function ContactCta({ color = DARK }: { color?: string }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Breadcrumb header — case-study pages (dark heroes). Kept on the original
-// white-text + mixBlendMode:difference treatment so it stays legible on imagery.
-// ════════════════════════════════════════════════════════════════════════════
-function BreadcrumbNav({ breadcrumb }: { breadcrumb: Crumb[] }) {
+// ── Breadcrumb trail — the desktop center for case-study pages ───────────────────
+// Replaces the centered nav links on case studies (Work / World / World ID). It is
+// DESKTOP-ONLY (hidden md:flex): on phones the breadcrumb is dropped entirely and
+// the page falls back to the shared logo + Menu header, same as every other page.
+function BreadcrumbTrail({ breadcrumb }: { breadcrumb: Crumb[] }) {
   return (
-    <>
-      <header
+    <nav
+      aria-label="Breadcrumb"
+      className="hidden md:flex"
+      style={{ flexShrink: 0, alignItems: "center", justifyContent: "center", pointerEvents: "auto" }}
+    >
+      <div
         style={{
-          position: "fixed", top: 0, left: 0, width: "100%", height: 80,
-          zIndex: 100, mixBlendMode: "difference", pointerEvents: "none",
+          display: "flex", alignItems: "center", gap: 8, fontFamily: FONT,
+          fontWeight: 500, fontSize: 18, lineHeight: 1, letterSpacing: "-0.36px",
+          textTransform: "capitalize", whiteSpace: "nowrap",
         }}
       >
-        <div className="w-full px-4 md:px-8 lg:px-5 flex items-center h-full">
-          <Link
-            href="/"
-            style={{ display: "block", height: 36, flex: "1 1 0", minWidth: 0, pointerEvents: "auto" }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/logo.svg"
-              alt="A11"
-              style={{ width: 32, height: 36, filter: "brightness(0) invert(1)", display: "block" }}
-            />
-          </Link>
-
-          <nav aria-label="Breadcrumb" style={{ flexShrink: 0, display: "flex", justifyContent: "center" }}>
-            <div
-              style={{
-                display: "flex", alignItems: "center", gap: 8, fontFamily: FONT,
-                fontWeight: 500, fontSize: 18, lineHeight: 1, letterSpacing: "-0.36px",
-                textTransform: "capitalize", whiteSpace: "nowrap",
-              }}
-            >
-              {breadcrumb.map((crumb, i) => {
-                const isLast = i === breadcrumb.length - 1;
-                const label = (
-                  <span style={{ color: "#ffffff", opacity: isLast ? 1 : 0.5 }}>{crumb.label}</span>
-                );
-                // Parent crumbs are hidden below md: the full trail ("Work / World /
-                // World Money") plus the right-aligned "Let's Talk" overran a 375px
-                // bar and overlapped. On phones we show only the current page; the
-                // logo still links home. Full trail returns at md+.
-                return (
-                  <span
-                    key={crumb.label}
-                    className={`${isLast ? "flex" : "hidden md:flex"} items-center gap-2`}
-                  >
-                    {crumb.href && !isLast ? (
-                      <Link href={crumb.href} style={{ textDecoration: "none", pointerEvents: "auto", padding: "13px 0" }}>
-                        {label}
-                      </Link>
-                    ) : (
-                      label
-                    )}
-                    {!isLast && <span style={{ color: "#ffffff", opacity: 0.3 }}>/</span>}
-                  </span>
-                );
-              })}
-            </div>
-          </nav>
-
-          {/* Keep the flex:1 spacer so the crumb stays centered, but hide the CTA
-              itself below md: a centered single crumb + right-aligned "Let's Talk"
-              abut with no gap on a 375px bar. Contact is still one tap away via the
-              "Let's talk" footer banner every case page ends with. */}
-          <div style={{ flex: "1 1 0", minWidth: 0, display: "flex", justifyContent: "flex-end" }}>
-            <span className="hidden md:block">
-              <ContactCta color="#fff" />
+        {breadcrumb.map((crumb, i) => {
+          const isLast = i === breadcrumb.length - 1;
+          const label = (
+            <span style={{ color: "#ffffff", opacity: isLast ? 1 : 0.5 }}>{crumb.label}</span>
+          );
+          return (
+            <span key={crumb.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {crumb.href && !isLast ? (
+                <Link href={crumb.href} style={{ textDecoration: "none", pointerEvents: "auto", padding: "13px 0" }}>
+                  {label}
+                </Link>
+              ) : (
+                label
+              )}
+              {!isLast && <span style={{ color: "#ffffff", opacity: 0.3 }}>/</span>}
             </span>
-          </div>
-        </div>
-      </header>
-      <div style={{ height: 80, flexShrink: 0 }} aria-hidden />
-    </>
+          );
+        })}
+      </div>
+    </nav>
   );
 }
 
@@ -208,8 +171,6 @@ export default function NavMenu({ breadcrumb, theme }: { breadcrumb?: Crumb[]; t
     if (menuOpen) setMenuOpen(false);
   }
 
-  if (breadcrumb) return <BreadcrumbNav breadcrumb={breadcrumb} />;
-
   return (
     <>
       <header
@@ -229,35 +190,40 @@ export default function NavMenu({ breadcrumb, theme }: { breadcrumb?: Crumb[]; t
             />
           </Link>
 
-          {/* ── Center: plain text links; active page carries a leading dot (desktop) ── */}
-          <nav
-            aria-label="Main navigation"
-            className="hidden md:flex"
-            style={{ flexShrink: 0, alignItems: "center", gap: 48, pointerEvents: "auto" }}
-          >
-            {NAV_LINKS.map((link) => {
-              const active = isActive(link.href);
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    textDecoration: "none", color: "#ffffff", fontFamily: FONT,
-                    fontWeight: 500, fontSize: 18, lineHeight: 1,
-                    letterSpacing: "-0.36px", whiteSpace: "nowrap",
-                    // Vertical padding grows the hit area to ~40px (>WCAG 2.2 24px
-                    // minimum); flex-centering keeps the label visually in place.
-                    padding: "11px 0",
-                  }}
-                >
-                  {active && <ActiveDot color="#fff" />}
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          {/* ── Center (desktop): breadcrumb trail on case studies, else nav links ──
+              Both are hidden below md, where the header is just logo + Menu. */}
+          {breadcrumb ? (
+            <BreadcrumbTrail breadcrumb={breadcrumb} />
+          ) : (
+            <nav
+              aria-label="Main navigation"
+              className="hidden md:flex"
+              style={{ flexShrink: 0, alignItems: "center", gap: 48, pointerEvents: "auto" }}
+            >
+              {NAV_LINKS.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 8,
+                      textDecoration: "none", color: "#ffffff", fontFamily: FONT,
+                      fontWeight: 500, fontSize: 18, lineHeight: 1,
+                      letterSpacing: "-0.36px", whiteSpace: "nowrap",
+                      // Vertical padding grows the hit area to ~40px (>WCAG 2.2 24px
+                      // minimum); flex-centering keeps the label visually in place.
+                      padding: "11px 0",
+                    }}
+                  >
+                    {active && <ActiveDot color="#fff" />}
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
 
           {/* ── Right (desktop): Let's Talk + animated dot-grid ── */}
           <div className="hidden md:flex" style={{ flex: "1 1 0", minWidth: 0, justifyContent: "flex-end" }}>
