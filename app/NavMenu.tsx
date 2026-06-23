@@ -17,8 +17,7 @@ const CONTACT_HREF = "/contact";
 const NAV_LINKS = [
   { label: "Work",       href: "/"       },
   { label: "Studio",     href: "/studio" },
-  // Manifesto hidden for now — re-add to restore the nav link.
-  // { label: "Manifesto",  href: "/manifesto" },
+  // Manifesto lives as the Studio-page CTA, not a nav link.
 ];
 
 const SOCIAL_LINKS = [
