@@ -111,8 +111,9 @@ const PROJECTS: Project[] = [
     image: atlansCase,
     name: "Atlans",
     description: "Athletic platform\nof Discovery and\nconnection",
-    // Dark over the light-yellow gradient (white was unreadable on the new crop).
-    textColor: "#282328",
+    // White over the new sunset crop — copy sits on the orange/red sky and the
+    // dark mountain silhouette (dark #282328 measured 1.2–2.7:1; white is 5.8–18:1).
+    textColor: "#ffffff",
     href: "/atlans",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -122,7 +123,8 @@ const PROJECTS: Project[] = [
     logoHeight: 31,
     logoLeft: 80,
     logoBottom: 56,
-    logoFilter: "brightness(0.157)",
+    // atlans mark ships dark → invert to white to match the copy.
+    logoFilter: "brightness(0) invert(1)",
   },
   {
     num: "03",
@@ -549,7 +551,7 @@ type MobileCardData = {
 
 const MOBILE_CARDS: MobileCardData[] = [
   { tile: worldTile,       name: "World",           description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#ffffff", href: "/world",       logo: worldLogo,        logoHeight: 20 },
-  { tile: atlansTile,      name: "Atlans",          description: "Athletic platform\nof Discovery and\nconnection",       color: "#282328", href: "/atlans",      logo: atlansLogo,       logoHeight: 16, logoFilter: "brightness(0.157)" },
+  { tile: atlansTile,      name: "Atlans",          description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16, logoFilter: "brightness(0) invert(1)" },
   { tile: nousTile,        name: "Nous",            description: "Shared intelligent\nlayer",                            color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
   { tile: freeholdTile,    name: "Freehold",        description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18, logoFilter: "brightness(0.157)" },
   { tile: districtsTile,   name: "Districts",       description: "Virtual World\nmirroring real\nopportunities",                   color: "#3b3658", href: "/districts",   logo: districtsLogoMobile,      logoHeight: 20 },
