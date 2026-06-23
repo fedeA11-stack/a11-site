@@ -3,9 +3,9 @@
 // If the domain changes, change it here.
 export const SITE_URL = "https://a11.studio";
 
-// Contact email as used across the site (note: a11studio.com, distinct from the
-// a11.studio web origin above).
-export const CONTACT_EMAIL = "hello@a11studio.com";
+// Contact email as used across the site — matches the a11.studio web origin and
+// the address the contact form sends to / displays.
+export const CONTACT_EMAIL = "hello@a11.studio";
 
 import type { Metadata } from "next";
 import type { CaseStudyData } from "./CaseStudy";

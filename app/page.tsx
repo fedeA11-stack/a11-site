@@ -306,7 +306,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         <CoverImage
           src={project.image}
           alt={project.name}
-          sizes="100vw"
+          sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
           priority={priority}
         />
       ) : (
@@ -314,7 +314,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           <CoverImage
             src={project.image}
             alt={project.name}
-            sizes="100vw"
+            sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
             priority={priority}
           />
         </ImageReveal>
@@ -489,7 +489,7 @@ function HeroReveal() {
           willChange: "transform, opacity",
         }}
       >
-        <motion.p
+        <motion.h1
           className="m-0 text-center whitespace-pre-wrap"
           initial={{ opacity: 0, filter: "blur(10px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -506,7 +506,7 @@ function HeroReveal() {
           }}
         >
           {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
-        </motion.p>
+        </motion.h1>
       </motion.section>
 
       {/*
@@ -628,7 +628,7 @@ function MobileHome() {
     <div className="md:hidden" style={{ position: "relative", zIndex: 1, background: "#fff" }}>
       {/* Static hero — lets the title wrap naturally to ~4 lines like the mockup */}
       <section style={{ paddingTop: 96, paddingBottom: 112, paddingLeft: 20, paddingRight: 20 }}>
-        <p
+        <h1
           className="m-0 text-center"
           style={{
             fontFamily: MFONT, fontWeight: 500, fontSize: 44, lineHeight: 0.9,
@@ -637,7 +637,7 @@ function MobileHome() {
           }}
         >
           We are A11. Product Studio Built on Passion and Craft.
-        </p>
+        </h1>
       </section>
 
       {/* Stacked tiles + interstitials. Pairs sit 10px apart; quotes get ~80px air. */}
