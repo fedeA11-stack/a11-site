@@ -12,7 +12,7 @@ export const ALL_PROJECTS: CSProject[] = [
   { name: "Atlans",      href: "/atlans",      preview: "/assets/All%20Projects/Atlans.png" },
   { name: "Freehold",    href: "/freehold",    preview: "/assets/All%20Projects/Freehold%20Mobile.png" },
   { name: "Relai",       href: "/relai",       preview: "/assets/All%20Projects/Relai.png" },
-  { name: "TokenStudio", href: "/tokenstudio", preview: "/assets/All%20Projects/Tokenization.png" },
+  { name: "Freehold Invest", href: "/freehold-invest", preview: "/assets/All%20Projects/Tokenization.png" },
   { name: "Districts",   href: "/districts",   preview: "/assets/All%20Projects/District.png" },
   { name: "Nous",        href: "/nous",        preview: "/assets/All%20Projects/Nous.png" },
 ];

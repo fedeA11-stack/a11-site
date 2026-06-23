@@ -183,7 +183,7 @@ const PROJECTS: Project[] = [
     description: "Real-world assets\nwith secure and\ntransparent\ntokenization",
     // Dark over the light cream backdrop of the new watch crop.
     textColor: "#282328",
-    href: "/tokenstudio",
+    href: "/freehold-invest",
     labelPx: 18,
     labelTracking: "-0.36px",
     labelTop: 70,
@@ -556,7 +556,7 @@ const MOBILE_CARDS: MobileCardData[] = [
   { tile: nousTile,        name: "Nous",            description: "Shared intelligent\nlayer",                            color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
   { tile: freeholdTile,    name: "Freehold",        description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18, logoFilter: "brightness(0.157)" },
   { tile: districtsTile,   name: "Districts",       description: "Virtual World\nmirroring real\nopportunities",                   color: "#3b3658", href: "/districts",   logo: districtsLogoMobile,      logoHeight: 20 },
-  { tile: tokenStudioTile, name: "Freehold Invest", description: "Real-world assets\nwith secure and\ntransparent\ntokenization", color: "#3f3d36", href: "/tokenstudio", logo: freeholdInvestLogoMobile, logoHeight: 18 },
+  { tile: tokenStudioTile, name: "Freehold Invest", description: "Real-world assets\nwith secure and\ntransparent\ntokenization", color: "#3f3d36", href: "/freehold-invest", logo: freeholdInvestLogoMobile, logoHeight: 18 },
   { tile: relaiTile,       name: "Relai",           description: "Bitcoin-only savings\napp focused on\nsimple self-custody", color: "#282328", href: "/relai",   logoHeight: 19 },
 ];
 
