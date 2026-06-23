@@ -50,6 +50,13 @@ import districtsTile from "../public/assets/mobile/districts.jpg";
 import tokenStudioTile from "../public/assets/mobile/tokenstudio.jpg";
 import atlansTile from "../public/assets/mobile/atlans.jpg";
 import relaiTile from "../public/assets/mobile/relai.jpg";
+import nousTile from "../public/assets/mobile/nous.jpg";
+// Mobile-only wordmarks: Nous (white, no desktop equivalent) + tinted Districts/
+// Freehold Invest marks that match the mobile design's per-card copy colors
+// (#3b3658 / #3f3d36). Desktop keeps the shared white/dark SVGs untouched.
+import nousLogo from "../public/assets/nous-logo.svg";
+import districtsLogoMobile from "../public/assets/districts-logo-mobile.svg";
+import freeholdInvestLogoMobile from "../public/assets/freeholdinvest-logo-mobile.svg";
 
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
@@ -73,6 +80,12 @@ type Project = {
   /** Logo distance from the card's bottom edge in design px (default 64),
    *  likewise scaled for the uniform crop. */
   logoBottom?: number;
+  /** Optional CSS filter applied to the wordmark <Image>. The mark SVGs are
+   *  monochrome (white, except districts which ships dark), so a filter retints
+   *  them to match the card's copy color: "brightness(0.157)" turns white →
+   *  ~#282828 on light-backed cards; "brightness(0) invert(1)" turns the dark
+   *  districts mark → white. */
+  logoFilter?: string;
 };
 
 const PROJECTS: Project[] = [
@@ -95,60 +108,11 @@ const PROJECTS: Project[] = [
   },
   {
     num: "02",
-    image: freeholdCase,
-    name: "Freehold",
-    description: "A non-custodial,\nmulti-chain DeFi\nwallet app",
-    textColor: "#282328",
-    href: "/freehold",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 54,
-    descTop: 108,
-    logo: freeholdLogoGrey,
-    logoHeight: 31,
-    logoLeft: 174,
-    logoBottom: 56,
-  },
-  {
-    num: "03",
-    image: districtCase,
-    name: "Districts",
-    description: "RWA tokenization,\nstart to finish",
-    // Near-black over the light lavander blur reads stronger than the mid-gray (4.3→7.1:1).
-    textColor: "#282328",
-    href: "/districts",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 139,
-    descTop: 198,
-    logo: districtLogo,
-    logoHeight: 31,
-    logoLeft: 72,
-    logoBottom: 61,
-  },
-  {
-    num: "04",
-    image: tokenStudioCase,
-    name: "Token Studio",
-    description: "Tokenize, launch,\nmanage. On-chain\nRWAs",
-    // White over the dark wood paneling — brown was unreadable (1.9→10:1 on the copy).
-    textColor: "#ffffff",
-    href: "/tokenstudio",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 70,
-    descTop: 124,
-    logo: freeholdLogo,
-    logoHeight: 31,
-    logoLeft: 80,
-    logoBottom: 56,
-  },
-  {
-    num: "05",
     image: atlansCase,
     name: "Atlans",
     description: "Athletic platform\nof Discovery and\nconnection",
-    textColor: "#ffffff",
+    // Dark over the light-yellow gradient (white was unreadable on the new crop).
+    textColor: "#282328",
     href: "/atlans",
     labelPx: 18,
     labelTracking: "-0.36px",
@@ -158,26 +122,13 @@ const PROJECTS: Project[] = [
     logoHeight: 31,
     logoLeft: 80,
     logoBottom: 56,
+    logoFilter: "brightness(0.157)",
   },
   {
-    num: "06",
-    image: relaiCase,
-    name: "Relai",
-    description: "Bitcoin-only savings\napp focused on\nsimple self-custody.",
-    textColor: "#282328",
-    href: "/relai",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 69,
-    descTop: 122,
-    logoHeight: 31,
-    logoLeft: 80,
-  },
-  {
-    num: "07",
+    num: "03",
     image: nousCase,
     name: "Nous",
-    description: "One Personal AI\nfor your whole life",
+    description: "Shared intelligent\nlayer",
     // White over the warm red/orange gradient (5.5:1; near-black was 2.9).
     textColor: "#ffffff",
     href: "/nous",
@@ -186,6 +137,73 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 58,
     descTop: 116,
+    logoHeight: 31,
+    logoLeft: 80,
+  },
+  {
+    num: "04",
+    image: freeholdCase,
+    name: "Freehold",
+    description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",
+    textColor: "#282328",
+    href: "/freehold",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 54,
+    descTop: 108,
+    logo: freeholdLogoGrey,
+    logoHeight: 31,
+    logoLeft: 80,
+    logoBottom: 56,
+    logoFilter: "brightness(0.157)",
+  },
+  {
+    num: "05",
+    image: districtCase,
+    name: "Districts",
+    description: "Virtual World\nmirroring real\nopportunities",
+    textColor: "#ffffff",
+    href: "/districts",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 139,
+    descTop: 198,
+    logo: districtLogo,
+    logoHeight: 31,
+    logoLeft: 72,
+    logoBottom: 61,
+    // districts mark ships dark (#282328) → invert to white to match the copy.
+    logoFilter: "brightness(0) invert(1)",
+  },
+  {
+    num: "06",
+    image: tokenStudioCase,
+    name: "Freehold Invest",
+    description: "Real-world assets\nwith secure and\ntransparent\ntokenization",
+    // Dark over the light cream backdrop of the new watch crop.
+    textColor: "#282328",
+    href: "/tokenstudio",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 70,
+    descTop: 124,
+    logo: freeholdLogo,
+    logoHeight: 31,
+    logoLeft: 80,
+    logoBottom: 56,
+    logoFilter: "brightness(0.157)",
+  },
+  {
+    num: "07",
+    image: relaiCase,
+    name: "Relai",
+    description: "Bitcoin-only savings\napp focused on\nsimple self-custody",
+    textColor: "#282328",
+    href: "/relai",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 69,
+    descTop: 122,
     logoHeight: 31,
     logoLeft: 80,
   },
@@ -304,7 +322,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           with the full-bleed card — text and logo stay on the image shape,
           exactly reproducing the 1240px design at any width. */}
       <div
-        className="absolute flex items-center whitespace-nowrap capitalize"
+        className="absolute flex items-center whitespace-nowrap"
         style={{
           top: cq(project.labelTop),
           left: cq(72),
@@ -323,7 +341,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
       </div>
 
       <p
-        className="absolute m-0 whitespace-pre-wrap capitalize"
+        className="absolute m-0 whitespace-pre-wrap"
         style={{
           // Top tracks the label proportionally; the label→copy gap scales with
           // the (middle-ground) type so the spacing stays right at any card size.
@@ -355,7 +373,13 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
             src={project.logo}
             alt=""
             aria-hidden
-            style={{ height: "100%", width: "auto", display: "block" }}
+            style={{
+              height: "100%",
+              width: "auto",
+              display: "block",
+              // Retint the monochrome wordmark to match the card's copy color.
+              filter: project.logoFilter,
+            }}
           />
         </div>
       )}
@@ -518,15 +542,19 @@ type MobileCardData = {
   href: string;
   logo?: StaticImageData;
   logoHeight: number;
+  /** CSS filter to retint the monochrome wordmark to the card's copy color —
+   *  same mechanism as the desktop cards (see Project.logoFilter). */
+  logoFilter?: string;
 };
 
 const MOBILE_CARDS: MobileCardData[] = [
-  { tile: worldTile,       name: "World",        description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#282328", href: "/world",       logo: worldLogo,        logoHeight: 20 },
-  { tile: freeholdTile,    name: "Freehold",     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18 },
-  { tile: districtsTile,   name: "Districts",    description: "RWA tokenization,\nstart to finish",                   color: "#45474a", href: "/districts",   logo: districtLogo,     logoHeight: 20 },
-  { tile: tokenStudioTile, name: "Token Studio", description: "Tokenize, launch,\nmanage. On-chain\nRWAs",            color: "#4d2820", href: "/tokenstudio", logo: freeholdLogo,     logoHeight: 18 },
-  { tile: atlansTile,      name: "Atlans",       description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16 },
-  { tile: relaiTile,       name: "Relai",        description: "Bitcoin-only savings\napp focused on\nsimple self-custody.", color: "#282328", href: "/relai",   logoHeight: 19 },
+  { tile: worldTile,       name: "World",           description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#ffffff", href: "/world",       logo: worldLogo,        logoHeight: 20 },
+  { tile: atlansTile,      name: "Atlans",          description: "Athletic platform\nof Discovery and\nconnection",       color: "#282328", href: "/atlans",      logo: atlansLogo,       logoHeight: 16, logoFilter: "brightness(0.157)" },
+  { tile: nousTile,        name: "Nous",            description: "Shared intelligent\nlayer",                            color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
+  { tile: freeholdTile,    name: "Freehold",        description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18, logoFilter: "brightness(0.157)" },
+  { tile: districtsTile,   name: "Districts",       description: "Virtual World\nmirroring real\nopportunities",                   color: "#3b3658", href: "/districts",   logo: districtsLogoMobile,      logoHeight: 20 },
+  { tile: tokenStudioTile, name: "Freehold Invest", description: "Real-world assets\nwith secure and\ntransparent\ntokenization", color: "#3f3d36", href: "/tokenstudio", logo: freeholdInvestLogoMobile, logoHeight: 18 },
+  { tile: relaiTile,       name: "Relai",           description: "Bitcoin-only savings\napp focused on\nsimple self-custody", color: "#282328", href: "/relai",   logoHeight: 19 },
 ];
 
 function MobileCard({ card, priority }: { card: MobileCardData; priority?: boolean }) {
@@ -551,7 +579,7 @@ function MobileCard({ card, priority }: { card: MobileCardData; priority?: boole
           <div style={{ position: "absolute", top: 32, left: 32, right: 24, display: "flex", flexDirection: "column", gap: 24 }}>
             <motion.div variants={itemVariants} style={{ height: card.logoHeight }}>
               {card.logo ? (
-                <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block" }} />
+                <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block", filter: card.logoFilter }} />
               ) : (
                 <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
                   {card.name}
@@ -672,6 +700,8 @@ function MobileHome() {
         <MobileCard card={MOBILE_CARDS[4]} />
         <div style={{ height: 10 }} />
         <MobileCard card={MOBILE_CARDS[5]} />
+        <div style={{ height: 10 }} />
+        <MobileCard card={MOBILE_CARDS[6]} />
 
         <div style={{ height: 10 }} />
         <MobileFooter />
