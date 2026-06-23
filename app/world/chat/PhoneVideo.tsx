@@ -42,6 +42,7 @@ export default function PhoneVideo({ src, bg = "#F0EBE5", radius, active = true 
           loop
           muted
           playsInline
+          preload="none"
           style={{
             position: "absolute",
             inset: 0,

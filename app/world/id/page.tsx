@@ -46,9 +46,9 @@ const data: CaseStudyData = {
       title: "Meet the Orb.\nAnd its experience.",
       body: "You know captchas. Pick the cars. Slide the puzzle piece. Find the crosswalk. Bots can do all of that now. So Tools For Humanity Design Lab built something they can't fake a camera that just looks at you. No voice. No instructions. No display. That's where the fun started.",
       media: [
-        { kind: "full", aspect: "1243 / 832", image: { src: "/assets/world-id/preflights.mp4", alt: "The Orb preflights", video: true, bg: "#F0EBE5" } },
+        { kind: "full", aspect: "1243 / 832", image: { src: "/assets/world-id/preflights.e0b82ac7.mp4", alt: "The Orb preflights", video: true, bg: "#F0EBE5" } },
         { kind: "duo", aspect: "615 / 612", images: [
-          { src: "/assets/world-id/Post_verification.mp4", alt: "Post verification flow", video: true, bg: "#F0EBE5" },
+          { src: "/assets/world-id/Post_verification.0dd44eb6.mp4", alt: "Post verification flow", video: true, bg: "#F0EBE5" },
           { src: s2b, alt: "The Orb experience", bg: "#F0EBE5" },
         ] },
       ],
@@ -59,7 +59,7 @@ const data: CaseStudyData = {
       media: [
         { kind: "full", aspect: "1243 / 832", image: { src: s3a, alt: "World ID credential", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "615 / 612", images: [
-          { src: "/assets/world-id/Passport.mp4", alt: "World ID passport", video: true, bg: "#F0EBE5" },
+          { src: "/assets/world-id/Passport.c97f4c7b.mp4", alt: "World ID passport", video: true, bg: "#F0EBE5" },
           { src: "/assets/world-id/WorldID_Card_Rotiation.mp4", alt: "World ID card rotation", video: true, bg: "#F0EBE5" },
         ] },
       ],

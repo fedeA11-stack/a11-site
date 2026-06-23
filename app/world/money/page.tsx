@@ -78,7 +78,7 @@ const data: CaseStudyData = {
           { src: s2b, alt: "World Money transaction detail", bg: BG },
           { src: "/assets/world-money/WorldMoneyP2P_1.mp4", alt: "World Money P2P payment", video: true, bg: BG },
         ] },
-        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF4.mp4", alt: "World Money invest overview", video: true, bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF4.fa79e18a.mp4", alt: "World Money invest overview", video: true, bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [
           { src: s2d, alt: "World Money activity history", bg: BG },
           { src: s2e, alt: "World Money confirmation", bg: BG },
@@ -102,7 +102,7 @@ const data: CaseStudyData = {
       title: "Helping users\nunderstand the value",
       body: "Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value.",
       media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF5.mp4", alt: "World Money grants intro", video: true, bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF5.0fe9dda2.mp4", alt: "World Money grants intro", video: true, bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4b, alt: "World Money claim flow", bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4c, alt: "World Money grant visual metaphor", bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [

@@ -149,7 +149,7 @@ function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string;
       <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: image.bg ?? BEIGE, aspectRatio: aspect, width: "100%" }}>
         {image.video && image.src ? (
            
-          <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline preload="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         ) : image.icon === "lock" ? (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "clamp(56px, 7vw, 96px)", aspectRatio: "1", borderRadius: "50%", background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
