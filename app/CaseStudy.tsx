@@ -173,7 +173,7 @@ function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string;
 // ─────────────────────────────────────────────────────────────────────────────
 function MediaBlock({ media }: { media: CSMedia }) {
   if (media.kind === "full") {
-    return <Cell image={media.image} aspect={media.aspect ?? "1241 / 760"} sizes="100vw" />;
+    return <Cell image={media.image} aspect={media.aspect ?? "1241 / 760"} sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw" />;
   }
 
   if (media.kind === "duo") {
@@ -181,7 +181,7 @@ function MediaBlock({ media }: { media: CSMedia }) {
     return (
       <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: cols, gap: CELL_GAP, alignItems: "start" }}>
         {media.images.map((img, i) => (
-          <Cell key={i} image={img} aspect={media.aspects?.[i] ?? media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
+          <Cell key={i} image={img} aspect={media.aspects?.[i] ?? media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" />
         ))}
       </div>
     );
@@ -189,11 +189,11 @@ function MediaBlock({ media }: { media: CSMedia }) {
 
   // tallDuo — tall tile + two stacked tiles. stackFirst swaps column order.
   const cols = media.columns ?? "1fr 1fr";
-  const tallCol = <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />;
+  const tallCol = <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" phone={media.tall.video} />;
   const stackCol = (
     <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
       {media.stack.map((img, i) => (
-        <Cell key={i} image={img} aspect={media.stackAspects?.[i] ?? media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, 50vw" />
+        <Cell key={i} image={img} aspect={media.stackAspects?.[i] ?? media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" />
       ))}
     </div>
   );

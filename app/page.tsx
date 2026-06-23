@@ -306,7 +306,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         <CoverImage
           src={project.image}
           alt={project.name}
-          sizes="100vw"
+          sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
           priority={priority}
         />
       ) : (
@@ -314,7 +314,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           <CoverImage
             src={project.image}
             alt={project.name}
-            sizes="100vw"
+            sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
             priority={priority}
           />
         </ImageReveal>
