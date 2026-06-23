@@ -10,9 +10,11 @@ import { useState, useEffect } from "react";
 export default function PageEnter({
   children,
   style,
+  className,
 }: {
   children: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
 }) {
   const [entered, setEntered] = useState(false);
 
@@ -23,6 +25,7 @@ export default function PageEnter({
 
   return (
     <div
+      className={className}
       style={{
         opacity: entered ? 1 : 0,
         filter: entered ? "blur(0px)" : "blur(10px)",

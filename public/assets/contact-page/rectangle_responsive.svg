@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="711" height="373" viewBox="0 0 711 373" fill="none">
+  <!--
+    Figma node 263:12206 — mobile contact page decorative card.
+    711×373px, fill rgba(255,255,255,0.05), cornerRadius=10.
+    On mobile (393px frame) this is placed so only ~10px of the left edge shows
+    at the right side of the screen — the remaining shape extends off-screen right.
+    Left-side corners rounded to match Figma cornerRadius:10 (only those are visible).
+    Right-side path matches the Figma vector with top-right diagonal cut and
+    bottom-right notch (off-screen on mobile but correct for wider uses).
+  -->
+  <path
+    d="M 10 0
+       L 534 0
+       L 641.13 0
+       L 711 49.64
+       L 711 93.25
+       L 711 186.5
+       L 698 221.99
+       L 698 363
+       Q 698 373 688 373
+       L 566.95 373
+       L 534 373
+       L 10 373
+       Q 0 373 0 363
+       L 0 10
+       Q 0 0 10 0
+       Z"
+    fill="rgba(255,255,255,0.05)"
+  />
+</svg>
