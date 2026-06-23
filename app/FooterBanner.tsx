@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+
+const MotionLink = motion.create(Link);
 import { Reveal, itemVariants } from "./Reveal";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
@@ -77,9 +80,9 @@ export default function FooterBanner() {
         </motion.p>
 
         {/* "We should talk." — underlined CTA */}
-        <motion.a
+        <MotionLink
           variants={itemVariants}
-          href="mailto:hello@a11studio.com"
+          href="/contact"
           className="fb-cta"
           style={{
             position:      "absolute",
@@ -101,7 +104,7 @@ export default function FooterBanner() {
           onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
         >
           We should talk.
-        </motion.a>
+        </MotionLink>
       </motion.section>
 
       {/*
