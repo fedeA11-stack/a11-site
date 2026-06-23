@@ -133,9 +133,9 @@ function WorldCard({ card, index, priority }: { card: CaseCard; index: number; p
 
       {/* Label — title (INK) + subtitle (muted) */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 16 }}>
-        <span style={{ fontFamily: "var(--font-system), sans-serif", fontWeight: 500, fontSize: 16, lineHeight: 1.2, letterSpacing: "-0.02em", color: INK }}>
+        <h2 style={{ margin: 0, fontFamily: "var(--font-system), sans-serif", fontWeight: 500, fontSize: 16, lineHeight: 1.2, letterSpacing: "-0.02em", color: INK }}>
           {card.title}
-        </span>
+        </h2>
         <span style={{ fontFamily: "var(--font-system), sans-serif", fontWeight: 400, fontSize: 14, lineHeight: 1.2, color: MUTED }}>
           {card.sub}
         </span>

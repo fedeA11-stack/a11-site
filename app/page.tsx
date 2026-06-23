@@ -338,7 +338,9 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
       >
         <span>{project.num}</span>
         <Chevron color={c} />
-        <span>{project.name}</span>
+        {/* Project name is the card's heading. font:inherit keeps the label row's
+            sizing/weight so promoting span→h2 changes the outline, not the look. */}
+        <h2 style={{ margin: 0, font: "inherit", letterSpacing: "inherit" }}>{project.name}</h2>
       </div>
 
       <p
@@ -578,11 +580,14 @@ function MobileCard({ card, priority }: { card: MobileCardData; priority?: boole
 
           {/* Brand mark + description, overlaid at (32, 32) — matches Figma. */}
           <div style={{ position: "absolute", top: 32, left: 32, right: 24, display: "flex", flexDirection: "column", gap: 24 }}>
+            {/* Heading for the outline. The brand mark is a decorative logo (alt="")
+                or a visual-only wordmark, so the accessible title lives here. */}
+            <h2 className="sr-only">{card.name}</h2>
             <motion.div variants={itemVariants} style={{ height: card.logoHeight }}>
               {card.logo ? (
                 <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block", filter: card.logoFilter }} />
               ) : (
-                <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
+                <span aria-hidden style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
                   {card.name}
                 </span>
               )}
