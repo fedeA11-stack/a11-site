@@ -204,9 +204,9 @@ export default function ManifestoPage() {
                 maxWidth: "calc(100% - 32px)",
               }}
             >
-              Design Got Lazy.
+              Design got lazy.
               <br />
-              We Didn&apos;t.
+              We didn&apos;t.
             </h1>
           </div>
 
@@ -240,20 +240,18 @@ export default function ManifestoPage() {
               <p style={{ margin: "0 0 40px" }}>
                 Design is deciding what a product should do, and what it should
                 refuse to do. These decisions do not have templates. They require
-                people who care enough to keep asking. We&rsquo;re nine people who
-                care a lot.
+                people who care enough to keep asking. We care a lot.
               </p>
 
               <p style={{ margin: "0 0 40px" }}>
                 Hundreds of millions of people are interacting with our designs
                 every day, and yet they do not notice the design. That is the
                 goal. Because the best products feel inevitable. You only notice
-                them when they are gone. That&rsquo;s how we&rsquo;ve built the
-                World from zero.
+                them when they are gone.
               </p>
 
               <p style={{ margin: "0 0 40px" }}>
-                We are not for everyone. Nine people cannot be. We take limited
+                We are not for everyone. Ten people cannot be. We take limited
                 number of projects at a time and give each one the full attention
                 of a team that has nowhere else to be. We move fast. Not because
                 we skip the thinking, but because clarity is what makes us fast.
