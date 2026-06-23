@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Reveal, itemVariants } from "./Reveal";
+import { SOCIAL_LINKS } from "./socialLinks";
 
 // ── Design tokens (Figma "Footer" — node 364:77140) ───────────────────────────
 const FONT = "var(--font-system), sans-serif";
@@ -17,11 +18,6 @@ const NAV: FooterLink[] = [
   { label: "Works",   href: "/"        },
   { label: "Studio",  href: "/studio"  },
   { label: "Contact", href: "/contact" },
-];
-const SOCIAL: FooterLink[] = [
-  { label: "Twitter",  href: "#" },
-  { label: "Cosmos",   href: "#" },
-  { label: "Linkedin", href: "#" },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -139,7 +135,7 @@ export default function FooterBanner() {
 
             {/* Column 2 — social */}
             <ul className="fbn-col">
-              {SOCIAL.map(({ label, href }) => (
+              {SOCIAL_LINKS.map(({ label, href }) => (
                 <li key={label}>
                   <a href={href}>{label}</a>
                 </li>

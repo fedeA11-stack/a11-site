@@ -3,6 +3,7 @@ import NavMenu from "../NavMenu";
 import PageEnter from "../PageEnter";
 import ContactForm from "./ContactForm";
 import CopyEmail from "./CopyEmail";
+import { SOCIAL_LINKS } from "../socialLinks";
 
 export const metadata: Metadata = {
   title: "Let's Talk",
@@ -23,12 +24,6 @@ export const metadata: Metadata = {
 
 const BG = "#302424";
 const FONT = "var(--font-system), sans-serif";
-
-const SOCIALS = [
-  { label: "X(Twitter)", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Medium", href: "#" },
-];
 
 export default function ContactPage() {
   return (
@@ -112,7 +107,7 @@ export default function ContactPage() {
               className="hidden md:flex gap-6 md:absolute md:left-0"
               style={{ bottom: "clamp(20px, 3.80vh, 41px)" }}
             >
-              {SOCIALS.map(({ label, href }) => (
+              {SOCIAL_LINKS.map(({ label, href }) => (
                 <a
                   key={label}
                   href={href}

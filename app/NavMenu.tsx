@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { SOCIAL_LINKS } from "./socialLinks";
 
 // ── Design tokens (from Figma "Navigation" frame 221:24055) ──────────────────────
 const FONT = "var(--font-system), sans-serif";
@@ -18,12 +19,6 @@ const NAV_LINKS = [
   { label: "Work",       href: "/"       },
   { label: "Studio",     href: "/studio" },
   // Manifesto lives as the Studio-page CTA, not a nav link.
-];
-
-const SOCIAL_LINKS = [
-  { label: "Twitter/X", href: "#" },
-  { label: "Cosmos",    href: "#" },
-  { label: "LinkedIn",  href: "#" },
 ];
 
 // A breadcrumb trail rendered in place of the centered nav links (used by the
