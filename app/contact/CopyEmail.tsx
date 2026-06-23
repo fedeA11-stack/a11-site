@@ -18,10 +18,12 @@ export default function CopyEmail({ email, fontFamily }: { email: string; fontFa
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [mounted, setMounted] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  // No "mounted" guard needed: the portal below is gated on `hovered`, which can
+  // only become true via onMouseEnter (client-only, post-hydration). So SSR and
+  // first client render both produce null — no hydration mismatch, no portal on
+  // the server where document.body doesn't exist.
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -46,7 +48,7 @@ export default function CopyEmail({ email, fontFamily }: { email: string; fontFa
     }
   }, [email]);
 
-  const label = mounted && hovered ? createPortal(
+  const label = hovered ? createPortal(
     <span
       aria-hidden
       style={{

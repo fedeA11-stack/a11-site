@@ -39,7 +39,6 @@ import districtLogo from "../public/assets/districts-logo.svg";
 import freeholdLogo from "../public/assets/tokenstudio-logo.svg";
 import atlansLogo from "../public/assets/atlans-logo.svg";
 import PageEnter from "./PageEnter";
-import WordReveal from "./WordReveal";
 
 // Mobile-only card tiles — portrait (373×490) compositions exported from the
 // Figma mobile frame (panel + device mockup, with text/logo layers hidden so we
@@ -260,7 +259,7 @@ function cqMid(px: number): string {
   return `clamp(${px}px, ${((px / CARD_DESIGN_W) * 100).toFixed(4)}cqw, ${(px * CARD_MAX_SCALE).toFixed(2)}px)`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 function Chevron({ color }: { color: string }) {
   // Inline so the slash stroke inherits the card's label color (the static
   // slash.svg was fixed dark — invisible on the white-text cards).

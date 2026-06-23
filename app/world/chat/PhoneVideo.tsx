@@ -35,7 +35,7 @@ export default function PhoneVideo({ src, bg = "#F0EBE5", radius, active = true 
           overflow: "hidden",
         }}
       >
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        { }
         <video
           src={active ? src : undefined}
           autoPlay

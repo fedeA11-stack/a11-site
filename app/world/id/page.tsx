@@ -4,11 +4,8 @@ import { ALL_PROJECTS } from "../../caseProjects";
 
 import hero from "../../../public/assets/world-id/wid-hero.jpg";
 import ajayAvatar from "../../../public/assets/world-id/Ajay.jpg";
-import s2a from "../../../public/assets/world-id/wid-2-1.jpg";
 import s2b from "../../../public/assets/world-id/wid-2-2.jpg";
 import s3a from "../../../public/assets/world-id/wid-3-1.jpg";
-import s3b from "../../../public/assets/world-id/wid-3-2.jpg";
-import s3c from "../../../public/assets/world-id/wid-3-3.jpg";
 import s4a from "../../../public/assets/world-id/wid-4-1.jpg";
 import s4tall from "../../../public/assets/world-id/wid-4-2.jpg";
 import s4s1 from "../../../public/assets/world-id/wid-4-3.jpg";

@@ -3,14 +3,13 @@
 import React from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import PhoneVideo from "./world/chat/PhoneVideo";
-import WordReveal from "./WordReveal";
 import { caseStudyJsonLd } from "./seo";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -149,7 +148,7 @@ function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string;
     <motion.div ref={ref} variants={tileVariants} initial="hidden" animate={inView ? "visible" : "hidden"} transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}>
       <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: image.bg ?? BEIGE, aspectRatio: aspect, width: "100%" }}>
         {image.video && image.src ? (
-          // eslint-disable-next-line jsx-a11y/media-has-caption
+           
           <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         ) : image.icon === "lock" ? (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -211,7 +210,10 @@ function MediaBlock({ media }: { media: CSMedia }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState("0");
+  // Parse "45M+" → ["45", "M+"] once. Non-numeric values render verbatim (below)
+  // and skip the count-up entirely, so they never need a setState.
+  const parsed = useMemo(() => value.match(/^([\d.]+)(.*)$/), [value]);
+  const [animated, setAnimated] = useState("0");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -226,12 +228,9 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
   }, []);
 
   useEffect(() => {
-    if (!visible) return;
-    // Parse number + suffix: "45M+" → [45, "M+"], "2M+" → [2, "M+"]
-    const match = value.match(/^([\d.]+)(.*)$/);
-    if (!match) { setDisplay(value); return; }
-    const target = parseFloat(match[1]);
-    const suffix = match[2];
+    if (!visible || !parsed) return;
+    const target = parseFloat(parsed[1]);
+    const suffix = parsed[2];
     const duration = 1200;
     const start = performance.now() + delay;
     let raf: number;
@@ -239,12 +238,15 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
       const t = Math.max(0, Math.min(1, (now - start) / duration));
       const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
       const current = Math.round(eased * target);
-      setDisplay(`${current}${suffix}`);
+      setAnimated(`${current}${suffix}`);
       if (t < 1) raf = requestAnimationFrame(tick);
     }
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [visible, value, delay]);
+  }, [visible, parsed, delay]);
+
+  // Numeric stats animate (count up from 0); non-numeric values render as-is.
+  const display = parsed ? animated : value;
 
   return (
     <span
@@ -376,7 +378,9 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
   const targetY      = useRef(0);
   const targetX      = useRef(0);
   const rafRef       = useRef<number | null>(null);
-  const lastIndex    = useRef(0);
+  // Last hovered row — drives which preview shows during the fade-out after the
+  // pointer leaves. It affects rendered output, so it must be state, not a ref.
+  const [lastIndex, setLastIndex] = useState(0);
   const rowRefs      = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -395,7 +399,7 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
   }, []);
 
   function onRowEnter(i: number) {
-    lastIndex.current = i;
+    setLastIndex(i);
     setHovered(i);
     const container = containerRef.current;
     const row = rowRefs.current[i];
@@ -417,7 +421,7 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
     targetX.current = nx * 40;
     // Y nudge is additive on top of the row-snap target — update targetY directly
     const container = containerRef.current;
-    const row = rowRefs.current[lastIndex.current];
+    const row = rowRefs.current[lastIndex];
     if (container && row) {
       const cRect = container.getBoundingClientRect();
       const rRect = row.getBoundingClientRect();
@@ -429,7 +433,7 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
   }
 
   const active = hovered !== null && !!shown[hovered]?.preview;
-  const displayIndex = hovered ?? lastIndex.current;
+  const displayIndex = hovered ?? lastIndex;
   const preview = shown[displayIndex]?.preview;
 
   return (
@@ -471,7 +475,6 @@ function AllProjects({ projects }: { projects: CSProject[] }) {
           // bottom line becomes 2px solid black, the rest fade to muted (#989190)
           // with faint 1px rgba(0,0,0,0.1) lines. Dividers sit between rows only.
           const dimmed = hovered !== null && hovered !== i;
-          const isLast = i === shown.length - 1;
           // Bottom line of row i turns dark when row i OR row i+1 is hovered
           const lineActive = hovered === i || hovered === i + 1;
           const border = `1px solid ${lineActive ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.1)"}`;

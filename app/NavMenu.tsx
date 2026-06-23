@@ -190,8 +190,15 @@ export default function NavMenu({ breadcrumb, theme }: { breadcrumb?: Crumb[]; t
     return () => { document.body.style.overflow = prev; };
   }, [menuOpen]);
 
-  // Close the overlay on route change.
-  useEffect(() => { setMenuOpen(false); }, [pathname]);
+  // Close the overlay on route change. Deriving this during render (the React
+  // "adjust state while rendering" pattern) avoids the extra render pass that
+  // set-state-in-effect causes, and covers every navigation cause — link click,
+  // back button, programmatic — not just clicks.
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    if (menuOpen) setMenuOpen(false);
+  }
 
   if (breadcrumb) return <BreadcrumbNav breadcrumb={breadcrumb} />;
 

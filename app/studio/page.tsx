@@ -3,7 +3,6 @@ import Image from "next/image";
 import NavMenu from "../NavMenu";
 import FooterBanner from "../FooterBanner";
 import PageEnter from "../PageEnter";
-import WordReveal from "../WordReveal";
 import CoverImage from "../CoverImage";
 import CtaButton from "../CtaButton";
 

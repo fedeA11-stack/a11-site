@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import NavMenu from "../NavMenu";
 import PageEnter from "../PageEnter";
 import FooterBanner from "../FooterBanner";
-import WordReveal from "../WordReveal";
 
 const FONT = "var(--font-system), sans-serif";
 
