@@ -640,7 +640,7 @@ function MobileHome() {
             maxWidth: 353, marginInline: "auto", textWrap: "balance",
           }}
         >
-          We are A11. Product Studio Built on Passion and Craft.
+          We are A11.<br />Product Studio Built on Passion and Craft.
         </h1>
       </section>
 
