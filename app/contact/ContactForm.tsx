@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, useRef, useActionState } from "react";
+import { sendContactEmail, type ContactState } from "./actions";
 
 const FONT = "var(--font-system), sans-serif";
 
@@ -10,34 +11,43 @@ const SOCIALS = [
   { label: "Medium", href: "#" },
 ];
 
-// ── Individual field with blur validation ─────────────────────────────────────
+const initialState: ContactState = { status: "idle" };
+
+// ── Individual field ──────────────────────────────────────────────────────────
+// Border color is NOT set inline — it lives in the page's <style> block so the
+// :focus rule (white line) can take effect. Inline styles beat stylesheets, so
+// setting borderBottom here would silently defeat :focus. Error state is driven
+// by the `field-error` class on the wrapper instead (red line, !important).
 function FormField({
   label,
+  name,
   placeholder,
   type = "text",
   multiline = false,
   required = true,
   className,
+  serverError,
+  onValueChange,
 }: {
   label: string;
+  name: string;
   placeholder: string;
   type?: string;
   multiline?: boolean;
   required?: boolean;
   className?: string;
+  serverError?: string;
+  onValueChange?: (name: string) => void;
 }) {
   const [value, setValue] = useState("");
   const [touched, setTouched] = useState(false);
-  const hasError = required && touched && value.trim() === "";
 
-  const borderColor = hasError
-    ? "rgba(255, 80, 80, 0.85)"
-    : "rgba(255,255,255,0.2)";
+  const clientError = required && touched && value.trim() === "";
+  const errorMsg = serverError ?? (clientError ? "This field is required" : "");
+  const hasError = errorMsg !== "";
 
   const baseStyle: React.CSSProperties = {
     background: "transparent",
-    border: "none",
-    borderBottom: `1px solid ${borderColor}`,
     color: "#ffffff",
     fontFamily: FONT,
     fontWeight: 400,
@@ -48,11 +58,16 @@ function FormField({
     padding: "0 0 8px",
     outline: "none",
     display: "block",
-    transition: "border-color 0.18s ease",
+  };
+
+  const handleChange = (next: string) => {
+    setValue(next);
+    // Clear a stale server-side error as soon as the user edits the field.
+    if (serverError) onValueChange?.(name);
   };
 
   return (
-    <div className={className}>
+    <div className={`${className ?? ""} ${hasError ? "field-error" : ""}`.trim()}>
       <label
         style={{
           display: "block",
@@ -71,29 +86,26 @@ function FormField({
 
       {multiline ? (
         <textarea
+          name={name}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setTouched(true)}
-          style={{
-            ...baseStyle,
-            resize: "none",
-            height: 89,
-            overflowY: "auto",
-          }}
+          style={{ ...baseStyle, resize: "none", height: 89, overflowY: "auto" }}
         />
       ) : (
         <input
           type={type}
+          name={name}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setTouched(true)}
           style={baseStyle}
         />
       )}
 
-      {/* Error message — only shown after blur on empty required field */}
+      {/* Error message — client (blur on empty) or server (returned from action) */}
       <span
         aria-live="polite"
         style={{
@@ -109,18 +121,19 @@ function FormField({
           pointerEvents: "none",
         }}
       >
-        {hasError ? "This field is required" : ""}
+        {errorMsg}
       </span>
     </div>
   );
 }
 
 // ── Send button ───────────────────────────────────────────────────────────────
-function SendButton() {
+function SendButton({ pending }: { pending: boolean }) {
   return (
     <button
       type="submit"
-      className="hover:opacity-90 active:scale-95 transition-[opacity,scale] duration-150"
+      disabled={pending}
+      className="hover:opacity-90 active:scale-95 transition-[opacity,scale] duration-150 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
       style={{
         position: "relative",
         display: "inline-flex",
@@ -137,12 +150,12 @@ function SendButton() {
         lineHeight: 0.95,
         letterSpacing: "-0.3px",
         color: "#282328",
-        cursor: "pointer",
+        cursor: pending ? "not-allowed" : "pointer",
         whiteSpace: "nowrap",
         textTransform: "capitalize",
       }}
     >
-      Send message
+      {pending ? "Sending…" : "Send message"}
       <span
         aria-hidden
         style={{
@@ -161,38 +174,141 @@ function SendButton() {
 }
 
 // ── Full contact form ─────────────────────────────────────────────────────────
+//
+//   submit ──► sendContactEmail (Server Action)
+//                ├─ honeypot / time-trap  → silent ok (bot)
+//                ├─ validate              → state.fieldErrors (red lines)
+//                └─ Resend send           → ok / state.message (fallback)
+//
+// On success the form is remounted (key bump) to clear all fields, and a
+// confirmation replaces the inline error region.
 export default function ContactForm() {
+  const [state, formAction, pending] = useActionState(sendContactEmail, initialState);
+
+  // Fields the user has edited since the last submit — used to clear stale
+  // server errors so a corrected field stops showing red immediately.
+  const [clearedFields, setClearedFields] = useState<Set<string>>(new Set());
+
+  // Bump on success to remount FormFields and reset their internal state.
+  const [formKey, setFormKey] = useState(0);
+
+  // Detect the transition into a successful submit during render — the
+  // React-endorsed "adjust state when something changes between renders"
+  // pattern (https://react.dev/learn/you-might-not-need-an-effect). Runs once
+  // per transition thanks to the prevStatus guard, so it converges.
+  const [prevStatus, setPrevStatus] = useState<ContactState["status"]>("idle");
+  if (state.status !== prevStatus) {
+    setPrevStatus(state.status);
+    if (state.status === "ok") {
+      setFormKey((k) => k + 1);
+      setClearedFields(new Set());
+    }
+  }
+
+  // A fresh submission invalidates stale server errors (handled in the event,
+  // not an effect).
+  const handleAction = (formData: FormData) => {
+    setClearedFields(new Set());
+    return formAction(formData);
+  };
+
+  const fieldError = (name: keyof NonNullable<ContactState["fieldErrors"]>) =>
+    clearedFields.has(name) ? undefined : state.fieldErrors?.[name];
+
+  const clearField = (name: string) =>
+    setClearedFields((prev) => new Set(prev).add(name));
+
   return (
     <>
-      {/* Form — right column, visible on all breakpoints */}
       <form
+        key={formKey}
         className="contact-form w-full mt-8 md:mt-9"
-        onSubmit={(e: FormEvent) => e.preventDefault()}
+        action={handleAction}
       >
-        {/* Row 1: Name + Email — stacked on mobile, side-by-side on desktop */}
+        {/* Honeypot — hidden from humans, irresistible to bots. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            width: 1,
+            height: 1,
+            overflow: "hidden",
+          }}
+        >
+          <label>
+            Leave this field empty
+            <input
+              type="text"
+              name="_gotcha"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </label>
+        </div>
+
+        {/* Time-trap — set on mount; submits faster than MIN_SUBMIT_MS are bots. */}
+        <TimestampField />
+
+        {/* Row 1: Name + Email */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-[clamp(20px,2.65vw,40px)] mb-8 md:mb-[clamp(28px,3.44vw,52px)]">
           <FormField
             label="Name*"
+            name="name"
             placeholder="Enter your name"
             className="w-full md:flex-1"
+            serverError={fieldError("name")}
+            onValueChange={clearField}
           />
           <FormField
-            label="Email"
+            label="Email*"
+            name="email"
             placeholder="Enter your email"
             type="email"
             className="w-full md:flex-1"
+            serverError={fieldError("email")}
+            onValueChange={clearField}
           />
         </div>
 
         {/* Message */}
         <FormField
           label="Message*"
+          name="message"
           placeholder="Type your message"
           multiline
           className="mb-8 md:mb-[clamp(28px,3.44vw,52px)]"
+          serverError={fieldError("message")}
+          onValueChange={clearField}
         />
 
-        <SendButton />
+        <div className="flex items-center gap-4 flex-wrap">
+          <SendButton pending={pending} />
+
+          {/* Form-level status — success or send/config failure */}
+          <span
+            aria-live="polite"
+            role="status"
+            style={{
+              fontFamily: FONT,
+              fontWeight: 400,
+              fontSize: 13,
+              lineHeight: 1.4,
+              color:
+                state.status === "ok"
+                  ? "#8ec5e6"
+                  : state.status === "error" && state.message
+                    ? "rgba(255, 80, 80, 0.85)"
+                    : "transparent",
+            }}
+          >
+            {state.status === "ok"
+              ? "Message sent — we'll be in touch."
+              : state.status === "error" && state.message
+                ? state.message
+                : ""}
+          </span>
+        </div>
       </form>
 
       {/* Social — mobile only, rendered after form */}
@@ -216,4 +332,16 @@ export default function ContactForm() {
       </div>
     </>
   );
+}
+
+// Hidden timestamp set after mount. Rendered empty on the server and on first
+// client render (no hydration mismatch); the mount time is written directly to
+// the DOM node in an effect (updating an external system, not React state). A
+// missing value fails open server-side, so a real user is never blocked.
+function TimestampField() {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (ref.current) ref.current.value = String(Date.now());
+  }, []);
+  return <input type="hidden" name="_ts" ref={ref} defaultValue="" />;
 }

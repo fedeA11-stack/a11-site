@@ -26,7 +26,18 @@ export default function ContactPage() {
       body { overflow-x: hidden; background: ${BG}; }
       .contact-form input::placeholder,
       .contact-form textarea::placeholder { color: rgba(255,255,255,0.35); }
-      .contact-form input, .contact-form textarea { caret-color: #ffffff; }
+      .contact-form input, .contact-form textarea {
+        caret-color: #ffffff;
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        transition: border-color 0.18s ease;
+      }
+      /* Focused field: line turns white. */
+      .contact-form input:focus,
+      .contact-form textarea:focus { border-bottom-color: #ffffff; }
+      /* Error wins over focus — keep the red cue visible while the user edits. */
+      .contact-form .field-error input,
+      .contact-form .field-error textarea { border-bottom-color: rgba(255,80,80,0.85) !important; }
     `}</style>
 
     <div className="relative w-full flex flex-col bg-[#302424] min-h-screen overflow-x-hidden md:h-screen md:overflow-hidden">
