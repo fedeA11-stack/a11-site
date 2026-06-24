@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { type StaticImageData } from "next/image";
-import { useEffect, useRef } from "react";
 import CoverImage from "../CoverImage";
 
 // Default-state lifestyle photos — exported from Figma (004_World, 2× / 1232×760).
@@ -46,59 +45,15 @@ const CARDS: CaseCard[] = [
 // ── Card ─────────────────────────────────────────────────────────────────────
 function WorldCard({ card, index, priority }: { card: CaseCard; index: number; priority?: boolean }) {
   const clipId = `wcs-notch-${index}`;
-  const tileRef = useRef<HTMLAnchorElement>(null);
-  const pillRef = useRef<HTMLDivElement>(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 0, y: 0 });
-  const raf = useRef<number | null>(null);
-  const reduced = useRef(false);
-
-  // Cursor-following "View project" pill: a lerped trail toward the pointer,
-  // matching the easing of the All-projects hover preview elsewhere on the site.
-  useEffect(() => {
-    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    return () => { if (raf.current !== null) cancelAnimationFrame(raf.current); };
-  }, []);
-
-  function place(x: number, y: number) {
-    if (pillRef.current) pillRef.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-  }
-  function loop() {
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    const t = reduced.current ? 1 : 0.2; // no trailing motion under reduced-motion
-    pos.current.x = lerp(pos.current.x, target.current.x, t);
-    pos.current.y = lerp(pos.current.y, target.current.y, t);
-    place(pos.current.x, pos.current.y);
-    raf.current = requestAnimationFrame(loop);
-  }
-  function onEnter(e: React.MouseEvent) {
-    const r = tileRef.current?.getBoundingClientRect();
-    if (!r) return;
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    pos.current = { x, y };
-    target.current = { x, y };
-    place(x, y); // snap on entry — no fly-in from the corner
-    if (raf.current === null) raf.current = requestAnimationFrame(loop);
-  }
-  function onMove(e: React.MouseEvent) {
-    const r = tileRef.current?.getBoundingClientRect();
-    if (!r) return;
-    target.current = { x: e.clientX - r.left, y: e.clientY - r.top };
-  }
-  function onLeave() {
-    if (raf.current !== null) { cancelAnimationFrame(raf.current); raf.current = null; }
-  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Link
-        ref={tileRef}
         href={card.href}
         aria-label={`${card.title}, ${card.sub}`}
         className="wcs-tile"
-        onMouseEnter={onEnter}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
+        data-cursor="View project"
+        data-cursor-dark=""
         style={{ display: "block", position: "relative", width: "100%", aspectRatio: "616 / 380" }}
       >
         {/* Per-card clip definition — `d` morphs on :hover (see <style> in parent). */}
@@ -119,15 +74,6 @@ function WorldCard({ card, index, priority }: { card: CaseCard; index: number; p
         <div className="wcs-badge">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={card.icon} alt="" aria-hidden style={{ width: `${card.iconScale * 100}%`, height: `${card.iconScale * 100}%`, display: "block" }} />
-        </div>
-
-        {/* Cursor-following View project pill */}
-        <div ref={pillRef} className="wcs-pill" aria-hidden>
-          <span>View project</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <path d="M3.71997 12.3822L12.3182 3.72882" stroke="currentColor" strokeWidth="1.33333" strokeMiterlimit="10" />
-            <path d="M4.63403 3.74219L12.3352 3.74527L12.3444 11.3903" stroke="currentColor" strokeWidth="1.33333" strokeMiterlimit="10" />
-          </svg>
         </div>
       </Link>
 
@@ -163,30 +109,17 @@ export default function WorldCards() {
 
         .wcs-clip-path { transition: d 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
 
-        .wcs-pill {
-          position: absolute; top: 0; left: 0;
-          display: flex; align-items: center; gap: 4px;
-          padding: 6px 14px;
-          border-radius: 999px;
-          background: #282328; color: #ffffff;
-          font-family: var(--font-system), sans-serif;
-          font-weight: 400; font-size: 14px; line-height: 1; white-space: nowrap;
-          pointer-events: none;
-          opacity: 0; scale: 0.85;
-          transition: opacity 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), scale 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
-          will-change: transform;
-          z-index: 2;
-        }
+        /* The "View project" pill is provided by the global cursor (Cursor.tsx)
+           via data-cursor on the tile — no per-card pill here, so the two cursor
+           layers can't overlap. */
 
         /* Hover affordances only on real pointer devices */
         @media (hover: hover) and (pointer: fine) {
-          .wcs-tile { cursor: none; }
           .wcs-tile:hover .wcs-clip-path { d: path("${NOTCH_HOVER}"); }
-          .wcs-tile:hover .wcs-pill { opacity: 1; scale: 1; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .wcs-clip-path, .wcs-pill { transition: none; }
+          .wcs-clip-path { transition: none; }
         }
       `}</style>
 
