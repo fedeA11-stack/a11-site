@@ -25,6 +25,12 @@ export const metadata: Metadata = {
 const BG = "#302424";
 const FONT = "var(--font-system), sans-serif";
 
+const SOCIALS = [
+  { label: "X(Twitter)", href: "https://x.com/a11studiox" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/a11studio/posts/?feedView=all" },
+  { label: "Cosmos", href: "#" },
+];
+
 export default function ContactPage() {
   return (
     <>
@@ -78,23 +84,23 @@ export default function ContactPage() {
               className="not-italic mt-14 md:mt-[clamp(48px,6.35vw,96px)]"
             >
               {/* Worldwide presence copy */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <p
                   className="font-normal leading-[1.4] m-0 text-[20px]"
                   style={{ fontFamily: FONT, color: "rgba(255,255,255,0.5)" }}
                 >
-                  We work worldwide, with people across:
+                  Global product studio.
                 </p>
                 <p
                   className="text-white font-normal leading-[1.4] m-0 text-[20px]"
                   style={{ fontFamily: FONT }}
                 >
-                  San Francisco · Munich · Barcelona ·<span className="md:hidden whitespace-nowrap"> Dubai · Italy</span><span className="hidden md:inline"> Dubai ·<br /> Italy</span> · Czech Republic · Slovakia
+                  San Francisco · Barcelona · Dubai
                 </p>
               </div>
 
               {/* Email */}
-              <p className="font-normal leading-[1.4] mt-10 md:mt-16 text-[20px] m-0">
+              <p className="font-normal leading-[1.4] mt-10 text-[20px] m-0">
                 <CopyEmail email="hello@a11.studio" fontFamily={FONT} />
               </p>
             </address>

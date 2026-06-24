@@ -6,7 +6,11 @@ import { SOCIAL_LINKS } from "../socialLinks";
 
 const FONT = "var(--font-system), sans-serif";
 
-const initialState: ContactState = { status: "idle" };
+const SOCIALS = [
+  { label: "X(Twitter)", href: "https://x.com/a11studiox" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/a11studio/posts/?feedView=all" },
+  { label: "Cosmos", href: "#" },
+];
 
 // ── Individual field ──────────────────────────────────────────────────────────
 // Border color is NOT set inline — it lives in the page's <style> block so the
