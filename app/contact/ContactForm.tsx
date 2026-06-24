@@ -5,9 +5,9 @@ import { useState, FormEvent } from "react";
 const FONT = "var(--font-system), sans-serif";
 
 const SOCIALS = [
-  { label: "X(Twitter)", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Medium", href: "#" },
+  { label: "X(Twitter)", href: "https://x.com/a11studiox" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/a11studio/posts/?feedView=all" },
+  { label: "Cosmos", href: "#" },
 ];
 
 // ── Individual field with blur validation ─────────────────────────────────────

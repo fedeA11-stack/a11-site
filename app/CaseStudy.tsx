@@ -382,7 +382,7 @@ function NextProject({ projects }: { projects: CSProject[] }) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            padding: "96px 24px",
+            padding: "0 24px",
             gap: "clamp(28px, 7.6vw, 40px)",
           }}
         >
@@ -393,7 +393,7 @@ function NextProject({ projects }: { projects: CSProject[] }) {
               fontSize: "clamp(32px, 10.2vw, 56px)",
               lineHeight: 0.9,
               letterSpacing: "-0.05em",
-              color: "#322324",
+              color: INK,
               opacity: 0.95,
               textAlign: "center",
             }}
@@ -433,7 +433,7 @@ function NextProject({ projects }: { projects: CSProject[] }) {
                 fontSize: "clamp(22px, 5.6vw, 32px)",
                 lineHeight: 0.9,
                 letterSpacing: "-0.04em",
-                color: "#322324",
+                color: INK,
                 opacity: 0.95,
                 textAlign: "center",
               }}
