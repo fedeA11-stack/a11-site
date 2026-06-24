@@ -17,7 +17,7 @@ import s5c from "../../../public/assets/world-id/wid-5-3.jpg";
 // World ID — case study (Figma 1871:12610) rendered through the canonical
 // case-study template. Tile grid + aspect ratios mirror the Figma `img` frames.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "World ID",
   section: { label: "World", href: "/world" },
   title: "Are you a real human?",

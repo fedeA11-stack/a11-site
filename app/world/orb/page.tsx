@@ -28,7 +28,7 @@ import s4d from "../../../public/assets/orb/orb-4-4.jpg";
 // mirror the Figma `img` frames: full tiles 1116×750, duos 553×550 side-by-side.
 // Includes the stats row (after hero) and the left-aligned testimonial.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Orb App",
   section: { label: "World", href: "/world" },
   title: "Designing clarity\nat global scale",

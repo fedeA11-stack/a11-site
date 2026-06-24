@@ -28,7 +28,7 @@ import s5e from "../../public/assets/districts/dis-5-5.png";
 // Tile grid + aspect ratios mirror the Figma `img` frames (root 1871:30025).
 // Stats row, pull quote, duos and a tallDuo all map to Figma's actual layout.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Districts",
   title: "Designing a world\nyou can own",
   description:

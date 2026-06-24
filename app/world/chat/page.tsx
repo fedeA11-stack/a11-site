@@ -15,7 +15,7 @@ import chat006 from "../../../public/assets/world-chat/chat-006.png";
 // ─────────────────────────────────────────────────────────────────────────────
 // World Chat — content for the canonical case-study design (Figma 1863:11469).
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "World Chat",
   section: { label: "World", href: "/world" },
   title: "Built for humans\nto talk to humans",

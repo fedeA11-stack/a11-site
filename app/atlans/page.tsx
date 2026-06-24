@@ -15,7 +15,7 @@ import s3c from "../../public/assets/atlans/atlans-3-3.jpg";
 import s3d from "../../public/assets/atlans/atlans-3-4.jpg";
 import s1c from "../../public/assets/atlans/atlans-1-3.jpg";
 
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Atlans",
   title: "Connecting athletes,\nplaces & communities",
   description:

@@ -7,6 +7,45 @@ export const SITE_URL = "https://a11.studio";
 // the address the contact form sends to / displays.
 export const CONTACT_EMAIL = "hello@a11.studio";
 
+// Booking link — single source for the Calendly URL used in JSON-LD, llms.txt, etc.
+export const CALENDLY_URL = "https://calendly.com/a11studio";
+
+// ── Studio profile (single source of truth for agent-facing prose) ───────────
+// Used by the Organization JSON-LD, llms.txt, and llms-full.txt so the studio's
+// self-description never drifts between the human site and the agent surfaces.
+// Verified facts only: founded 2019, nine people. Update here, everything follows.
+export const STUDIO_NAME = "A11 Product Studio";
+export const STUDIO_TAGLINE = "A11 Product Studio of the Ambitious.";
+export const STUDIO_FOUNDED = "2019";
+export const STUDIO_HEADCOUNT = 9;
+export const STUDIO_DOMAINS = ["crypto", "identity", "fintech", "real-world assets"];
+
+export const STUDIO_SUMMARY =
+  'A11 is a product design studio "of the Ambitious" — nine people designing digital ' +
+  "products together since 2019. Their longest engagement was five years with Tools for " +
+  "Humanity, designing World App from scratch into one of the most widely used mobile " +
+  "wallets in the world. The work spans crypto, identity, fintech, and real-world-asset products.";
+
+export const STUDIO_SERVICES =
+  "end-to-end product design — product/UX, brand and visual identity, and web — for " +
+  "ambitious startups and scale-ups, in crypto, identity, fintech, and real-world-asset " +
+  "products. Engagements range from focused project work to multi-year embedded partnerships.";
+
+// Non-case-study routes, for the llms.txt index. Case studies are derived from
+// caseProjects.ts (see app/caseData.ts), so only these handful are listed here.
+export const STUDIO_PAGES: { name: string; href: string; blurb: string }[] = [
+  { name: "Studio", href: "/studio", blurb: "About A11 — the team, history, and approach to product design." },
+  { name: "Manifesto", href: "/manifesto", blurb: "The studio's design philosophy and principles." },
+  { name: "Work", href: "/", blurb: "The full portfolio index." },
+  { name: "Contact", href: "/contact", blurb: "Get in touch with the studio — start a project or book a call." },
+];
+
+/** First sentence of a description — used for the punchy llms.txt index line. */
+export const firstSentence = (s: string) => {
+  const m = s.match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : s).trim();
+};
+
 import type { Metadata } from "next";
 import type { CaseStudyData } from "./CaseStudy";
 

@@ -29,7 +29,7 @@ const HERO = "#0D0D0D";          // dark monitor hero
 const LIGHT = "#F3F2F2";         // light tile frame
 const CHAT = "linear-gradient(180deg, #6B6B6B 0%, #F3F2F2 100%)"; // chat tile frame
 
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Nous",
   title: "Designing a shared\nintelligence layer",
   description:

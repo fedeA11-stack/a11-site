@@ -27,7 +27,7 @@ import s4f from "../../../public/assets/world-money/wm-4-6.jpg";
 // ─────────────────────────────────────────────────────────────────────────────
 const BG = "#F0EBE5";
 
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "World Money",
   section: { label: "World", href: "/world" },
   title: "Designing no.1\nwallet in the world",

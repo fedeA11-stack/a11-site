@@ -21,7 +21,7 @@ import s4c from "../../public/assets/relai/relai-4-3.jpg";
 // (Figma 1871:43569). Tile grid + aspect ratios mirror the Figma `img` frames
 // exactly, including side-by-side duos.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Relai",
   title: "Making Bitcoin\nsaving feel simple",
   description:

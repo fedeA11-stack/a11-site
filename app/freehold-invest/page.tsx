@@ -23,7 +23,7 @@ import s4c from "../../public/assets/tokenstudio/ts-4-3.jpg";
 // "img" frame; the grid mirrors Figma's real tile layout (full + side-by-side
 // duos). Aspect ratios are the exact Figma frame dimensions.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Freehold Invest",
   title: "Invest across\nreal-world assets",
   description:

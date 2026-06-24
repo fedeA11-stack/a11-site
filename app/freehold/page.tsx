@@ -22,7 +22,7 @@ import s4c from "../../public/assets/freehold/fh-4-3.jpg";
 // No `section` field (not a World product) → breadcrumb reads "Work / Freehold".
 // Tile grid + aspect ratios mirror the Figma `img` frames exactly.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Freehold",
   title: "Invest and manage\non the move",
   description:
