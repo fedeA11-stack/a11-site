@@ -27,7 +27,7 @@ import s4f from "../../../public/assets/world-money/wm-4-6.jpg";
 // ─────────────────────────────────────────────────────────────────────────────
 const BG = "#F0EBE5";
 
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "World Money",
   section: { label: "World", href: "/world" },
   title: "Designing no.1\nwallet in the world",
@@ -46,7 +46,7 @@ const data: CaseStudyData = {
     // wallet designed for everyone (y1962)
     {
       title: "Wallet designed\nfor everyone",
-      body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks, or blockchain infrastructure, they simply needed to understand what they owned, how to receive it, and how to use it safely.",
+      body: "For many people entering World Money was their first experience with digital assets. They were not thinking about networks or blockchain infrastructure; they simply needed to understand what they owned, how to receive it, and how to use it safely.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
           { src: "/assets/world-money/WorldMoney_Tabs.mp4", alt: "World Money wallet home", video: true, bg: BG },
@@ -71,14 +71,14 @@ const data: CaseStudyData = {
     },
     // New financial rails / Familiar actions (y5279)
     {
-      title: "New financial rails\nfamiliar actions",
-      body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity, confidence, and control.",
+      title: "New financial rails,\nfamiliar actions",
+      body: "The experience was built around actions people already understand. The complexity of crypto infrastructure stayed in the background, while the interface focused on clarity and control.",
       media: [
         { kind: "duo", aspect: "553 / 900", images: [
           { src: s2b, alt: "World Money transaction detail", bg: BG },
           { src: "/assets/world-money/WorldMoneyP2P_1.mp4", alt: "World Money P2P payment", video: true, bg: BG },
         ] },
-        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF4.mp4", alt: "World Money invest overview", video: true, bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF4.fa79e18a.mp4", alt: "World Money invest overview", video: true, bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [
           { src: s2d, alt: "World Money activity history", bg: BG },
           { src: s2e, alt: "World Money confirmation", bg: BG },
@@ -102,7 +102,7 @@ const data: CaseStudyData = {
       title: "Helping users\nunderstand the value",
       body: "Grants introduced a new concept for many users. We translated abstract ideas like airdrops, claims, and ownership into familiar visual metaphors, using everyday objects to help people understand the value.",
       media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF5.mp4", alt: "World Money grants intro", video: true, bg: BG } },
+        { kind: "full", aspect: "1116 / 750", image: { src: "/assets/world-money/REF5.0fe9dda2.mp4", alt: "World Money grants intro", video: true, bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4b, alt: "World Money claim flow", bg: BG } },
         { kind: "full", aspect: "1116 / 750", image: { src: s4c, alt: "World Money grant visual metaphor", bg: BG } },
         { kind: "duo", aspect: "553 / 600", images: [

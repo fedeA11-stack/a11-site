@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 /**
@@ -12,8 +12,10 @@ import { usePathname } from "next/navigation";
  *   2. Pill — the "View project" label that appears over [data-cursor] elements.
  *      While the pill is shown the dot hides, so they never overlap.
  *
- * The native cursor is hidden (cursor: none) only on fine-pointer devices.
- * Disabled entirely on /world/* case study pages.
+ * Mounted ONLY on fine-pointer devices (mouse/trackpad). On touch devices the
+ * whole layer — DOM, listeners, rAF loop — is never created: a tap there
+ * synthesizes mousemove/mouseenter, which would otherwise flash the
+ * difference-blend dot or strand the "View project" pill at the tap point.
  */
 const DOT_SIZE = 12; // px
 const DOT_HOVER_SCALE = 1.6; // dot grows slightly over interactive elements
@@ -204,7 +206,21 @@ function CursorLayer() {
   );
 }
 
-// Rendered once in the root layout — present on every page.
+// Rendered once in the root layout — present on every page, but only actually
+// mounted on fine-pointer (mouse/trackpad) devices. We render null on the server
+// and on the first client paint, then enable after a matchMedia check, so there's
+// no hydration mismatch and touch devices never create the cursor at all.
 export default function Cursor() {
+  const [fine, setFine] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    setFine(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setFine(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  if (!fine) return null;
   return <CursorLayer />;
 }

@@ -5,9 +5,9 @@ import type { MetadataRoute } from "next";
 // app icons via Next's file conventions.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "A11 Product Studio",
+    name: "A11 Studio",
     short_name: "A11",
-    description: "A11 Product Studio of the Ambitious.",
+    description: "A11 Studio of the Ambitious.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

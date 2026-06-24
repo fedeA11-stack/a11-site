@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import NavMenu from "../NavMenu";
 import PageEnter from "../PageEnter";
 import FooterBanner from "../FooterBanner";
-import WordReveal from "../WordReveal";
 
 const FONT = "var(--font-system), sans-serif";
 
@@ -60,18 +59,18 @@ function FloatingLabel({
 export const metadata: Metadata = {
   title: "Manifesto",
   description:
-    "The A11 manifesto — the beliefs and principles behind how we design products for the ambitious.",
+    "The A11 manifesto: the beliefs and principles behind how we design products for the ambitious.",
   alternates: { canonical: "/manifesto" },
   openGraph: {
     type: "article",
-    title: "Manifesto — A11 Product Studio",
+    title: "Manifesto · A11 Studio",
     description:
       "The beliefs and principles behind how A11 designs products for the ambitious.",
     url: "/manifesto",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Manifesto — A11 Product Studio",
+    title: "Manifesto · A11 Studio",
     description: "The beliefs and principles behind how A11 designs products for the ambitious.",
   },
 };
@@ -204,9 +203,9 @@ export default function ManifestoPage() {
                 maxWidth: "calc(100% - 32px)",
               }}
             >
-              Design Got Lazy.
+              Design got lazy.
               <br />
-              We Didn&apos;t.
+              We didn&apos;t.
             </h1>
           </div>
 
@@ -240,20 +239,18 @@ export default function ManifestoPage() {
               <p style={{ margin: "0 0 40px" }}>
                 Design is deciding what a product should do, and what it should
                 refuse to do. These decisions do not have templates. They require
-                people who care enough to keep asking. We&rsquo;re nine people who
-                care a lot.
+                people who care enough to keep asking. We care a lot.
               </p>
 
               <p style={{ margin: "0 0 40px" }}>
                 Hundreds of millions of people are interacting with our designs
                 every day, and yet they do not notice the design. That is the
                 goal. Because the best products feel inevitable. You only notice
-                them when they are gone. That&rsquo;s how we&rsquo;ve built the
-                World from zero.
+                them when they are gone.
               </p>
 
               <p style={{ margin: "0 0 40px" }}>
-                We are not for everyone. Nine people cannot be. We take limited
+                We are not for everyone. Ten people cannot be. We take a limited
                 number of projects at a time and give each one the full attention
                 of a team that has nowhere else to be. We move fast. Not because
                 we skip the thinking, but because clarity is what makes us fast.
@@ -271,7 +268,7 @@ export default function ManifestoPage() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-[1240px] mx-auto pb-[10px] lg:max-w-none lg:px-5">
+      <div className="max-w-[1240px] mx-auto lg:max-w-none lg:px-5">
         <FooterBanner />
       </div>
       </PageEnter>

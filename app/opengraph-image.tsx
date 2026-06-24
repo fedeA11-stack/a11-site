@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Open Graph / Twitter share image — rendered at build time.
 // Next.js wires this up automatically via the file convention; the same
 // image is reused for the Twitter card.
-export const alt = "A11 Product Studio of the Ambitious";
+export const alt = "A11 Studio of the Ambitious";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -32,7 +32,7 @@ export default function Image() {
         </svg>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 84, fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.05 }}>
-            A11 Product Studio
+            A11 Studio
           </div>
           <div style={{ fontSize: 40, color: "rgba(255,255,255,0.6)", marginTop: 16 }}>
             Of the Ambitious

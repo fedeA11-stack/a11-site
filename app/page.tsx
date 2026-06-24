@@ -39,7 +39,6 @@ import districtLogo from "../public/assets/districts-logo.svg";
 import freeholdLogo from "../public/assets/tokenstudio-logo.svg";
 import atlansLogo from "../public/assets/atlans-logo.svg";
 import PageEnter from "./PageEnter";
-import WordReveal from "./WordReveal";
 
 // Mobile-only card tiles — portrait (373×490) compositions exported from the
 // Figma mobile frame (panel + device mockup, with text/logo layers hidden so we
@@ -50,6 +49,13 @@ import districtsTile from "../public/assets/mobile/districts.jpg";
 import tokenStudioTile from "../public/assets/mobile/tokenstudio.jpg";
 import atlansTile from "../public/assets/mobile/atlans.jpg";
 import relaiTile from "../public/assets/mobile/relai.jpg";
+import nousTile from "../public/assets/mobile/nous.jpg";
+// Mobile-only wordmarks: Nous (white, no desktop equivalent) + tinted Districts/
+// Freehold Invest marks that match the mobile design's per-card copy colors
+// (#3b3658 / #3f3d36). Desktop keeps the shared white/dark SVGs untouched.
+import nousLogo from "../public/assets/nous-logo.svg";
+import districtsLogoMobile from "../public/assets/districts-logo-mobile.svg";
+import freeholdInvestLogoMobile from "../public/assets/freeholdinvest-logo-mobile.svg";
 
 // ─── Project data ─────────────────────────────────────────────────────────────
 type Project = {
@@ -73,6 +79,12 @@ type Project = {
   /** Logo distance from the card's bottom edge in design px (default 64),
    *  likewise scaled for the uniform crop. */
   logoBottom?: number;
+  /** Optional CSS filter applied to the wordmark <Image>. The mark SVGs are
+   *  monochrome (white, except districts which ships dark), so a filter retints
+   *  them to match the card's copy color: "brightness(0.157)" turns white →
+   *  ~#282828 on light-backed cards; "brightness(0) invert(1)" turns the dark
+   *  districts mark → white. */
+  logoFilter?: string;
 };
 
 const PROJECTS: Project[] = [
@@ -80,7 +92,7 @@ const PROJECTS: Project[] = [
     num: "01",
     image: worldCase,
     name: "World",
-    description: "Five years,\nnine people.\nFour Apps for\nreal humans",
+    description: "Five years,\nnine people.\nFour apps for\nreal humans",
     // White reads against the new dark-green-couch fill (near-black failed: ~1.0:1 → 7:1).
     textColor: "#ffffff",
     href: "/world",
@@ -95,59 +107,11 @@ const PROJECTS: Project[] = [
   },
   {
     num: "02",
-    image: freeholdCase,
-    name: "Freehold",
-    description: "A non-custodial,\nmulti-chain DeFi\nwallet app",
-    textColor: "#282328",
-    href: "/freehold",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 54,
-    descTop: 108,
-    logo: freeholdLogoGrey,
-    logoHeight: 31,
-    logoLeft: 174,
-    logoBottom: 56,
-  },
-  {
-    num: "03",
-    image: districtCase,
-    name: "Districts",
-    description: "RWA tokenization,\nstart to finish",
-    // Near-black over the light lavander blur reads stronger than the mid-gray (4.3→7.1:1).
-    textColor: "#282328",
-    href: "/districts",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 139,
-    descTop: 198,
-    logo: districtLogo,
-    logoHeight: 31,
-    logoLeft: 72,
-    logoBottom: 61,
-  },
-  {
-    num: "04",
-    image: tokenStudioCase,
-    name: "Token Studio",
-    description: "Tokenize, launch,\nmanage. On-chain\nRWAs",
-    // White over the dark wood paneling — brown was unreadable (1.9→10:1 on the copy).
-    textColor: "#ffffff",
-    href: "/tokenstudio",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 70,
-    descTop: 124,
-    logo: freeholdLogo,
-    logoHeight: 31,
-    logoLeft: 80,
-    logoBottom: 56,
-  },
-  {
-    num: "05",
     image: atlansCase,
     name: "Atlans",
     description: "Athletic platform\nof Discovery and\nconnection",
+    // White over the new sunset crop — copy sits on the orange/red sky and the
+    // dark mountain silhouette (dark #282328 measured 1.2–2.7:1; white is 5.8–18:1).
     textColor: "#ffffff",
     href: "/atlans",
     labelPx: 18,
@@ -158,26 +122,14 @@ const PROJECTS: Project[] = [
     logoHeight: 31,
     logoLeft: 80,
     logoBottom: 56,
+    // atlans mark ships dark → invert to white to match the copy.
+    logoFilter: "brightness(0) invert(1)",
   },
   {
-    num: "06",
-    image: relaiCase,
-    name: "Relai",
-    description: "Bitcoin-only savings\napp focused on\nsimple self-custody.",
-    textColor: "#282328",
-    href: "/relai",
-    labelPx: 18,
-    labelTracking: "-0.36px",
-    labelTop: 69,
-    descTop: 122,
-    logoHeight: 31,
-    logoLeft: 80,
-  },
-  {
-    num: "07",
+    num: "03",
     image: nousCase,
     name: "Nous",
-    description: "One Personal AI\nfor your whole life",
+    description: "Shared intelligence\nlayer",
     // White over the warm red/orange gradient (5.5:1; near-black was 2.9).
     textColor: "#ffffff",
     href: "/nous",
@@ -186,6 +138,73 @@ const PROJECTS: Project[] = [
     labelTracking: "-0.36px",
     labelTop: 58,
     descTop: 116,
+    logoHeight: 31,
+    logoLeft: 80,
+  },
+  {
+    num: "04",
+    image: freeholdCase,
+    name: "Freehold",
+    description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",
+    textColor: "#282328",
+    href: "/freehold",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 54,
+    descTop: 108,
+    logo: freeholdLogoGrey,
+    logoHeight: 31,
+    logoLeft: 80,
+    logoBottom: 56,
+    logoFilter: "brightness(0.157)",
+  },
+  {
+    num: "05",
+    image: districtCase,
+    name: "Districts",
+    description: "Virtual World\nmirroring real\nopportunities",
+    textColor: "#ffffff",
+    href: "/districts",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 139,
+    descTop: 198,
+    logo: districtLogo,
+    logoHeight: 31,
+    logoLeft: 72,
+    logoBottom: 61,
+    // districts mark ships dark (#282328) → invert to white to match the copy.
+    logoFilter: "brightness(0) invert(1)",
+  },
+  {
+    num: "06",
+    image: tokenStudioCase,
+    name: "Freehold Invest",
+    description: "Real-world assets\nwith secure and\ntransparent\ntokenization",
+    // Dark over the light cream backdrop of the new watch crop.
+    textColor: "#282328",
+    href: "/freehold-invest",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 70,
+    descTop: 124,
+    logo: freeholdLogo,
+    logoHeight: 31,
+    logoLeft: 80,
+    logoBottom: 56,
+    logoFilter: "brightness(0.157)",
+  },
+  {
+    num: "07",
+    image: relaiCase,
+    name: "Relai",
+    description: "Bitcoin-only savings\napp focused on\nsimple self-custody",
+    textColor: "#282328",
+    href: "/relai",
+    labelPx: 18,
+    labelTracking: "-0.36px",
+    labelTop: 69,
+    descTop: 122,
     logoHeight: 31,
     logoLeft: 80,
   },
@@ -240,7 +259,7 @@ function cqMid(px: number): string {
   return `clamp(${px}px, ${((px / CARD_DESIGN_W) * 100).toFixed(4)}cqw, ${(px * CARD_MAX_SCALE).toFixed(2)}px)`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 function Chevron({ color }: { color: string }) {
   // Inline so the slash stroke inherits the card's label color (the static
   // slash.svg was fixed dark — invisible on the white-text cards).
@@ -286,7 +305,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
         <CoverImage
           src={project.image}
           alt={project.name}
-          sizes="100vw"
+          sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
           priority={priority}
         />
       ) : (
@@ -294,7 +313,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           <CoverImage
             src={project.image}
             alt={project.name}
-            sizes="100vw"
+            sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw"
             priority={priority}
           />
         </ImageReveal>
@@ -304,7 +323,7 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
           with the full-bleed card — text and logo stay on the image shape,
           exactly reproducing the 1240px design at any width. */}
       <div
-        className="absolute flex items-center whitespace-nowrap capitalize"
+        className="absolute flex items-center whitespace-nowrap"
         style={{
           top: cq(project.labelTop),
           left: cq(72),
@@ -319,11 +338,13 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
       >
         <span>{project.num}</span>
         <Chevron color={c} />
-        <span>{project.name}</span>
+        {/* Project name is the card's heading. font:inherit keeps the label row's
+            sizing/weight so promoting span→h2 changes the outline, not the look. */}
+        <h2 style={{ margin: 0, font: "inherit", letterSpacing: "inherit" }}>{project.name}</h2>
       </div>
 
       <p
-        className="absolute m-0 whitespace-pre-wrap capitalize"
+        className="absolute m-0 whitespace-pre-wrap"
         style={{
           // Top tracks the label proportionally; the label→copy gap scales with
           // the (middle-ground) type so the spacing stays right at any card size.
@@ -355,7 +376,13 @@ function ProjectCard({ project, priority, zoom }: { project: Project; priority?:
             src={project.logo}
             alt=""
             aria-hidden
-            style={{ height: "100%", width: "auto", display: "block" }}
+            style={{
+              height: "100%",
+              width: "auto",
+              display: "block",
+              // Retint the monochrome wordmark to match the card's copy color.
+              filter: project.logoFilter,
+            }}
           />
         </div>
       )}
@@ -463,7 +490,7 @@ function HeroReveal() {
           willChange: "transform, opacity",
         }}
       >
-        <motion.p
+        <motion.h1
           className="m-0 text-center whitespace-pre-wrap"
           initial={{ opacity: 0, filter: "blur(10px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -479,8 +506,8 @@ function HeroReveal() {
             textWrap: "balance",
           }}
         >
-          {"We are A11.\nProduct Studio Built on\nPassion and Craft."}
-        </motion.p>
+          {"We are A11.\nA product studio built on\npassion and craft."}
+        </motion.h1>
       </motion.section>
 
       {/*
@@ -518,15 +545,19 @@ type MobileCardData = {
   href: string;
   logo?: StaticImageData;
   logoHeight: number;
+  /** CSS filter to retint the monochrome wordmark to the card's copy color —
+   *  same mechanism as the desktop cards (see Project.logoFilter). */
+  logoFilter?: string;
 };
 
 const MOBILE_CARDS: MobileCardData[] = [
-  { tile: worldTile,       name: "World",        description: "Five years,\nnine people.\nFour Apps for\nreal humans", color: "#282328", href: "/world",       logo: worldLogo,        logoHeight: 20 },
-  { tile: freeholdTile,    name: "Freehold",     description: "A non-custodial,\nmulti-chain DeFi\nwallet app",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18 },
-  { tile: districtsTile,   name: "Districts",    description: "RWA tokenization,\nstart to finish",                   color: "#45474a", href: "/districts",   logo: districtLogo,     logoHeight: 20 },
-  { tile: tokenStudioTile, name: "Token Studio", description: "Tokenize, launch,\nmanage. On-chain\nRWAs",            color: "#4d2820", href: "/tokenstudio", logo: freeholdLogo,     logoHeight: 18 },
-  { tile: atlansTile,      name: "Atlans",       description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16 },
-  { tile: relaiTile,       name: "Relai",        description: "Bitcoin-only savings\napp focused on\nsimple self-custody.", color: "#282328", href: "/relai",   logoHeight: 19 },
+  { tile: worldTile,       name: "World",           description: "Five years,\nnine people.\nFour apps for\nreal humans", color: "#ffffff", href: "/world",       logo: worldLogo,        logoHeight: 20 },
+  { tile: atlansTile,      name: "Atlans",          description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16, logoFilter: "brightness(0) invert(1)" },
+  { tile: nousTile,        name: "Nous",            description: "Shared intelligence\nlayer",                            color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
+  { tile: freeholdTile,    name: "Freehold",        description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18, logoFilter: "brightness(0.157)" },
+  { tile: districtsTile,   name: "Districts",       description: "Virtual World\nmirroring real\nopportunities",                   color: "#3b3658", href: "/districts",   logo: districtsLogoMobile,      logoHeight: 20 },
+  { tile: tokenStudioTile, name: "Freehold Invest", description: "Real-world assets\nwith secure and\ntransparent\ntokenization", color: "#3f3d36", href: "/freehold-invest", logo: freeholdInvestLogoMobile, logoHeight: 18 },
+  { tile: relaiTile,       name: "Relai",           description: "Bitcoin-only savings\napp focused on\nsimple self-custody", color: "#282328", href: "/relai",   logoHeight: 19 },
 ];
 
 function MobileCard({ card, priority }: { card: MobileCardData; priority?: boolean }) {
@@ -549,11 +580,14 @@ function MobileCard({ card, priority }: { card: MobileCardData; priority?: boole
 
           {/* Brand mark + description, overlaid at (32, 32) — matches Figma. */}
           <div style={{ position: "absolute", top: 32, left: 32, right: 24, display: "flex", flexDirection: "column", gap: 24 }}>
+            {/* Heading for the outline. The brand mark is a decorative logo (alt="")
+                or a visual-only wordmark, so the accessible title lives here. */}
+            <h2 className="sr-only">{card.name}</h2>
             <motion.div variants={itemVariants} style={{ height: card.logoHeight }}>
               {card.logo ? (
-                <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block" }} />
+                <Image src={card.logo} alt="" aria-hidden style={{ height: "100%", width: "auto", display: "block", filter: card.logoFilter }} />
               ) : (
-                <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
+                <span aria-hidden style={{ fontFamily: MFONT, fontWeight: 500, fontSize: card.logoHeight, lineHeight: 1, letterSpacing: "-0.03em", color: card.color }}>
                   {card.name}
                 </span>
               )}
@@ -592,54 +626,13 @@ function MobileQuote({ text, buttonLabel, href, maxWidth }: { text: string; butt
   );
 }
 
-function MobileFooter() {
-  return (
-    <Reveal className="w-full" amount={0.3}>
-      <motion.div
-        variants={itemVariants}
-        style={{
-          position: "relative", width: "100%", borderRadius: 5, overflow: "hidden",
-          background: "#282328", padding: "50px 40px", minHeight: 220,
-        }}
-      >
-        <p
-          className="m-0 whitespace-pre-wrap"
-          style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#fff" }}
-        >
-          {"If you're ambitious\nenough to work with us."}
-        </p>
-        <a
-          href="mailto:hello@a11studio.com"
-          style={{
-            display: "inline-block", marginTop: 24, fontFamily: MFONT, fontWeight: 500,
-            fontSize: 28, lineHeight: 0.9, letterSpacing: "-0.03em", color: "#fff",
-            textDecoration: "underline", textUnderlineOffset: 4,
-          }}
-        >
-          We should talk.
-        </a>
-      </motion.div>
-
-      <motion.div
-        variants={itemVariants}
-        style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginTop: 20, padding: "0 20px", whiteSpace: "nowrap",
-        }}
-      >
-        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>A11 © 2026</span>
-        <span style={{ fontFamily: MFONT, fontWeight: 500, fontSize: 16, lineHeight: 1.4, letterSpacing: "-0.02em", color: "#282328" }}>Privacy Policy</span>
-      </motion.div>
-    </Reveal>
-  );
-}
 
 function MobileHome() {
   return (
     <div className="md:hidden" style={{ position: "relative", zIndex: 1, background: "#fff" }}>
       {/* Static hero — lets the title wrap naturally to ~4 lines like the mockup */}
       <section style={{ paddingTop: 96, paddingBottom: 112, paddingLeft: 20, paddingRight: 20 }}>
-        <p
+        <h1
           className="m-0 text-center"
           style={{
             fontFamily: MFONT, fontWeight: 500, fontSize: 44, lineHeight: 0.9,
@@ -647,12 +640,12 @@ function MobileHome() {
             maxWidth: 353, marginInline: "auto", textWrap: "balance",
           }}
         >
-          We are A11. Product Studio Built on Passion and Craft.
-        </p>
+          We are A11.<br />A product studio built on passion and craft.
+        </h1>
       </section>
 
       {/* Stacked tiles + interstitials. Pairs sit 10px apart; quotes get ~80px air. */}
-      <div style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 10, display: "flex", flexDirection: "column" }}>
+      <div style={{ paddingLeft: 10, paddingRight: 10, display: "flex", flexDirection: "column" }}>
         <MobileCard card={MOBILE_CARDS[0]} priority />
         <div style={{ height: 10 }} />
         <MobileCard card={MOBILE_CARDS[1]} />
@@ -672,9 +665,11 @@ function MobileHome() {
         <MobileCard card={MOBILE_CARDS[4]} />
         <div style={{ height: 10 }} />
         <MobileCard card={MOBILE_CARDS[5]} />
-
         <div style={{ height: 10 }} />
-        <MobileFooter />
+        <MobileCard card={MOBILE_CARDS[6]} />
+
+        <div style={{ height: 20 }} />
+        <FooterBanner />
       </div>
     </div>
   );
@@ -724,7 +719,7 @@ export default function WorkPage() {
             <Reveal><ProjectCard project={PROJECTS[6]} /></Reveal>
           </main>
 
-          <div className="max-w-[1240px] mx-auto md:px-8 mt-[10px] pb-[10px] lg:max-w-none lg:px-[var(--bleed)]">
+          <div className="max-w-[1240px] mx-auto md:px-8 mt-[20px] lg:max-w-none lg:px-[var(--bleed)]">
             <FooterBanner />
           </div>
         </PageEnter>

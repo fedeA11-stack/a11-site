@@ -29,12 +29,12 @@ const HERO = "#0D0D0D";          // dark monitor hero
 const LIGHT = "#F3F2F2";         // light tile frame
 const CHAT = "linear-gradient(180deg, #6B6B6B 0%, #F3F2F2 100%)"; // chat tile frame
 
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Nous",
   title: "Designing a shared\nintelligence layer",
   description:
     "Nous was designed as an AI workspace where people, memory, and specialized agents work together, helping individuals and teams turn context into action without losing control over knowledge access.",
-  hero: { src: heroImg, alt: "Nous — a shared intelligence workspace", bg: HERO },
+  hero: { src: heroImg, alt: "Nous, a shared intelligence workspace", bg: HERO },
   sections: [
     {
       title: "Keeping context\nwithout losing control",
@@ -78,7 +78,7 @@ const data: CaseStudyData = {
     },
     {
       title: "Connecting\nthe knowledge",
-      body: "Nous brings files, connected tools, and shared resources into one context layer — making knowledge easy to organize, reuse, and selectively share with the agents and people who need it.",
+      body: "Nous brings files, connected tools, and shared resources into one context layer, making knowledge easy to organize, reuse, and selectively share with the agents and people who need it.",
       media: [
         { kind: "full", aspect: "1077 / 723", image: { src: s4a, alt: "Nous file storage", bg: CHAT } },
         { kind: "duo", aspect: "533 / 530", images: [

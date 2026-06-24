@@ -15,15 +15,15 @@ import chat006 from "../../../public/assets/world-chat/chat-006.png";
 // ─────────────────────────────────────────────────────────────────────────────
 // World Chat — content for the canonical case-study design (Figma 1863:11469).
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "World Chat",
   section: { label: "World", href: "/world" },
   title: "Built for humans\nto talk to humans",
   description:
-    "A communication layer designed for a world where being human can no longer be assumed, simple to use, yet grounded in identity, trust, and interaction.",
+    "A communication layer for a world where being human can no longer be assumed. Simple to use, but grounded in real identity.",
   hero: {
     src: chatMain,
-    alt: "World Chat app — hand holding phone showing chat list",
+    alt: "World Chat app, hand holding phone showing chat list",
     bg: "#282328",
   },
   sections: [
@@ -36,7 +36,7 @@ const data: CaseStudyData = {
           tall: { src: "/assets/world-chat/chat-unverified-verified.webm", alt: "Verifying a chat participant", video: true, bg: "#F0EBE5" },
           stack: [
             { src: chatGroup, alt: "Friends group with chat notification" },
-            { src: chatVerifiedUser, alt: "Joseph Wilson — verified human" },
+            { src: chatVerifiedUser, alt: "Joseph Wilson, verified human" },
           ],
         },
       ],
@@ -54,7 +54,7 @@ const data: CaseStudyData = {
           kind: "duo",
           images: [
             { src: "/assets/world-chat/End_to_End.mp4", alt: "End-to-end encrypted", video: true, bg: "#F0EBE5" },
-            { src: chatSophia, alt: "Sophia Davis — verified human", bg: "#F0EBE5" },
+            { src: chatSophia, alt: "Sophia Davis, verified human", bg: "#F0EBE5" },
           ],
         },
       ],
@@ -79,7 +79,7 @@ const data: CaseStudyData = {
         {
           kind: "full",
           aspect: "1242 / 835",
-          image: { src: chat006, alt: "Sending money — phone detail", bg: "#F6F3EE" },
+          image: { src: chat006, alt: "Sending money, phone detail", bg: "#F6F3EE" },
         },
       ],
     },

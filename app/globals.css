@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* ── Reduced motion ───────────────────────────────────────────────────────────
+   JS-driven motion already honours the preference (Lenis via its `prevent`
+   callback in SmoothScroll.tsx; framer-motion via useReducedMotion). This is the
+   CSS backstop for CSS-driven motion the JS guards don't reach — e.g. the
+   manifesto floating labels (infinite keyframes) and component transitions.
+   The near-zero (not 0) duration keeps animationend/transitionend listeners
+   firing. WAAPI animations (framer) have their own timing and are untouched. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── System Unlicensed Trial ─────────────────────────────────────────────────
    Self-hosted via next/font/local in app/layout.tsx, which sets the
    --font-system CSS variable (with a size-adjusted fallback) on <html>. */
@@ -90,13 +108,23 @@ body {
   .cs-section-header { flex-direction: column !important; gap: 16px !important; }
   .cs-section-header > * { max-width: 100% !important; }
 
-  /* Stats: one per row (fixes the horizontal overflow) and drop the dividers. */
+  /* Stats: one per row (fixes the horizontal overflow) and drop the dividers.
+     Also zero the inline padding-left (32px on items after the first, for the
+     desktop divider gap) — left in, it indented every stacked stat but the
+     first, so the numbers no longer lined up. */
   .cs-stats {
     grid-template-columns: 1fr !important;
     max-width: 100% !important;
     row-gap: clamp(28px, 8vw, 40px);
   }
-  .cs-stats > * { border-left: 0 !important; }
+  .cs-stats > * {
+    border-left: 0 !important;
+    padding-left: 0 !important;
+    /* Center each stacked stat (number + label) on phones; the inline styles
+       left-align them for the desktop divided row. */
+    align-items: center !important;
+    text-align: center !important;
+  }
 
   /* Media duos / tall-duos: stack the tiles so they keep a usable size. */
   .cs-media-grid { grid-template-columns: 1fr !important; }

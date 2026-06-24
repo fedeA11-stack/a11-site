@@ -28,13 +28,13 @@ import s4d from "../../../public/assets/orb/orb-4-4.jpg";
 // mirror the Figma `img` frames: full tiles 1116×750, duos 553×550 side-by-side.
 // Includes the stats row (after hero) and the left-aligned testimonial.
 // ─────────────────────────────────────────────────────────────────────────────
-const data: CaseStudyData = {
+export const data: CaseStudyData = {
   breadcrumb: "Orb App",
   section: { label: "World", href: "/world" },
   title: "Designing clarity\nat global scale",
   description:
     "Orb App evolved alongside the World network, supporting thousands of operators, devices, and verification workflows across rapidly expanding global operations.",
-  hero: { src: heroImg, alt: "Orb App — designing clarity at global scale", bg: "#F0EBE5" },
+  hero: { src: heroImg, alt: "Orb App, designing clarity at global scale", bg: "#F0EBE5" },
   sections: [
     // Stats row (Figma y1462)
     {

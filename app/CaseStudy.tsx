@@ -3,14 +3,13 @@
 import React from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import NavMenu from "./NavMenu";
 import FooterBanner from "./FooterBanner";
 import CoverImage from "./CoverImage";
 import PhoneVideo from "./world/chat/PhoneVideo";
-import WordReveal from "./WordReveal";
 import { caseStudyJsonLd } from "./seo";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -153,8 +152,8 @@ function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string;
     <motion.div ref={ref} variants={tileVariants} initial="hidden" animate={inView ? "visible" : "hidden"} transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}>
       <div style={{ position: "relative", borderRadius: RADIUS, overflow: "hidden", background: image.bg ?? BEIGE, aspectRatio: aspect, width: "100%" }}>
         {image.video && image.src ? (
-          // eslint-disable-next-line jsx-a11y/media-has-caption
-          <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+           
+          <video src={inView ? (image.src as string) : undefined} autoPlay loop muted playsInline preload="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         ) : image.icon === "lock" ? (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "clamp(56px, 7vw, 96px)", aspectRatio: "1", borderRadius: "50%", background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -177,7 +176,7 @@ function Cell({ image, aspect, sizes, phone }: { image: CSImage; aspect: string;
 // ─────────────────────────────────────────────────────────────────────────────
 function MediaBlock({ media }: { media: CSMedia }) {
   if (media.kind === "full") {
-    return <Cell image={media.image} aspect={media.aspect ?? "1241 / 760"} sizes="100vw" />;
+    return <Cell image={media.image} aspect={media.aspect ?? "1241 / 760"} sizes="(min-width: 1024px) calc(100vw - 29rem), 100vw" />;
   }
 
   if (media.kind === "duo") {
@@ -185,7 +184,7 @@ function MediaBlock({ media }: { media: CSMedia }) {
     return (
       <div className="cs-media-grid" style={{ display: "grid", gridTemplateColumns: cols, gap: CELL_GAP, alignItems: "start" }}>
         {media.images.map((img, i) => (
-          <Cell key={i} image={img} aspect={media.aspects?.[i] ?? media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, 50vw" />
+          <Cell key={i} image={img} aspect={media.aspects?.[i] ?? media.aspect ?? "615 / 612"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" />
         ))}
       </div>
     );
@@ -193,11 +192,11 @@ function MediaBlock({ media }: { media: CSMedia }) {
 
   // tallDuo — tall tile + two stacked tiles. stackFirst swaps column order.
   const cols = media.columns ?? "1fr 1fr";
-  const tallCol = <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, 50vw" phone={media.tall.video} />;
+  const tallCol = <Cell image={media.tall} aspect={media.tallAspect ?? "615 / 1038"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" phone={media.tall.video} />;
   const stackCol = (
     <div style={{ display: "flex", flexDirection: "column", gap: CELL_GAP }}>
       {media.stack.map((img, i) => (
-        <Cell key={i} image={img} aspect={media.stackAspects?.[i] ?? media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, 50vw" />
+        <Cell key={i} image={img} aspect={media.stackAspects?.[i] ?? media.stackAspect ?? "615 / 513"} sizes="(max-width: 768px) 100vw, (min-width: 1024px) calc((100vw - 29rem) / 2), 50vw" />
       ))}
     </div>
   );
@@ -215,7 +214,10 @@ function MediaBlock({ media }: { media: CSMedia }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState("0");
+  // Parse "45M+" → ["45", "M+"] once. Non-numeric values render verbatim (below)
+  // and skip the count-up entirely, so they never need a setState.
+  const parsed = useMemo(() => value.match(/^([\d.]+)(.*)$/), [value]);
+  const [animated, setAnimated] = useState("0");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -230,12 +232,9 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
   }, []);
 
   useEffect(() => {
-    if (!visible) return;
-    // Parse number + suffix: "45M+" → [45, "M+"], "2M+" → [2, "M+"]
-    const match = value.match(/^([\d.]+)(.*)$/);
-    if (!match) { setDisplay(value); return; }
-    const target = parseFloat(match[1]);
-    const suffix = match[2];
+    if (!visible || !parsed) return;
+    const target = parseFloat(parsed[1]);
+    const suffix = parsed[2];
     const duration = 1200;
     const start = performance.now() + delay;
     let raf: number;
@@ -243,12 +242,15 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
       const t = Math.max(0, Math.min(1, (now - start) / duration));
       const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
       const current = Math.round(eased * target);
-      setDisplay(`${current}${suffix}`);
+      setAnimated(`${current}${suffix}`);
       if (t < 1) raf = requestAnimationFrame(tick);
     }
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [visible, value, delay]);
+  }, [visible, parsed, delay]);
+
+  // Numeric stats animate (count up from 0); non-numeric values render as-is.
+  const display = parsed ? animated : value;
 
   return (
     <span
@@ -271,8 +273,19 @@ function StatNumber({ value, delay = 0 }: { value: string; delay?: number }) {
 // Section — optional 2-col header (title left, body right), optional stats row,
 // optional pull quote, and a stack of media blocks
 // ─────────────────────────────────────────────────────────────────────────────
+// Testimonials (the case-study pull quotes + the divider beneath them) are
+// currently hidden site-wide. Flip to `true` to bring them back — the quote
+// data still lives in each page's `sections`, so nothing is lost.
+const SHOW_TESTIMONIALS = false;
+
 function Section({ section }: { section: CSSection }) {
   const hasHeader = section.title || section.body;
+  const hasStats = section.stats && section.stats.length > 0;
+  const hasMedia = section.media && section.media.length > 0;
+  const showQuote = SHOW_TESTIMONIALS && section.quote;
+  // With testimonials hidden, a quote-only section renders nothing — skip it
+  // entirely so its top margin doesn't double the gap between real sections.
+  if (!hasHeader && !hasStats && !showQuote && !hasMedia) return null;
   return (
     <section style={{ marginTop: SECTION_GAP, display: "flex", flexDirection: "column", gap: HEADER_GAP }}>
       {hasHeader && (
@@ -309,8 +322,8 @@ function Section({ section }: { section: CSSection }) {
         <div style={{ height: 1, background: HAIRLINE, width: "100%" }} />
       )}
 
-      {section.quote && (() => {
-        const q = section.quote;
+      {showQuote && (() => {
+        const q = section.quote!;
         const left = q.align === "left";
         const attribution = (q.author || q.role) && (
           <footer style={{ display: "flex", alignItems: "center", gap: 14 }}>

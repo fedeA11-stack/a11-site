@@ -47,7 +47,7 @@ export function caseStudyOgImage(name: string, tagline: string) {
           </div>
         </div>
         <div style={{ fontSize: 28, color: "rgba(255,255,255,0.45)" }}>
-          A11 Product Studio — Of the Ambitious
+          A11 Studio · Of the Ambitious
         </div>
       </div>
     ),
