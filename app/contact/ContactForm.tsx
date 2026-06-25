@@ -195,6 +195,8 @@ function SendButton({ pending }: { pending: boolean }) {
 //
 // On success the form is remounted (key bump) to clear all fields, and a
 // confirmation replaces the inline error region.
+const initialState: ContactState = { status: "idle" };
+
 export default function ContactForm() {
   const [state, formAction, pending] = useActionState(sendContactEmail, initialState);
 
