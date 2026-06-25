@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Cursor from "./Cursor";
 import Preloader from "./Preloader";
 import SmoothScroll from "./SmoothScroll";
@@ -134,6 +135,7 @@ export default function RootLayout({
         <Cursor />
         <Preloader />
         <SmoothScroll>{children}</SmoothScroll>
+        <SpeedInsights />
       </body>
     </html>
   );
