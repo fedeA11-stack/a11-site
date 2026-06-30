@@ -253,6 +253,46 @@ export default function NavMenu({ breadcrumb, theme }: { breadcrumb?: Crumb[]; t
         </div>
       </header>
 
+      {/* ── Mobile tap targets (iOS Safari fix) ─────────────────────────────────
+          The header above is pointer-events:none + mix-blend-mode:difference +
+          position:fixed. iOS Safari drops taps on a pointer-events:auto node
+          nested inside that combination: the tap falls THROUGH the bar to the
+          content behind it (e.g. a work-grid card), so "Menu" reads as dead and
+          the card opens instead. These transparent hit targets sit OUTSIDE that
+          subtree — siblings of <header>, no pointer-events:none ancestor, no
+          blend — so iOS delivers the tap. They mirror the visible logo / Menu
+          geometry and are aria-hidden + un-focusable: the real semantic controls
+          for keyboard and assistive tech stay in the header above (they activate
+          via the a11y action API, which the touch-routing bug doesn't affect).
+          Mobile-only — md:hidden drops them where the header's own taps work. */}
+      <Link
+        href="/"
+        aria-hidden
+        tabIndex={-1}
+        className="flex md:hidden"
+        style={{
+          position: "fixed", top: 0, left: 0, height: 80, width: 64, zIndex: 101,
+          alignItems: "center", paddingLeft: 16,
+        }}
+      />
+      <button
+        type="button"
+        onClick={() => setMenuOpen(true)}
+        aria-hidden
+        tabIndex={-1}
+        className="flex md:hidden"
+        style={{
+          position: "fixed", top: 0, right: 0, height: 80, zIndex: 101,
+          alignItems: "center", gap: 12, padding: "0 16px",
+          border: "none", background: "transparent", color: "transparent",
+          cursor: "none", fontFamily: FONT, fontWeight: 500, fontSize: 18,
+          lineHeight: 1, letterSpacing: "-0.36px",
+        }}
+      >
+        Menu
+        <DotGrid color="transparent" reduce={!!reduce} />
+      </button>
+
       {/* Spacer — matches header height so content starts below the fixed bar */}
       <div style={{ height: 80, flexShrink: 0 }} aria-hidden />
 
