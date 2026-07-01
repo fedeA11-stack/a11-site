@@ -19,7 +19,7 @@ export const data: CaseStudyData = {
   breadcrumb: "Atlans",
   title: "Connecting athletes,\nplaces & communities",
   description:
-    "For those who don't only care about wattage and stats, but about the espresso and how they spend their time.",
+    "Designed for modern athletes who seek authentic connections. Value depth over noise and care equally about the espresso and training quality.",
   hero: { src: heroImg, alt: "Atlans hero", bg: "#F0EBE5" },
   sections: [
     {

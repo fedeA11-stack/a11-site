@@ -46,11 +46,11 @@ export default function WorldPage() {
               textWrap: "balance",
             }}
           >
-            Five years, nine people,
+            Five Years. Nine People.
             <br />
-            four apps, number one
+            One of the biggest wallets
             <br />
-            crypto wallet.
+            in the world.
           </h1>
 
           {/* Project navigation — 2×2 grid, notch + cursor pill on hover */}

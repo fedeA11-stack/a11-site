@@ -129,7 +129,7 @@ const PROJECTS: Project[] = [
     num: "03",
     image: nousCase,
     name: "Nous",
-    description: "Shared intelligence\nlayer",
+    description: "AI agents as\nultimate companion",
     // White over the warm red/orange gradient (5.5:1; near-black was 2.9).
     textColor: "#ffffff",
     href: "/nous",
@@ -198,7 +198,7 @@ const PROJECTS: Project[] = [
     num: "07",
     image: relaiCase,
     name: "Relai",
-    description: "Bitcoin-only savings\napp focused on\nsimple self-custody",
+    description: "Bitcoin app focused\non simple and\ntrusted self-custody",
     textColor: "#282328",
     href: "/relai",
     labelPx: 18,
@@ -506,7 +506,7 @@ function HeroReveal() {
             textWrap: "balance",
           }}
         >
-          {"We are A11.\nA product studio built on\npassion and craft."}
+          {"A11 Product Studio\nOf The Ambitious"}
         </motion.h1>
       </motion.section>
 
@@ -553,11 +553,11 @@ type MobileCardData = {
 const MOBILE_CARDS: MobileCardData[] = [
   { tile: worldTile,       name: "World",           description: "Five years,\nnine people.\nFour apps for\nreal humans", color: "#ffffff", href: "/world",       logo: worldLogo,        logoHeight: 20 },
   { tile: atlansTile,      name: "Atlans",          description: "Athletic platform\nof Discovery and\nconnection",       color: "#ffffff", href: "/atlans",      logo: atlansLogo,       logoHeight: 16, logoFilter: "brightness(0) invert(1)" },
-  { tile: nousTile,        name: "Nous",            description: "Shared intelligence\nlayer",                            color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
+  { tile: nousTile,        name: "Nous",            description: "AI agents as\nultimate companion",                     color: "#ffffff", href: "/nous",        logo: nousLogo,                 logoHeight: 24 },
   { tile: freeholdTile,    name: "Freehold",        description: "Mobile wallet for\ninvestments and\nmanagement on\nthe move",        color: "#282328", href: "/freehold",    logo: freeholdLogoGrey, logoHeight: 18, logoFilter: "brightness(0.157)" },
   { tile: districtsTile,   name: "Districts",       description: "Virtual World\nmirroring real\nopportunities",                   color: "#3b3658", href: "/districts",   logo: districtsLogoMobile,      logoHeight: 20 },
   { tile: tokenStudioTile, name: "Freehold Invest", description: "Real-world assets\nwith secure and\ntransparent\ntokenization", color: "#3f3d36", href: "/freehold-invest", logo: freeholdInvestLogoMobile, logoHeight: 18 },
-  { tile: relaiTile,       name: "Relai",           description: "Bitcoin-only savings\napp focused on\nsimple self-custody", color: "#282328", href: "/relai",   logoHeight: 19 },
+  { tile: relaiTile,       name: "Relai",           description: "Bitcoin app focused\non simple and\ntrusted self-custody", color: "#282328", href: "/relai",   logoHeight: 19 },
 ];
 
 function MobileCard({ card, priority }: { card: MobileCardData; priority?: boolean }) {
@@ -640,7 +640,7 @@ function MobileHome() {
             maxWidth: 353, marginInline: "auto", textWrap: "balance",
           }}
         >
-          We are A11.<br />A product studio built on passion and craft.
+          A11 Product Studio<br />Of The Ambitious
         </h1>
       </section>
 
