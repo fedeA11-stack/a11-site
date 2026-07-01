@@ -306,13 +306,18 @@ function Section({ section }: { section: CSSection }) {
       )}
 
       {section.stats && section.stats.length > 0 && (
-        // Left-aligned stats row, capped at ~1025px; number→label gap 16px.
-        <div className="cs-stats" style={{ display: "grid", gridTemplateColumns: `repeat(${section.stats.length}, 1fr)`, width: "100%", maxWidth: 1025, margin: 0 }}>
+        // Stats row spread across the full content width: first flush left, last
+        // flush right, the rest evenly spaced between, with hairline dividers in
+        // the gaps. Stacks to one-per-row on phones (see .cs-stats in globals.css).
+        <div className="cs-stats" style={{ display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%", margin: 0, gap: 32 }}>
           {section.stats.map((s, i) => (
-            <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, textAlign: "left", borderLeft: i > 0 ? `1px solid ${HAIRLINE}` : "none", paddingLeft: i > 0 ? 32 : 0 }}>
-              <StatNumber value={s.value} delay={i * 120} />
-              <span style={{ ...T.label, margin: 0 }}>{s.label}</span>
-            </div>
+            <React.Fragment key={s.label}>
+              {i > 0 && <div aria-hidden className="cs-stat-divider" style={{ width: 1, alignSelf: "stretch", background: HAIRLINE }} />}
+              <div className="cs-stat" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, textAlign: "left" }}>
+                <StatNumber value={s.value} delay={i * 120} />
+                <span style={{ ...T.label, margin: 0 }}>{s.label}</span>
+              </div>
+            </React.Fragment>
           ))}
         </div>
       )}

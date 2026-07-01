@@ -27,16 +27,9 @@ export const data: CaseStudyData = {
   breadcrumb: "Freehold Invest",
   title: "Invest across\nreal-world assets",
   description:
-    "Tokenization turns illiquid real-world assets into tradeable digital ownership. We designed the experience that lets anyone invest in property, art, or infrastructure and move value the way the internet moves data.",
+    "Tokenization turns real-world assets into tradeable digital ownership. We designed the experience that lets anyone invest in hyper car, property, art and move value the way the internet moves data.",
   hero: { src: heroImg, alt: "Freehold Invest, invest across real-world assets", bg: "#F0EBE5" },
   sections: [
-    {
-      stats: [
-        { value: "18M+", label: "Verified users" },
-        { value: "3700", label: "Active operators" },
-        { value: "160+", label: "Countries covered" },
-      ],
-    },
     {
       title: "Real-world assets\nreimagined",
       body: "The platform connects traditional investments with digital ownership, so more people can own assets that used to be out of reach.",
@@ -80,8 +73,8 @@ export const data: CaseStudyData = {
       ],
     },
     {
-      title: "Ownership beyond\nthe transaction",
-      body: "Investing is only one part of the journey. The platform was designed to support the complete lifecycle of digital ownership, from investor management and liquidity to reporting and ongoing asset operations.",
+      title: "The control room\nfor token",
+      body: "We designed the backend that token issuers actually operate from — supply tracking, investment round management, whitelisting, liquidity pools, and chain analysis. The infrastructure behind the asset.",
       media: [
         { kind: "full", aspect: "1078 / 720", image: { src: s4a, alt: "Freehold Invest investor management and reporting", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "533 / 623", images: [

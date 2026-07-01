@@ -36,9 +36,9 @@ export const data: CaseStudyData = {
     // Stats row (Figma y1462)
     {
       stats: [
-        { value: "45M+", label: "Total users" },
-        { value: "36M+", label: "Monthly transactions" },
-        { value: "2M+", label: "Daily users" },
+        { value: "39M+", label: "World App users" },
+        { value: "18M+", label: "Verified humans" },
+        { value: "191", label: "Countries" },
       ],
     },
     // wallet designed for everyone (y1962)

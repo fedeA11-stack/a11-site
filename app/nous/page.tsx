@@ -33,7 +33,7 @@ export const data: CaseStudyData = {
   breadcrumb: "Nous",
   title: "Designing a shared\nintelligence layer",
   description:
-    "Nous was designed as an AI workspace where people, memory, and specialized agents work together, helping individuals and teams turn context into action without losing control over knowledge access.",
+    "Nous was designed as an experimental AI workspace where people, memory, and specialized agents work together, helping individuals and teams turn context into action without losing control over knowledge access.",
   hero: { src: heroImg, alt: "Nous, a shared intelligence workspace", bg: HERO },
   sections: [
     {

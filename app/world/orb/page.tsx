@@ -31,31 +31,11 @@ import s4d from "../../../public/assets/orb/orb-4-4.jpg";
 export const data: CaseStudyData = {
   breadcrumb: "Orb App",
   section: { label: "World", href: "/world" },
-  title: "Designing clarity\nat global scale",
+  title: "Designing for scale",
   description:
-    "Orb App evolved alongside the World network, supporting thousands of operators, devices, and verification workflows across rapidly expanding global operations.",
+    "Orb App evolved alongside the World network, supporting operators, devices, and verification workflows across rapidly expanding global operations.",
   hero: { src: heroImg, alt: "Orb App, designing clarity at global scale", bg: "#F0EBE5" },
   sections: [
-    // Stats row (Figma y1462)
-    {
-      stats: [
-        { value: "18M+", label: "Verified users" },
-        { value: "3700", label: "Active operators" },
-        { value: "160+", label: "Countries covered" },
-      ],
-    },
-    // Simplicity across every workflow (y1962)
-    {
-      title: "Simplicity across\nevery workflow",
-      body: "The core challenge was not designing more features. It was reducing the cognitive load behind every critical workflow, helping operators understand what to do, what state the system was in, and what needed to happen next, regardless of technical background.",
-      media: [
-        { kind: "full", aspect: "1116 / 750", image: { src: s1a, alt: "Orb App workflow overview", bg: "#F0EBE5" } },
-        { kind: "duo", aspect: "553 / 550", images: [
-          { src: s1b, alt: "Orb App workflow detail", bg: "#F0EBE5" },
-          { src: s1c, alt: "Orb App verification dashboard", bg: "#F0EBE5" },
-        ] },
-      ],
-    },
     // Left-aligned testimonial (y3826)
     {
       quote: {
@@ -71,6 +51,13 @@ export const data: CaseStudyData = {
       title: "Intuitive interfaces\nfor complex hardware",
       body: "Orb App was designed to make complex hardware easy to operate, simplifying setup, connectivity, and device management through clear and intuitive interactions.",
       media: [
+        // Images from the former "Simplicity across every workflow" section —
+        // copy removed per the deck; media merged here so it keeps the tile gap.
+        { kind: "full", aspect: "1116 / 750", image: { src: s1a, alt: "Orb App workflow overview", bg: "#F0EBE5" } },
+        { kind: "duo", aspect: "553 / 550", images: [
+          { src: s1b, alt: "Orb App workflow detail", bg: "#F0EBE5" },
+          { src: s1c, alt: "Orb App verification dashboard", bg: "#F0EBE5" },
+        ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s2a, alt: "Orb App device setup", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "553 / 550", images: [
           { src: s2b, alt: "Orb App connectivity", bg: "#F0EBE5" },
@@ -81,26 +68,16 @@ export const data: CaseStudyData = {
           { src: s2e, alt: "Orb App setup confirmation", bg: "#F0EBE5" },
         ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s2f, alt: "Orb App hardware overview", bg: "#F0EBE5" } },
-      ],
-    },
-    // Visibility Across Global Deployments (y7397)
-    {
-      title: "Visibility across\nglobal deployments",
-      body: "Orb App was designed to support the coordination of teams, devices, and field activity across rapidly expanding operations, while maintaining operational clarity at every level.",
-      media: [
+        // Images from the former "Visibility across global deployments" section —
+        // copy removed per the deck; media merged here so it keeps the tile gap
+        // instead of opening a new section (which would add the larger gap).
         { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "Orb App deployment overview", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "553 / 550", images: [
           { src: s3b, alt: "Orb App field activity", bg: "#F0EBE5" },
           { src: s3c, alt: "Orb App scheduling calendar", bg: "#F0EBE5" },
         ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s3d, alt: "Orb App operational clarity", bg: "#F0EBE5" } },
-      ],
-    },
-    // Built For Large Scale Operations (y9843)
-    {
-      title: "Built for\nlarge scale operations",
-      body: "From structured field deployments to lightweight community-led operations, Orb App was designed to support a wide range of workflows and operational models at global scale.",
-      media: [
+        // Images from the former "Built for large scale operations" section.
         { kind: "full", aspect: "1116 / 750", image: { src: s4a, alt: "Orb App large-scale operations", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "553 / 550", images: [
           { src: s4b, alt: "Orb App operational models", bg: "#F0EBE5" },
