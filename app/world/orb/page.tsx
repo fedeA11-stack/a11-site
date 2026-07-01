@@ -72,24 +72,16 @@ export const data: CaseStudyData = {
           { src: s2e, alt: "Orb App setup confirmation", bg: "#F0EBE5" },
         ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s2f, alt: "Orb App hardware overview", bg: "#F0EBE5" } },
-      ],
-    },
-    // Images from the former "Visibility across global deployments" section —
-    // copy removed per the copy deck; media kept as a headless block.
-    {
-      media: [
+        // Images from the former "Visibility across global deployments" section —
+        // copy removed per the deck; media merged here so it keeps the tile gap
+        // instead of opening a new section (which would add the larger gap).
         { kind: "full", aspect: "1116 / 750", image: { src: s3a, alt: "Orb App deployment overview", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "553 / 550", images: [
           { src: s3b, alt: "Orb App field activity", bg: "#F0EBE5" },
           { src: s3c, alt: "Orb App scheduling calendar", bg: "#F0EBE5" },
         ] },
         { kind: "full", aspect: "1116 / 750", image: { src: s3d, alt: "Orb App operational clarity", bg: "#F0EBE5" } },
-      ],
-    },
-    // Images from the former "Built for large scale operations" section — copy
-    // removed per the copy deck; media kept as a headless block.
-    {
-      media: [
+        // Images from the former "Built for large scale operations" section.
         { kind: "full", aspect: "1116 / 750", image: { src: s4a, alt: "Orb App large-scale operations", bg: "#F0EBE5" } },
         { kind: "duo", aspect: "553 / 550", images: [
           { src: s4b, alt: "Orb App operational models", bg: "#F0EBE5" },
