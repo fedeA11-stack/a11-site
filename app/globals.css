@@ -113,15 +113,15 @@ body {
      desktop divider gap) — left in, it indented every stacked stat but the
      first, so the numbers no longer lined up. */
   .cs-stats {
-    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
     max-width: 100% !important;
     row-gap: clamp(28px, 8vw, 40px);
   }
-  .cs-stats > * {
-    border-left: 0 !important;
-    padding-left: 0 !important;
+  /* Drop the vertical dividers on phones — they'd render as full-width 1px rules. */
+  .cs-stat-divider { display: none !important; }
+  .cs-stat {
     /* Center each stacked stat (number + label) on phones; the inline styles
-       left-align them for the desktop divided row. */
+       left-align them for the desktop spread-out row. */
     align-items: center !important;
     text-align: center !important;
   }
