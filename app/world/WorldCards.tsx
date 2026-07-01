@@ -53,7 +53,6 @@ function WorldCard({ card, index, priority }: { card: CaseCard; index: number; p
         aria-label={`${card.title}, ${card.sub}`}
         className="wcs-tile"
         data-cursor="View project"
-        data-cursor-dark=""
         style={{ display: "block", position: "relative", width: "100%", aspectRatio: "616 / 380" }}
       >
         {/* Per-card clip definition — `d` morphs on :hover (see <style> in parent). */}

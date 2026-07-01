@@ -465,7 +465,6 @@ function NextProject({ projects }: { projects: CSProject[] }) {
         <div
           className="hidden lg:flex lg:px-[var(--bleed)]"
           data-cursor="View project"
-          data-cursor-dark=""
           style={{
             alignItems: "center",
             justifyContent: "space-between",

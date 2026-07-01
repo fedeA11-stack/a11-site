@@ -59,9 +59,11 @@ function CursorLayer() {
       // dot's centre keeps it locked on the pointer.
       const targetScale = hoverRef.current && !pillActive.current ? DOT_HOVER_SCALE : 1;
       scaleRef.current = lerp(scaleRef.current, targetScale, 0.2);
-      // Dot follows the smoothed position; pill snaps to the raw position.
+      // Dot and pill both follow the SAME smoothed position, so the cursor keeps
+      // one consistent trailing feel — the pill replacing the dot over
+      // [data-cursor] tiles must not suddenly snap to the raw pointer.
       dot!.style.transform  = `translate3d(${x - DOT_SIZE / 2}px, ${y - DOT_SIZE / 2}px, 0) scale(${scaleRef.current})`;
-      pill!.style.transform = `translate3d(${targetRef.current.x - pill!.offsetWidth / 2}px, ${targetRef.current.y - pill!.offsetHeight / 2}px, 0)`;
+      pill!.style.transform = `translate3d(${x - pill!.offsetWidth / 2}px, ${y - pill!.offsetHeight / 2}px, 0)`;
       rafRef.current = requestAnimationFrame(tick);
     }
 
@@ -92,11 +94,15 @@ function CursorLayer() {
       if (!(e.target instanceof Element)) return;
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
+      // These listeners are on `document` with capture, so they fire for EVERY
+      // descendant (image, badge, svg …). When the pointer moves between two
+      // children of the SAME tile it comes from within `target` — ignore it, or
+      // the paired leave/enter strobes the pill's opacity.
+      if (e.relatedTarget instanceof Node && target.contains(e.relatedTarget)) return;
       const label = (target as HTMLElement).dataset.cursor ?? "";
-      const dark  = (target as HTMLElement).hasAttribute("data-cursor-dark");
+      // Pill is always white (see inline styles). One look, nothing per-tile to
+      // theme — dropped the old dark variant that flickered on the World cards.
       if (labelRef.current) labelRef.current.textContent = label;
-      pill!.style.background = dark ? "#282328" : "#ffffff";
-      pill!.style.color      = dark ? "#ffffff" : "#282328";
       pill!.style.opacity = "1";
       dot!.style.opacity  = "0"; // hide dot while pill is up
       pillActive.current = true;
@@ -106,9 +112,10 @@ function CursorLayer() {
       if (!(e.target instanceof Element)) return;
       const target = e.target.closest("[data-cursor]");
       if (!target) return;
-      pill!.style.opacity    = "0";
-      pill!.style.background = "#ffffff";
-      pill!.style.color      = "#282328";
+      // Still inside the same tile (moving to one of its children)? Not a real
+      // leave — bail before resetting, so we don't strobe the pill. See onEnter.
+      if (e.relatedTarget instanceof Node && target.contains(e.relatedTarget)) return;
+      pill!.style.opacity = "0";
       if (shownRef.current) dot!.style.opacity = "1";
       pillActive.current = false;
     }
