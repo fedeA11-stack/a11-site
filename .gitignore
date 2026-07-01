@@ -44,3 +44,6 @@ next-env.d.ts
 # local claude worktrees / scratch
 .claude/
 .gstack/
+
+# copy export docs (local only)
+/pages-copy/
